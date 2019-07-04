@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>:: Call Centre :: Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="CCS Bootstrap 2.1.1 Admin">
+    <meta name="author" content="Cyrix">
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/vendor/animate-css/animate.min.css">
+    <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
+    <link rel="stylesheet" href="../assets/vendor/multi-select/css/multi-select.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="../assets/vendor/nouislider/nouislider.min.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+    <link rel="stylesheet" href="../assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/color_skins.css">
+</head>
+<body class="theme-blue">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img src="../assets/images/thumbnail.png" width="48" height="48" alt="CCS"></div>
+        <p>Please wait...</p>
+    </div>
+</div>
+<!-- Overlay For Sidebars -->
+<div class="overlay" style="display: none;"></div>
+
+<div id="wrapper">
+
+    <nav class="navbar navbar-fixed-top">
+        <div class="container-fluid">
+
+            <div class="navbar-brand">
+                <a href="index.html">
+                    <img src="../assets/images/logo.png" alt="CCS Logo" class="img-responsive logo">
+                    <span class="name">CCS</span>
+                </a>
+            </div>
+
+            <div class="navbar-right">
+                <ul class="list-unstyled clearfix mb-0">
+                    <li>
+                        <div class="navbar-btn btn-toggle-show">
+                            <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
+                        </div>
+                        <a href="javascript:void(0);" class="btn-toggle-fullwidth btn-toggle-hide"><i class="fa fa-bars"></i></a>
+                    </li>
+                    <li>
+                        <form id="navbar-search" class="navbar-form search-form">
+                            <input value="" class="form-control" placeholder="Search here..." type="text">
+                            <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
+                        </form>
+                    </li>
+                    <li>
+                        <div id="navbar-menu">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a href="javascript:void(0);" class="mega_menu icon-menu" title="Mega Menu">Menu</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="create_new icon-menu" title="Create New">Refresh</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                        <i class="icon-bell"></i>
+                                        <span class="notification-dot"></span>
+                                    </a>
+
+                                </li>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-flag"></i><span class="notification-dot"></span></a>
+                                    <ul class="dropdown-menu animated bounceIn task">
+                                        <li class="header"><strong>Kawasan Terbaru</strong></li>
+                                        <li class="body">
+                                            <ul class="menu tasks list-unstyled">
+                                                <li>
+                                                    <a href="javascript:void(0);">
+                                                        <span class="text-muted">Selayang <span class="float-right">29%</span></span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar l-turquoise" role="progressbar" aria-valuenow="29" aria-valuemin="0" aria-valuemax="100" style="width: 29%;"></div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">
+                                                        <span class="text-muted">Batu Muda <span class="float-right">78%</span></span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar l-slategray" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" style="width: 78%;"></div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">
+                                                        <span class="text-muted">Ampang Baru <span class="float-right">45%</span></span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar l-parpl" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;"></div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">
+                                                        <span class="text-muted">Sri Gombak <span class="float-right">68%</span></span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar l-coral" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;"></div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);">
+                                                        <span class="text-muted">Kota Damansara <span class="float-right">21%</span></span>
+                                                        <div class="progress">
+                                                            <div class="progress-bar l-amber" role="progressbar" aria-valuenow="21" aria-valuemin="0" aria-valuemax="100" style="width: 21%;"></div>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="footer"><a href="javascript:void(0);">View All</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="fa fa-language"></i></a>
+                                    <ul class="dropdown-menu animated flipInX choose_language">
+                                        <li><a href="javascript:void(0);">English</a></li>
+                                        <li><a href="javascript:void(0);">Malay</a></li>
+                                        <li><a href="javascript:void(0);">Chinese</a></li>
+                                        <li><a href="javascript:void(0);">Indian</a></li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                        <img class="rounded-circle" src="../assets/images/user-small.png" width="30" alt="">
+                                    </a>
+                                    <div class="dropdown-menu animated flipInY user-profile">
+                                        <div class="d-flex p-3 align-items-center">
+                                            <div class="drop-left m-r-10">
+                                                <img src="../assets/images/user-small.png" class="rounded" width="50" alt="">
+                                            </div>
+                                            <div class="drop-right">
+                                                <h4>Diana Osman</h4>
+                                                <p class="user-name">dianaosman@info.com</p>
+                                            </div>
+                                        </div>
+                                        <div class="m-t-10 p-3 drop-list">
+                                            <ul class="list-unstyled">
+                                                <li><a href="page-profile.html"><i class="icon-user"></i>My Profile</a></li>
+                                                <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                                                <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="page-login.html"><i class="icon-power"></i>Logout</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="leftsidebar" class="sidebar">
+        <div class="sidebar-scroll">
+            <nav id="leftsidebar-nav" class="sidebar-nav">
+                <ul id="main-menu" class="metismenu">
+                    <li class="heading">Main</li>
+                    <li><a href="index.html"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                    <li class="heading">App</li>
+                    <li><a href="#"><i class="icon-envelope"></i><span>Inbox</span></a></li>
+                    <li><a href="#"><i class="icon-calendar"></i><span>Calendar</span></a></li>
+                    <li><a href="#"><i class="icon-notebook"></i><span>Taskboard</span></a></li>
+                    <li class="heading">Tetapan</li>
+                    <li class="middle">
+                        <a href="#Tetapan" class="has-arrow"><i class="icon-user"></i><span>User</span></a>
+                        <ul>
+                            <li><a href="useradmin.html">Admin</a></li>
+                            <li><a href="usersuper.html">Supervisor</a></li>
+                            <li><a href="useroperator.html">Operator</a></li>
+                        </ul>
+                    </li>
+                    <li class="active">
+                        <a href="#Widgets" class="has-arrow"><i class="icon-puzzle"></i><span>Record Operator</span></a>
+                        <ul>
+                            <li><a href="opstats.html">Statistics</a></li>
+                            <li><a href="opkawasan.html">Tetapan Kawasan</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="uploadsasaran.html" ><i class="icon-cloud-upload"></i><span>Upload Sasaran</span></a>
+                    </li>
+                    <li class="heading">Kajiselidik</li>
+                    <li>
+                        <a href="soalanresult.html"><i class="icon-bar-chart"></i><span>Result</span></a>
+                    </li>
+                    <li>
+                        <a href="#soalan" class="has-arrow"><i class="icon-pencil"></i><span>Soalan</span></a>
+                        <ul>
+                            <li><a href="soalanlist.html">Senarai Set Soalan</a></li>
+                            <li><a href="soalantambah.html">Tambah Set Soalan</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#komen" class="has-arrow"><i class="icon-tag"></i><span>Comment</span></a>
+                        <ul>
+                            <li><a href="#">Custom Categories</a></li>
+                            <li><a href="#">Comments List</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <div class="row">
+                    <div class="col-lg-5 col-md-8 col-sm-12">
+                        <h2>Statistik Operator</h2>
+                    </div>
+                    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+                        <ul class="breadcrumb justify-content-end">
+                            <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+                            <li class="breadcrumb-item">Record Operator</li>
+                            <li class="breadcrumb-item active">Statistik</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="header">
+                        <h2>Performance Operator<small>Note for admin here</small> </h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-lg-3 col-md-12">
+                                    <label>Pilihan Kawasan</label>
+                                    <div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Semua Kawasan
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">Selayang</a>
+                                            <a class="dropdown-item" href="#">Sri Gombak</a>
+                                            <a class="dropdown-item" href="#">Sibu</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Semua kawasan</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-12">
+                                    <label>Range</label>
+                                    <div class="input-daterange input-group" data-provide="datepicker">
+                                        <input type="text" class="input-sm form-control" name="start">
+                                        <span class="input-group-addon range-to">to</span>
+                                        <input type="text" class="input-sm form-control" name="end">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-12">
+                                    <div class="body">
+                                        <div>
+
+                                        <button type="button" class="btn btn-primary">Reset</button>
+                                        <button type="button" class="btn btn-success">Carian</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card">
+
+
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                <tr>
+                                    <th>Nama Pengguna</th>
+                                    <th>Jumlah Kajian Berjaya</th>
+                                    <th>Jumlah Panggilan</th>
+                                    <th>Jumlah Sesi</th>
+                                    <th>Purata Sesi</th>
+                                    <th>Sessi Terlama</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Tiger Nixon</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <<td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                <tr>
+                                    <td>Ramlah Husin</td>
+                                    <td>39</td>
+                                    <td>150</td>
+                                    <td>18:41:19</td>
+                                    <td>00:07:28</td>
+                                    <td>01:22:58</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Nama Pengguna</th>
+                                    <th>Jumlah Kajian Berjaya</th>
+                                    <th>Jumlah Panggilan</th>
+                                    <th>Jumlah Sesi</th>
+                                    <th>Purata Sesi</th>
+                                    <th>Sessi Terlama</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<!-- Javascript -->
+<script src="assets/bundles/libscripts.bundle.js"></script>
+<script src="assets/bundles/vendorscripts.bundle.js"></script>
+
+<script src="../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js -->
+<script src="../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
+<script src="../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<script src="../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+<script src="../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
+<script src="../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js -->
+
+<script src="assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+<script src="assets/bundles/mainscripts.bundle.js"></script>
+<script src="assets/bundles/morrisscripts.bundle.js"></script>
+<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="assets/js/pages/tables/jquery-datatable.js"></script>
+
+</body>
+</html>
