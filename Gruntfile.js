@@ -83,7 +83,14 @@ module.exports = function(grunt) {
             "js/jquery.flot.pie.js",
             "js/jquery.flot.categories.js",
             "js/jquery.flot.time.js"
-          ] /* Flot Chart js*/
+          ] /* Flot Chart js*/,
+          "js/my-scripts": [
+            "js/signals.min.js",
+            "js/crossroads.min.js",
+            "js/hasher.min.js",
+            "js/handlebars.min.js",
+            "js/index.js",
+          ]
         }
       }
     }
