@@ -1,27 +1,27 @@
 {
-  "name": "ccs",
+  "name": "web",
   "version": "1.0.0",
-  "description": "CCS Bootstrap 4.1.1 Admin Dashboard",
-  "main": "Gruntfile.js",
-  "directories": {
-    "doc": "doc"
-  },
+  "description": "Service Centre",
+  "main": "index.js",
   "scripts": {
-    "start": "index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "CCS",
-    "Version"
-  ],
-  "author": "ThemeMakker.com",
-  "license": "ISC",
-  "dependencies": {
-    "grunt": "^1.0.2",
-    "metismenu": "^2.7.7"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikr96/ccs-raw.git"
   },
-  "devDependencies": {
-    "grunt-contrib-uglify": "^3.3.0",
-    "grunt-sass": "^2.1.0"
+  "keywords": [
+    "bootstrap 4 template"
+  ],
+  "author": "Irsyadkamil.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikr96/ccs-raw/issues"
+  },
+  "homepage": "https://github.com/mikr96/ccs-raw#readme",
+  "dependencies": {
+    "crossroads": "^0.12.2",
+    "express": "^4.17.1",
+    "handlebars": "^4.1.2"
   }
 }
