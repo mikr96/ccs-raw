@@ -2,9 +2,13 @@
   "name": "web",
   "version": "1.0.0",
   "description": "Service Centre",
-  "main": "index.js",
+  "main": "Gruntfile.js",
   "scripts": {
+    "start": "index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "directories": {
+    "doc": "doc"
   },
   "repository": {
     "type": "git",
@@ -20,8 +24,11 @@
   },
   "homepage": "https://github.com/mikr96/ccs-raw#readme",
   "dependencies": {
-    "crossroads": "^0.12.2",
-    "express": "^4.17.1",
-    "handlebars": "^4.1.2"
+    "grunt": "^1.0.2",
+    "metismenu": "^2.7.7"
+  },
+  "devDependencies": {
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-sass": "^2.1.0"
   }
 }
