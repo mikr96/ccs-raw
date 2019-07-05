@@ -1,25 +1,158 @@
-$(document).ready(function () {
-  crossroads.addRoute("/", function () {
-    var html = Template.templates.home()
-    $("#divhome").empty();
-    $("#divhome")
+// const DirectusSDK = require("directus-sdk-javascript/remote");
+// const client = new DirectusSDK({
+//   url: "http://ccs.cyrix.my/cms/public",
+//   project: "_",
+//   email: "admin@example.com",
+//   password: "password"
+// });
+
+$(document).ready(function() {
+  crossroads.addRoute("/", function() {
+    var html = Template.templates.home();
+    $("#home").empty();
+    $("#home")
       .html(html)
       .show();
-    $("#divhome").show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
   });
 
-  crossroads.addRoute("/home", function () {
-    var html = Template.templates.home()
-
-    $("#divhome").empty();
-    $("#divhome")
+  crossroads.addRoute("/home", function() {
+    var html = Template.templates.home();
+    $("#home").empty();
+    $("#home")
       .html(html)
       .show();
-    $("#divhome").show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/user-admin", function() {
+    var html = Template.templates.home();
+    $("#user-admin").empty();
+    $("#user-admin")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").show();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/user-supervisor", function() {
+    var html = Template.templates.home();
+    $("#user-supervisor").empty();
+    $("#user-supervisor")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").show();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/user-operator", function() {
+    var html = Template.templates.home();
+    $("#user-operator").empty();
+    $("#user-operator")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").show();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/record-statistics", function() {
+    var html = Template.templates.home();
+    $("#record-statistics").empty();
+    $("#record-statistics")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").show();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/record-region", function() {
+    var html = Template.templates.home();
+    $("#record-region").empty();
+    $("#record-region")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").show();
+    $("#soalan-set").hide();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/soalan-set", function() {
+    var html = Template.templates.home();
+    $("#soalan-set").empty();
+    $("#soalan-set")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").show();
+    $("#result").hide();
+  });
+
+  crossroads.addRoute("/result", function() {
+    var html = Template.templates.home();
+    $("#result").empty();
+    $("#result")
+      .html(html)
+      .show();
+    $("#home").show();
+    $("#user-admin").hide();
+    $("#user-supervisor").hide();
+    $("#user-operator").hide();
+    $("#record-statistics").hide();
+    $("#record-region").hide();
+    $("#soalan-set").hide();
+    $("#result").show();
   });
 
   $(".knob2").knob({
-    format: function (value) {
+    format: function(value) {
       return value + "%";
     }
   });
@@ -167,9 +300,9 @@ $(document).ready(function () {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function (_, axis) {
+    $.each(plot.getXAxes(), function(_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -187,53 +320,53 @@ $(document).ready(function () {
   // Visitors Statistics ============= end
 });
 
-$(function () {
+$(function() {
   "use strict";
-  var options;
+  // var options;
 
-  var data = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ],
-    series: [
-      {
-        name: "series-real",
-        data: [200, 289, 263, 278, 320, 450, 359, 400, 369, 479, 628, 530]
-      },
-      {
-        name: "series-projection",
-        data: [240, 502, 360, 380, 505, 520, 590, 523, 600, 650, 790, 1020]
-      }
-    ]
-  };
+  // var data = {
+  //   labels: [
+  //     "Jan",
+  //     "Feb",
+  //     "Mar",
+  //     "Apr",
+  //     "May",
+  //     "Jun",
+  //     "Jul",
+  //     "Aug",
+  //     "Sep",
+  //     "Oct",
+  //     "Nov",
+  //     "Dec"
+  //   ],
+  //   series: [
+  //     {
+  //       name: "series-real",
+  //       data: [200, 289, 263, 278, 320, 450, 359, 400, 369, 479, 628, 530]
+  //     },
+  //     {
+  //       name: "series-projection",
+  //       data: [240, 502, 360, 380, 505, 520, 590, 523, 600, 650, 790, 1020]
+  //     }
+  //   ]
+  // };
 
-  // area chart
-  options = {
-    height: "255px",
-    showArea: false,
-    showLine: true,
-    showPoint: true,
-    axisX: {
-      showGrid: false
-    },
-    axisY: {
-      labelInterpolationFnc: function (value) {
-        return value / 1000 + "k";
-      }
-    },
-    lineSmooth: true
-  };
+  // // area chart
+  // options = {
+  //   height: "255px",
+  //   showArea: false,
+  //   showLine: true,
+  //   showPoint: true,
+  //   axisX: {
+  //     showGrid: false
+  //   },
+  //   axisY: {
+  //     labelInterpolationFnc: function(value) {
+  //       return value / 1000 + "k";
+  //     }
+  //   },
+  //   lineSmooth: true
+  // };
   // new Chartist.Line("#Sales_Overview", data, options);
 
   function parseHash(newHash, oldHash) {
@@ -242,4 +375,4 @@ $(function () {
   hasher.initialized.add(parseHash); //parse initial hash
   hasher.changed.add(parseHash); //parse hash changes
   hasher.init(); //start listening for history change
-})
+});

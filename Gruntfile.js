@@ -1,8 +1,18 @@
-module.exports = function (grunt) {
-
-  grunt.loadNpmTasks('grunt-contrib-handlebars');
+module.exports = function(grunt) {
+  grunt.loadNpmTasks("grunt-contrib-handlebars");
 
   grunt.initConfig({
+    "commonjs-compiler": {
+      index: {
+        cwd: "js", // scripts path, optional
+        compilerPath: "closure-compiler-v20190618.jar", // compiler.jar location
+        entryModule: "index.js",
+        output: "../build.js", // output file location
+        externs: ["externs/jquery.js"], // optional
+        report: "build-report.txt", // optional
+        define: "SOME_VAR=true" // @define, optional
+      }
+    },
     sass: {
       options: {
         includePaths: ["node_modules/bootstrap-sass/assets/stylesheets"]
@@ -29,22 +39,20 @@ module.exports = function (grunt) {
     handlebars: {
       compile: {
         options: {
-
           // configure a namespace for your templates
-          namespace: 'Template.templates',
+          namespace: "Template.templates",
 
           // convert file path into a function name
-          // in this example, I convert grab just the filename without the extension 
-          processName: function (filePath) {
-            var pieces = filePath.split('/');
-            return pieces[pieces.length - 1].split('.')[0];
+          // in this example, I convert grab just the filename without the extension
+          processName: function(filePath) {
+            var pieces = filePath.split("/");
+            return pieces[pieces.length - 1].split(".")[0];
           }
-
         },
 
         // output file: input files
         files: {
-          'js/compiled.js': 'js/pages/*.Handlebars'
+          "js/compiled.js": "js/pages/*.Handlebars"
         }
       }
     },
@@ -109,7 +117,7 @@ module.exports = function (grunt) {
             "js/jquery.flot.categories.js",
             "js/jquery.flot.time.js"
           ] /* Flot Chart js*/,
-          "js/my-scripts.js": [
+          "js/handlebars.bundles.js": [
             "js/signals.min.js",
             "js/crossroads.min.js",
             "js/hasher.min.js",
@@ -120,9 +128,12 @@ module.exports = function (grunt) {
       }
     }
   });
+  grunt.loadNpmTasks("grunt-commonjs-compiler");
   grunt.loadNpmTasks("grunt-sass");
   grunt.loadNpmTasks("grunt-contrib-uglify");
-
   grunt.registerTask("buildcss", ["sass"]);
-  grunt.registerTask("buildjs", ["uglify"]);
+  grunt.registerTask("buildjs", ["uglify", "commonjs-compiler"]);
+  grunt.registerTask("index", function() {
+    grunt.task.run("commonjs-compiler:index");
+  });
 };

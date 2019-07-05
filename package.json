@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/mikr96/ccs-raw#readme",
   "dependencies": {
+    "directus-sdk-javascript": "^2.15.0",
     "grunt": "^1.0.2",
+    "grunt-commonjs-compiler": "0.0.4",
     "metismenu": "^2.7.7"
   },
   "devDependencies": {
