@@ -1,4 +1,7 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
+
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
+
   grunt.initConfig({
     sass: {
       options: {
@@ -21,6 +24,28 @@ module.exports = function(grunt) {
             "css/blog.css": "css/pages/blog.scss" /* 'Blog App SCSS to CSS' */
           }
         ]
+      }
+    },
+    handlebars: {
+      compile: {
+        options: {
+
+          // configure a namespace for your templates
+          namespace: 'Template.templates',
+
+          // convert file path into a function name
+          // in this example, I convert grab just the filename without the extension 
+          processName: function (filePath) {
+            var pieces = filePath.split('/');
+            return pieces[pieces.length - 1].split('.')[0];
+          }
+
+        },
+
+        // output file: input files
+        files: {
+          'js/compiled.js': 'js/pages/*.Handlebars'
+        }
       }
     },
     uglify: {
@@ -84,12 +109,12 @@ module.exports = function(grunt) {
             "js/jquery.flot.categories.js",
             "js/jquery.flot.time.js"
           ] /* Flot Chart js*/,
-          "js/my-scripts": [
+          "js/my-scripts.js": [
             "js/signals.min.js",
             "js/crossroads.min.js",
             "js/hasher.min.js",
             "js/handlebars.min.js",
-            "js/index.js",
+            "js/compiled.js"
           ]
         }
       }

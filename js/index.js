@@ -1,36 +1,25 @@
-$(function() {
-  "use strict";
-
-  function parseHash(newHash, oldHash) {
-    crossroads.parse(newHash);
-  }
-
-  var route1 = crossroads.addRoute("/", function() {
-    $.get("js/pages/home.Handlebars").then(function(src) {
-      console.log("tt");
-      var homeTemplate = Handlebars.compile(src);
-      $("#divhome").empty();
-      $("#divhome")
-        .html(homeTemplate)
-        .show();
-    });
+$(document).ready(function () {
+  crossroads.addRoute("/", function () {
+    var html = Template.templates.home()
+    $("#divhome").empty();
+    $("#divhome")
+      .html(html)
+      .show();
     $("#divhome").show();
   });
 
-  var route2 = crossroads.addRoute("/home", function() {
-    $.get("js/pages/home.Handlebars").then(function(src) {
-      var homeTemplate = Handlebars.compile(src);
+  crossroads.addRoute("/home", function () {
+    var html = Template.templates.home()
 
-      $("#divhome").empty();
-      $("#divhome")
-        .html(homeTemplate)
-        .show();
-    });
+    $("#divhome").empty();
+    $("#divhome")
+      .html(html)
+      .show();
     $("#divhome").show();
   });
 
   $(".knob2").knob({
-    format: function(value) {
+    format: function (value) {
       return value + "%";
     }
   });
@@ -178,9 +167,9 @@ $(function() {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function(_, axis) {
+    $.each(plot.getXAxes(), function (_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -198,7 +187,7 @@ $(function() {
   // Visitors Statistics ============= end
 });
 
-$(function() {
+$(function () {
   "use strict";
   var options;
 
@@ -239,11 +228,18 @@ $(function() {
       showGrid: false
     },
     axisY: {
-      labelInterpolationFnc: function(value) {
+      labelInterpolationFnc: function (value) {
         return value / 1000 + "k";
       }
     },
     lineSmooth: true
   };
   // new Chartist.Line("#Sales_Overview", data, options);
-});
+
+  function parseHash(newHash, oldHash) {
+    crossroads.parse(newHash);
+  }
+  hasher.initialized.add(parseHash); //parse initial hash
+  hasher.changed.add(parseHash); //parse hash changes
+  hasher.init(); //start listening for history change
+})
