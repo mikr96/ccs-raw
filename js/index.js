@@ -6,153 +6,78 @@
 //   password: "password"
 // });
 
-$(document).ready(function() {
-  crossroads.addRoute("/", function() {
+$(document).ready(function () {
+  crossroads.addRoute("/", function () {
     var html = Template.templates.home();
-    $("#home").empty();
-    $("#home")
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/home", function() {
+  crossroads.addRoute("/home", function () {
     var html = Template.templates.home();
-    $("#home").empty();
-    $("#home")
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/user-admin", function() {
-    var html = Template.templates.home();
-    $("#user-admin").empty();
-    $("#user-admin")
+  crossroads.addRoute("/user-admin", function () {
+    var html = Template.templates.userAdmin();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").show();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/user-supervisor", function() {
-    var html = Template.templates.home();
-    $("#user-supervisor").empty();
-    $("#user-supervisor")
+  crossroads.addRoute("/user-supervisor", function () {
+    var html = Template.templates.userSupervisor();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").show();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/user-operator", function() {
-    var html = Template.templates.home();
-    $("#user-operator").empty();
-    $("#user-operator")
+  crossroads.addRoute("/user-operator", function () {
+    var html = Template.templates.userOperator();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").show();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/record-statistics", function() {
-    var html = Template.templates.home();
-    $("#record-statistics").empty();
-    $("#record-statistics")
+  crossroads.addRoute("/record-statistics", function () {
+    var html = Template.templates.recordStatistics();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").show();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/record-region", function() {
-    var html = Template.templates.home();
-    $("#record-region").empty();
-    $("#record-region")
+  crossroads.addRoute("/record-region", function () {
+    var html = Template.templates.recordRegion();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").show();
-    $("#soalan-set").hide();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/soalan-set", function() {
-    var html = Template.templates.home();
-    $("#soalan-set").empty();
-    $("#soalan-set")
+  crossroads.addRoute("/soalan-set", function () {
+    var html = Template.templates.soalanSet();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").show();
-    $("#result").hide();
   });
 
-  crossroads.addRoute("/result", function() {
-    var html = Template.templates.home();
-    $("#result").empty();
-    $("#result")
+  crossroads.addRoute("/result", function () {
+    var html = Template.templates.result();
+    $("#root").empty();
+    $("#root")
       .html(html)
       .show();
-    $("#home").show();
-    $("#user-admin").hide();
-    $("#user-supervisor").hide();
-    $("#user-operator").hide();
-    $("#record-statistics").hide();
-    $("#record-region").hide();
-    $("#soalan-set").hide();
-    $("#result").show();
   });
 
   $(".knob2").knob({
-    format: function(value) {
+    format: function (value) {
       return value + "%";
     }
   });
@@ -300,9 +225,9 @@ $(document).ready(function() {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function(_, axis) {
+    $.each(plot.getXAxes(), function (_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -320,7 +245,7 @@ $(document).ready(function() {
   // Visitors Statistics ============= end
 });
 
-$(function() {
+$(function () {
   "use strict";
   // var options;
 
