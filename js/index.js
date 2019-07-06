@@ -7,6 +7,11 @@
 // });
 
 $(document).ready(function () {
+  const client = new DirectusSDK({
+    url: "http://ccs.cyrix.my/cms/public",
+    project: "_"
+  });
+
   crossroads.addRoute("/", function () {
     var html = Template.templates.home();
     $("#root")
