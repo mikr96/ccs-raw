@@ -1,1 +1,61 @@
-<h2>soalan-set here</h2>
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h2>Senarai Soalan</h2>
+    </div>
+    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb justify-content-end">
+        <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+        <li class="breadcrumb-item">Soalan</li>
+        <li class="breadcrumb-item active">Senarai Soalan</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div class="header">
+      <h2>Senarai Soalan</h2>
+    </div>
+    <div class="body">
+      <div class="table-responsive">
+        <table class="table center-aligned-table">
+          <thead>
+            <tr>
+              <th>Set #</th>
+              <th>Nama Set</th>
+              <th>Date created</th>
+              <th>Bilangan Soalan</th>
+              <th>Kategori</th>
+              <th>Status</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="s,i in set">
+              <td>{{s.name}}</td>
+              <td>{{s.category}}</td>
+              <td>{{s.date_created}}</td>
+              <td>{{s.questions.length}}</td>
+              <td>{{s.category}}</td>
+              <td><label class="badge">Active</label></td>
+              <td>
+                <button @click="viewQuestionsModal(i)" class="btn btn-success btn-sm">View Set
+                </button>
+              </td>
+              <td>
+                <button @click="editSetModal(i)" class="btn btn-info btn-sm"><i class="icon-pencil"></i></button>
+              </td>
+              <td>
+                <button @click="deleteSet(i)" class="btn btn-danger btn-sm"><i class="icon-trash"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
