@@ -19,6 +19,9 @@
       <h2>Senarai Soalan</h2>
     </div>
     <div class="body">
+      <div>
+        <button class="btn btn-primary">Tambah Soalan</button>
+      </div>
       <div class="table-responsive">
         <table class="table center-aligned-table">
           <thead>
@@ -35,24 +38,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="s,i in set">
-              <td>{{s.name}}</td>
-              <td>{{s.category}}</td>
-              <td>{{s.date_created}}</td>
-              <td>{{s.questions.length}}</td>
-              <td>{{s.category}}</td>
-              <td><label class="badge">Active</label></td>
-              <td>
-                <button @click="viewQuestionsModal(i)" class="btn btn-success btn-sm">View Set
-                </button>
-              </td>
-              <td>
-                <button @click="editSetModal(i)" class="btn btn-info btn-sm"><i class="icon-pencil"></i></button>
-              </td>
-              <td>
-                <button @click="deleteSet(i)" class="btn btn-danger btn-sm"><i class="icon-trash"></i></button>
-              </td>
-            </tr>
+            {{#each data}}
+              <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+                <td>{{date}}</td>
+                <td>{{questions.length}}</td>
+                <td>{{category}}</td>
+                <td><label class="badge">Active</label></td>
+                <td>
+                  <button @click="viewQuestionsModal(i)" class="btn btn-success btn-sm">View Set
+                  </button>
+                </td>
+                <td>
+                  <button @click="editSetModal(i)" class="btn btn-info btn-sm"><i class="icon-pencil"></i></button>
+                </td>
+                <td>
+                  <button @click="deleteSet(i)" class="btn btn-danger btn-sm"><i class="icon-trash"></i></button>
+                </td>
+              </tr>
+            {{/each}}
           </tbody>
         </table>
       </div>
