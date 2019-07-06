@@ -117,7 +117,6 @@ module.exports = function (grunt) {
       }
     }
   });
-  grunt.loadNpmTasks("grunt-commonjs-compiler");
   grunt.loadNpmTasks("grunt-sass");
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("buildcss", ["sass"]);
