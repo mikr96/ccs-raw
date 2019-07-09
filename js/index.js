@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-$(document).ready(function() {
+$(document).ready(function () {
   var token = sessionStorage.getItem("token");
   console.log(token);
   if (token == null) {
@@ -8,14 +7,6 @@ $(document).ready(function() {
 
   // const url = "https://ccs.cyrix.my/CCS-API/";
   const url = "http://localhost/CCS-API/";
-=======
-$(document).ready(function () {
-  if (!sessionStorage.token)
-    window.location = 'js/pages/page-login.html'
-
-  const url = "http://localhost/ccs-api/";
-  // const url = "https://ccs.cyrix.my/CCS-API/";
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
 
   var role = sessionStorage.getItem("role");
   if (role == "admin") {
@@ -32,7 +23,6 @@ $(document).ready(function () {
     $("li[id='users']").empty();
   }
 
-<<<<<<< HEAD
   // setTimeout(() => {
   //   fetch(url + "profiles", {
   //     method: "get",
@@ -46,10 +36,7 @@ $(document).ready(function () {
   //     .then(res => console.log(res));
   // }, 3000);
 
-  crossroads.addRoute("/", function() {
-=======
   async function home() {
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
     if (role == "operator") {
       var html = Template.templates.homeOperator();
       $("#root")
@@ -138,8 +125,7 @@ $(document).ready(function () {
       .show();
   });
 
-<<<<<<< HEAD
-  crossroads.addRoute("/user-operator", function() {
+  crossroads.addRoute("/user-operator", function () {
     fetch(url + "profiles", {
       method: "get",
       headers: {
@@ -156,14 +142,6 @@ $(document).ready(function () {
           .html(html)
           .show();
       });
-=======
-  crossroads.addRoute("/user-operator", function () {
-    var html = Template.templates.userOperator();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
   });
 
   crossroads.addRoute("/record-statistics", function () {
@@ -183,29 +161,29 @@ $(document).ready(function () {
   });
 
   crossroads.addRoute("/soalan-set", function () {
-    client
-      .getItems("set_soalan", {
-        fields: "*.*"
-      })
-      .then(res => {
-        size = Object.keys(res).length;
-        data = [];
-        for (i = 0; i <= size; i++) {
-          data.push({
-            id: res.data[i].id,
-            name: res.data[i].name,
-            date: res.data[i].created_on,
-            questions: res.data[i].questions,
-            category: res.data[i].category,
-            status: res.data[i].status
-          });
-        }
-        html = Template.templates.soalanSet({ data });
-        $("#root").empty();
-        $("#root")
-          .html(html)
-          .show();
-      });
+    // client
+    //   .getItems("set_soalan", {
+    //     fields: "*.*"
+    //   })
+    //   .then(res => {
+    //     size = Object.keys(res).length;
+    //     data = [];
+    //     for (i = 0; i <= size; i++) {
+    //       data.push({
+    //         id: res.data[i].id,
+    //         name: res.data[i].name,
+    //         date: res.data[i].created_on,
+    //         questions: res.data[i].questions,
+    //         category: res.data[i].category,
+    //         status: res.data[i].status
+    //       });
+    //     }
+    //     html = Template.templates.soalanSet({ data });
+    //     $("#root").empty();
+    //     $("#root")
+    //       .html(html)
+    //       .show();
+    //   });
   });
 
   crossroads.addRoute("/result", function () {
