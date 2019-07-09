@@ -1,6 +1,6 @@
 //Registration form
-const url = "http://ccs.cyrix.my/CCS-API/";
-
+// const url = "http://ccs.cyrix.my/CCS-API/";
+const url = "http://localhost/CCS-API/";
 async function registration() {
   event.preventDefault(); //prevent redirect/page refresh
   console.log("submitted");

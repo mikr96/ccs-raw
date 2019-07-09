@@ -1,5 +1,12 @@
 $(document).ready(function() {
-  const url = "https://ccs.cyrix.my/CCS-API/";
+  var token = sessionStorage.getItem("token");
+  console.log(token);
+  if (token == null) {
+    window.location.href = "js/pages/page-login.html";
+  }
+
+  // const url = "https://ccs.cyrix.my/CCS-API/";
+  const url = "http://localhost/CCS-API/";
 
   var role = sessionStorage.getItem("role");
   if (role == "admin") {
@@ -15,6 +22,19 @@ $(document).ready(function() {
   } else {
     $("li[id='users']").empty();
   }
+
+  // setTimeout(() => {
+  //   fetch(url + "profiles", {
+  //     method: "get",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-type": "application/json",
+  //       Authorization: `bearer ${sessionStorage.getItem("token")}`
+  //     }
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => console.log(res));
+  // }, 3000);
 
   crossroads.addRoute("/", function() {
     if (role == "operator") {
@@ -82,11 +102,22 @@ $(document).ready(function() {
   });
 
   crossroads.addRoute("/user-operator", function() {
-    var html = Template.templates.userOperator();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
+    fetch(url + "profiles", {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        var html = Template.templates.userOperator({ res });
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      });
   });
 
   crossroads.addRoute("/record-statistics", function() {

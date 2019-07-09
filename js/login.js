@@ -1,4 +1,5 @@
-const url = "https://ccs.cyrix.my/CCS-API/";
+// const url = "https://ccs.cyrix.my/CCS-API/";
+const url = "http://localhost/CCS-API/";
 async function login() {
   event.preventDefault(); //prevent redirect/page refresh
   var formData = JSON.stringify({
@@ -15,7 +16,7 @@ async function login() {
       },
       body: formData
     });
-    
+
     const success = await loginResponse.json();
     console.log(success);
     if (success.status !== -1) {
@@ -28,10 +29,10 @@ async function login() {
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);
         if (result.value) {
-          if (success.role == "admin" || success.role == "supervisor") {
-            window.location.href = "../../index.html";
-          } else {
+          if (success.role == "operator") {
             window.location.href = "page-verify.html";
+          } else {
+            window.location.href = "../../index.html";
           }
         }
       });
