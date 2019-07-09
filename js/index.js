@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
   var token = sessionStorage.getItem("token");
   console.log(token);
   if (token == null) {
@@ -116,7 +116,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/user-operator", function () {
+  crossroads.addRoute("/user-operator", function() {
     fetch(url + "profiles", {
       method: "get",
       headers: {
@@ -127,6 +127,7 @@ $(document).ready(function () {
     })
       .then(res => res.json())
       .then(res => {
+        console.log(res);
         var html = Template.templates.userOperator({ res });
         $("#root").empty();
         $("#root")
@@ -151,7 +152,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function () {
+  crossroads.addRoute("/soalan-set", function() {
     // client
     //   .getItems("set_soalan", {
     //     fields: "*.*"
