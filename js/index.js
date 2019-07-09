@@ -20,59 +20,52 @@ $(document).ready(function () {
     $("li[id='users']").empty();
   }
 
-  crossroads.addRoute("/", function() {
-    if (role == "operator") {
-      var html = Template.templates.homeOperator();
-      $("#root")
-        .html(html)
-        .show();
-    } else {
-      var html = Template.templates.home();
-      $("#root")
-        .html(html)
-        .show();
-    }
-  });
   async function home() {
-    try {
-      const res = await fetch(`${url}profiles`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `bearer ${sessionStorage.getItem('token')}`
-        }
-      })
-      const profiles = await res.json()
-
-      const totalProfiles = profiles.reduce((acc, profile) => {
-        if (profile.role === 'operator')
-          return { ...acc, operator: acc.operator += 1 }
-        if (profile.role === 'supervisor')
-          return { ...acc, supervisor: acc.supervisor += 1 }
-        return acc
-      }, { 'operator': 0, 'supervisor': 0 })
-      var html = Template.templates.home({ totalProfiles });
-      $("#root")
-        .html(html)
-        .show();
-  crossroads.addRoute("/home", function() {
     if (role == "operator") {
       var html = Template.templates.homeOperator();
       $("#root")
         .html(html)
         .show();
     } else {
-      var html = Template.templates.home();
-      $("#root")
-        .html(html)
-        .show();
-    }
-  });
+      try {
+        const res = await fetch(`${url}profiles`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `bearer ${sessionStorage.getItem('token')}`
+          }
+        })
+        const profiles = await res.json()
 
-    } catch (err) {
-      console.log(err)
-    }
+        const totalProfiles = profiles.reduce((acc, profile) => {
+          if (profile.role === 'operator')
+            return { ...acc, operator: acc.operator += 1 }
+          if (profile.role === 'supervisor')
+            return { ...acc, supervisor: acc.supervisor += 1 }
+          return acc
+        }, { 'operator': 0, 'supervisor': 0 })
+        var html = Template.templates.home({ totalProfiles });
+        $("#root")
+          .html(html)
+          .show();
+        crossroads.addRoute("/home", function () {
+          if (role == "operator") {
+            var html = Template.templates.homeOperator();
+            $("#root")
+              .html(html)
+              .show();
+          } else {
+            var html = Template.templates.home();
+            $("#root")
+              .html(html)
+              .show();
+          }
+        });
 
+      } catch (err) {
+        console.log(err)
+      }
+    }
   }
 
   crossroads.addRoute("/", home);
