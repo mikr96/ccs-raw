@@ -1,20 +1,8 @@
-<<<<<<< HEAD
 $(document).ready(function() {
   if (!sessionStorage.token) window.location = "js/pages/page-login.html";
 
   const url = "http://localhost/ccs-api/";
   // const url = "https://ccs.cyrix.my/CCS-API/";
-=======
-$(document).ready(function () {
-  var token = sessionStorage.getItem("token");
-  console.log(token);
-  if (token == null) {
-    window.location.href = "js/pages/page-login.html";
-  }
-
-  // const url = "https://ccs.cyrix.my/CCS-API/";
-  const url = "http://localhost/CCS-API/";
->>>>>>> 1a72ca9e35573d20cb172809af07828bfcd1b4d3
 
   var role = sessionStorage.getItem("role");
   if (role == "admin") {
@@ -31,8 +19,6 @@ $(document).ready(function () {
     $("li[id='users']").empty();
   }
 
-<<<<<<< HEAD
-=======
   // setTimeout(() => {
   //   fetch(url + "profiles", {
   //     method: "get",
@@ -46,7 +32,6 @@ $(document).ready(function () {
   //     .then(res => console.log(res));
   // }, 3000);
 
->>>>>>> 1a72ca9e35573d20cb172809af07828bfcd1b4d3
   async function home() {
     if (role == "operator") {
       var html = Template.templates.homeOperator();
@@ -140,11 +125,7 @@ $(document).ready(function () {
       .show();
   });
 
-<<<<<<< HEAD
   crossroads.addRoute("/user-operator", function() {
-=======
-  crossroads.addRoute("/user-operator", function () {
->>>>>>> 1a72ca9e35573d20cb172809af07828bfcd1b4d3
     fetch(url + "profiles", {
       method: "get",
       headers: {
@@ -155,6 +136,7 @@ $(document).ready(function () {
     })
       .then(res => res.json())
       .then(res => {
+        console.log(res);
         var html = Template.templates.userOperator({ res });
         $("#root").empty();
         $("#root")
@@ -179,33 +161,7 @@ $(document).ready(function () {
       .show();
   });
 
-<<<<<<< HEAD
   crossroads.addRoute("/soalan-set", function() {
-    client
-      .getItems("set_soalan", {
-        fields: "*.*"
-      })
-      .then(res => {
-        size = Object.keys(res).length;
-        data = [];
-        for (i = 0; i <= size; i++) {
-          data.push({
-            id: res.data[i].id,
-            name: res.data[i].name,
-            date: res.data[i].created_on,
-            questions: res.data[i].questions,
-            category: res.data[i].category,
-            status: res.data[i].status
-          });
-        }
-        html = Template.templates.soalanSet({ data });
-        $("#root").empty();
-        $("#root")
-          .html(html)
-          .show();
-      });
-=======
-  crossroads.addRoute("/soalan-set", function () {
     // client
     //   .getItems("set_soalan", {
     //     fields: "*.*"
@@ -229,7 +185,6 @@ $(document).ready(function () {
     //       .html(html)
     //       .show();
     //   });
->>>>>>> 1a72ca9e35573d20cb172809af07828bfcd1b4d3
   });
 
   crossroads.addRoute("/result", function() {
