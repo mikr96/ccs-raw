@@ -1,8 +1,10 @@
 $(document).ready(function() {
-  const client = new DirectusSDK({
-    url: "http://ccs.cyrix.my/cms/public",
-    project: "_"
-  });
+  // const client = new DirectusSDK({
+  //   url: "http://ccs.cyrix.my/cms/public",
+  //   project: "_"
+  // });
+
+  const url = "https://ccs.cyrix.my/CCS-API/";
 
   crossroads.addRoute("/", function() {
     var html = Template.templates.home();
@@ -19,7 +21,29 @@ $(document).ready(function() {
   });
 
   crossroads.addRoute("/user-admin", function() {
-    var html = Template.templates.userAdmin();
+    client
+      .getItems("set_soalan", {
+        fields: "*.*"
+      })
+      .then(res => {
+        size = Object.keys(res).length;
+        data = [];
+        for (i = 0; i <= size; i++) {
+          data.push({
+            id: res.data[i].id,
+            name: res.data[i].name,
+            date: res.data[i].created_on,
+            questions: res.data[i].questions,
+            category: res.data[i].category,
+            status: res.data[i].status
+          });
+        }
+        html = Template.templates.userAdmin();
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      });
     $("#root")
       .html(html)
       .show();
