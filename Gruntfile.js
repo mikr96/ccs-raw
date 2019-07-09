@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-handlebars");
 
   grunt.initConfig({
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 
           // convert file path into a function name
           // in this example, I convert grab just the filename without the extension
-          processName: function(filePath) {
+          processName: function (filePath) {
             var pieces = filePath.split("/");
             return pieces[pieces.length - 1].split(".")[0];
           }
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
             "js/signals.min.js",
             "js/crossroads.min.js",
             "js/hasher.min.js",
-            "js/handlebars.min.js",
+            "js/handlebars.js",
             "js/compiled.js"
           ]
         }
