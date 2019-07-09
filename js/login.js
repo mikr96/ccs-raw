@@ -52,7 +52,7 @@ async function login() {
 
     const success = await loginResponse.json();
     console.log(success);
-    if (success.status) {
+    if (success.status !== -1) {
       Swal.fire({
         title: "Login Success",
         text: "Welcome back",
