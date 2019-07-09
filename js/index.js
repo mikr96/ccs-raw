@@ -1,8 +1,12 @@
 $(document).ready(function() {
-  if (!sessionStorage.token) window.location = "js/pages/page-login.html";
+  var token = sessionStorage.getItem("token");
+  console.log(token);
+  if (token == null) {
+    window.location.href = "js/pages/page-login.html";
+  }
 
-  const url = "http://localhost/ccs-api/";
   // const url = "https://ccs.cyrix.my/CCS-API/";
+  const url = "http://localhost/CCS-API/";
 
   var role = sessionStorage.getItem("role");
   if (role == "admin") {
@@ -18,19 +22,6 @@ $(document).ready(function() {
   } else {
     $("li[id='users']").empty();
   }
-
-  // setTimeout(() => {
-  //   fetch(url + "profiles", {
-  //     method: "get",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-type": "application/json",
-  //       Authorization: `bearer ${sessionStorage.getItem("token")}`
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => console.log(res));
-  // }, 3000);
 
   async function home() {
     if (role == "operator") {
