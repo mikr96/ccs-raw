@@ -1,21 +1,8 @@
-<<<<<<< HEAD
 $(document).ready(function() {
-  var token = sessionStorage.getItem("token");
-  console.log(token);
-  if (token == null) {
-    window.location.href = "js/pages/page-login.html";
-  }
-
-  // const url = "https://ccs.cyrix.my/CCS-API/";
-  const url = "http://localhost/CCS-API/";
-=======
-$(document).ready(function () {
-  if (!sessionStorage.token)
-    window.location = 'js/pages/page-login.html'
+  if (!sessionStorage.token) window.location = "js/pages/page-login.html";
 
   const url = "http://localhost/ccs-api/";
   // const url = "https://ccs.cyrix.my/CCS-API/";
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
 
   var role = sessionStorage.getItem("role");
   if (role == "admin") {
@@ -32,24 +19,7 @@ $(document).ready(function () {
     $("li[id='users']").empty();
   }
 
-<<<<<<< HEAD
-  // setTimeout(() => {
-  //   fetch(url + "profiles", {
-  //     method: "get",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-type": "application/json",
-  //       Authorization: `bearer ${sessionStorage.getItem("token")}`
-  //     }
-  //   })
-  //     .then(res => res.json())
-  //     .then(res => console.log(res));
-  // }, 3000);
-
-  crossroads.addRoute("/", function() {
-=======
   async function home() {
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
     if (role == "operator") {
       var html = Template.templates.homeOperator();
       $("#root")
@@ -58,26 +28,31 @@ $(document).ready(function () {
     } else {
       try {
         const res = await fetch(`${url}profiles`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            "Content-Type": "application/json",
+            Authorization: `bearer ${sessionStorage.getItem("token")}`
           }
-        })
-        const profiles = await res.json()
+        });
+        const profiles = await res.json();
 
-        const totalProfiles = profiles.reduce((acc, profile) => {
-          if (profile.role === 'operator')
-            return { ...acc, operator: acc.operator += 1 }
-          if (profile.role === 'supervisor')
-            return { ...acc, supervisor: acc.supervisor += 1 }
-          return acc
-        }, { 'operator': 0, 'supervisor': 0 })
+        const totalProfiles = profiles.reduce(
+          (acc, profile) => {
+            if (profile.role === "operator")
+              return { ...acc, operator: (acc.operator += 1) };
+            if (profile.role === "supervisor")
+              return { ...acc, supervisor: (acc.supervisor += 1) };
+            return acc;
+          },
+          { operator: 0, supervisor: 0 }
+        );
+
         var html = Template.templates.home({ totalProfiles });
         $("#root")
           .html(html)
           .show();
-        crossroads.addRoute("/home", function () {
+
+        crossroads.addRoute("/home", function() {
           if (role == "operator") {
             var html = Template.templates.homeOperator();
             $("#root")
@@ -90,9 +65,8 @@ $(document).ready(function () {
               .show();
           }
         });
-
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
   }
@@ -101,7 +75,7 @@ $(document).ready(function () {
 
   crossroads.addRoute("/home", home);
 
-  crossroads.addRoute("/user-admin", function () {
+  crossroads.addRoute("/user-admin", function() {
     client
       .getItems("set_soalan", {
         fields: "*.*"
@@ -130,7 +104,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/user-supervisor", function () {
+  crossroads.addRoute("/user-supervisor", function() {
     var html = Template.templates.userSupervisor();
     $("#root").empty();
     $("#root")
@@ -138,7 +112,6 @@ $(document).ready(function () {
       .show();
   });
 
-<<<<<<< HEAD
   crossroads.addRoute("/user-operator", function() {
     fetch(url + "profiles", {
       method: "get",
@@ -156,17 +129,9 @@ $(document).ready(function () {
           .html(html)
           .show();
       });
-=======
-  crossroads.addRoute("/user-operator", function () {
-    var html = Template.templates.userOperator();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
->>>>>>> 44888ba228b3d3f2b8d204cb8ba7c58fae9a3dea
   });
 
-  crossroads.addRoute("/record-statistics", function () {
+  crossroads.addRoute("/record-statistics", function() {
     var html = Template.templates.recordStatistics();
     $("#root").empty();
     $("#root")
@@ -174,7 +139,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/record-region", function () {
+  crossroads.addRoute("/record-region", function() {
     var html = Template.templates.recordRegion();
     $("#root").empty();
     $("#root")
@@ -182,7 +147,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function () {
+  crossroads.addRoute("/soalan-set", function() {
     client
       .getItems("set_soalan", {
         fields: "*.*"
@@ -208,7 +173,7 @@ $(document).ready(function () {
       });
   });
 
-  crossroads.addRoute("/result", function () {
+  crossroads.addRoute("/result", function() {
     var html = Template.templates.result();
     $("#root").empty();
     $("#root")
@@ -217,7 +182,7 @@ $(document).ready(function () {
   });
 
   $(".knob2").knob({
-    format: function (value) {
+    format: function(value) {
       return value + "%";
     }
   });
@@ -365,9 +330,9 @@ $(document).ready(function () {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function (_, axis) {
+    $.each(plot.getXAxes(), function(_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -385,7 +350,7 @@ $(document).ready(function () {
   // Visitors Statistics ============= end
 });
 
-$(function () {
+$(function() {
   "use strict";
   // var options;
 

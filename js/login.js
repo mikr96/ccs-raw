@@ -29,10 +29,10 @@ async function login() {
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);
         if (result.value) {
-          if (success.role == "operator") {
-            window.location.href = "page-verify.html";
-          } else {
+          if (success.role == "admin" || success.role == "supervisor") {
             window.location.href = "../../index.html";
+          } else {
+            window.location.href = "page-verify.html";
           }
         }
       });
