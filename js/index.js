@@ -1,26 +1,49 @@
-$(document).ready(function() {
+$(document).ready(function () {
+  if (!sessionStorage.token)
+    window.location = 'js/pages/page-login.html'
+
   // const client = new DirectusSDK({
   //   url: "http://ccs.cyrix.my/cms/public",
   //   project: "_"
   // });
 
-  const url = "https://ccs.cyrix.my/CCS-API/";
+  const url = "http://localhost/ccs-api/";
+  // const url = "https://ccs.cyrix.my/CCS-API/";
 
-  crossroads.addRoute("/", function() {
-    var html = Template.templates.home();
-    $("#root")
-      .html(html)
-      .show();
-  });
+  async function home() {
+    try {
+      const res = await fetch(`${url}profiles`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `bearer ${sessionStorage.getItem('token')}`
+        }
+      })
+      const profiles = await res.json()
 
-  crossroads.addRoute("/home", function() {
-    var html = Template.templates.home();
-    $("#root")
-      .html(html)
-      .show();
-  });
+      const totalProfiles = profiles.reduce((acc, profile) => {
+        if (profile.role === 'operator')
+          return { ...acc, operator: acc.operator += 1 }
+        if (profile.role === 'supervisor')
+          return { ...acc, supervisor: acc.supervisor += 1 }
+        return acc
+      }, { 'operator': 0, 'supervisor': 0 })
+      var html = Template.templates.home({ totalProfiles });
+      $("#root")
+        .html(html)
+        .show();
 
-  crossroads.addRoute("/user-admin", function() {
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+
+  crossroads.addRoute("/", home);
+
+  crossroads.addRoute("/home", home);
+
+  crossroads.addRoute("/user-admin", function () {
     client
       .getItems("set_soalan", {
         fields: "*.*"
@@ -49,7 +72,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/user-supervisor", function() {
+  crossroads.addRoute("/user-supervisor", function () {
     var html = Template.templates.userSupervisor();
     $("#root").empty();
     $("#root")
@@ -57,7 +80,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/user-operator", function() {
+  crossroads.addRoute("/user-operator", function () {
     var html = Template.templates.userOperator();
     $("#root").empty();
     $("#root")
@@ -65,7 +88,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/record-statistics", function() {
+  crossroads.addRoute("/record-statistics", function () {
     var html = Template.templates.recordStatistics();
     $("#root").empty();
     $("#root")
@@ -73,7 +96,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/record-region", function() {
+  crossroads.addRoute("/record-region", function () {
     var html = Template.templates.recordRegion();
     $("#root").empty();
     $("#root")
@@ -81,7 +104,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function() {
+  crossroads.addRoute("/soalan-set", function () {
     client
       .getItems("set_soalan", {
         fields: "*.*"
@@ -107,7 +130,7 @@ $(document).ready(function() {
       });
   });
 
-  crossroads.addRoute("/result", function() {
+  crossroads.addRoute("/result", function () {
     var html = Template.templates.result();
     $("#root").empty();
     $("#root")
@@ -116,7 +139,7 @@ $(document).ready(function() {
   });
 
   $(".knob2").knob({
-    format: function(value) {
+    format: function (value) {
       return value + "%";
     }
   });
@@ -264,9 +287,9 @@ $(document).ready(function() {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function(_, axis) {
+    $.each(plot.getXAxes(), function (_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -284,7 +307,7 @@ $(document).ready(function() {
   // Visitors Statistics ============= end
 });
 
-$(function() {
+$(function () {
   "use strict";
   // var options;
 
