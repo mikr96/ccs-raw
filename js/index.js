@@ -1,39 +1,55 @@
-// const DirectusSDK = require("directus-sdk-javascript/remote");
-// const client = new DirectusSDK({
-//   url: "http://ccs.cyrix.my/cms/public",
-//   project: "_",
-//   email: "admin@example.com",
-//   password: "password"
-// });
+$(document).ready(function() {
+  // const client = new DirectusSDK({
+  //   url: "http://ccs.cyrix.my/cms/public",
+  //   project: "_"
+  // });
 
-$(document).ready(function () {
-  const client = new DirectusSDK({
-    url: "http://ccs.cyrix.my/cms/public",
-    project: "_"
-  });
+  const url = "https://ccs.cyrix.my/CCS-API/";
 
-  crossroads.addRoute("/", function () {
+  crossroads.addRoute("/", function() {
     var html = Template.templates.home();
     $("#root")
       .html(html)
       .show();
   });
 
-  crossroads.addRoute("/home", function () {
+  crossroads.addRoute("/home", function() {
     var html = Template.templates.home();
     $("#root")
       .html(html)
       .show();
   });
 
-  crossroads.addRoute("/user-admin", function () {
-    var html = Template.templates.userAdmin();
+  crossroads.addRoute("/user-admin", function() {
+    client
+      .getItems("set_soalan", {
+        fields: "*.*"
+      })
+      .then(res => {
+        size = Object.keys(res).length;
+        data = [];
+        for (i = 0; i <= size; i++) {
+          data.push({
+            id: res.data[i].id,
+            name: res.data[i].name,
+            date: res.data[i].created_on,
+            questions: res.data[i].questions,
+            category: res.data[i].category,
+            status: res.data[i].status
+          });
+        }
+        html = Template.templates.userAdmin();
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      });
     $("#root")
       .html(html)
       .show();
   });
 
-  crossroads.addRoute("/user-supervisor", function () {
+  crossroads.addRoute("/user-supervisor", function() {
     var html = Template.templates.userSupervisor();
     $("#root").empty();
     $("#root")
@@ -41,7 +57,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/user-operator", function () {
+  crossroads.addRoute("/user-operator", function() {
     var html = Template.templates.userOperator();
     $("#root").empty();
     $("#root")
@@ -49,7 +65,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/record-statistics", function () {
+  crossroads.addRoute("/record-statistics", function() {
     var html = Template.templates.recordStatistics();
     $("#root").empty();
     $("#root")
@@ -57,7 +73,7 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/record-region", function () {
+  crossroads.addRoute("/record-region", function() {
     var html = Template.templates.recordRegion();
     $("#root").empty();
     $("#root")
@@ -65,15 +81,33 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function () {
-    var html = Template.templates.soalanSet();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
+  crossroads.addRoute("/soalan-set", function() {
+    client
+      .getItems("set_soalan", {
+        fields: "*.*"
+      })
+      .then(res => {
+        size = Object.keys(res).length;
+        data = [];
+        for (i = 0; i <= size; i++) {
+          data.push({
+            id: res.data[i].id,
+            name: res.data[i].name,
+            date: res.data[i].created_on,
+            questions: res.data[i].questions,
+            category: res.data[i].category,
+            status: res.data[i].status
+          });
+        }
+        html = Template.templates.soalanSet({ data });
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      });
   });
 
-  crossroads.addRoute("/result", function () {
+  crossroads.addRoute("/result", function() {
     var html = Template.templates.result();
     $("#root").empty();
     $("#root")
@@ -82,7 +116,7 @@ $(document).ready(function () {
   });
 
   $(".knob2").knob({
-    format: function (value) {
+    format: function(value) {
       return value + "%";
     }
   });
@@ -230,9 +264,9 @@ $(document).ready(function () {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function (_, axis) {
+    $.each(plot.getXAxes(), function(_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -250,7 +284,7 @@ $(document).ready(function () {
   // Visitors Statistics ============= end
 });
 
-$(function () {
+$(function() {
   "use strict";
   // var options;
 
