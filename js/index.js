@@ -2,14 +2,37 @@ $(document).ready(function () {
   if (!sessionStorage.token)
     window.location = 'js/pages/page-login.html'
 
-  // const client = new DirectusSDK({
-  //   url: "http://ccs.cyrix.my/cms/public",
-  //   project: "_"
-  // });
-
   const url = "http://localhost/ccs-api/";
   // const url = "https://ccs.cyrix.my/CCS-API/";
 
+  var role = sessionStorage.getItem("role");
+  if (role == "admin") {
+    $("ul[id='userRole']").empty();
+    $("ul[id='userRole']").append(
+      "<li><a href='#user-admin'>Admin</a></li><li><a href='#user-supervisor'>Supervisor</a></li><li><a href='#user-operator'>Operator</a></li>"
+    );
+  } else if (role == "supervisor") {
+    $("ul[id='userRole']").empty();
+    $("ul[id='userRole']").append(
+      "<li><a href='#user-operator'>Operator</a></li>"
+    );
+  } else {
+    $("li[id='users']").empty();
+  }
+
+  crossroads.addRoute("/", function() {
+    if (role == "operator") {
+      var html = Template.templates.homeOperator();
+      $("#root")
+        .html(html)
+        .show();
+    } else {
+      var html = Template.templates.home();
+      $("#root")
+        .html(html)
+        .show();
+    }
+  });
   async function home() {
     try {
       const res = await fetch(`${url}profiles`, {
@@ -32,6 +55,19 @@ $(document).ready(function () {
       $("#root")
         .html(html)
         .show();
+  crossroads.addRoute("/home", function() {
+    if (role == "operator") {
+      var html = Template.templates.homeOperator();
+      $("#root")
+        .html(html)
+        .show();
+    } else {
+      var html = Template.templates.home();
+      $("#root")
+        .html(html)
+        .show();
+    }
+  });
 
     } catch (err) {
       console.log(err)

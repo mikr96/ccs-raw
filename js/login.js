@@ -1,37 +1,3 @@
-// const client = new DirectusSDK({
-//   url: "http://ccs.cyrix.my/cms/public",
-//   project: "_"
-// })
-
-// let app = new Vue({
-//   el: '#wrapper',
-//   data: {
-//     email: '',
-//     password: ''
-//   },
-//   methods: {
-//     login: async function () {
-//       try {
-//         const loginResponse = await client
-//           .login({
-//             url: "http://ccs.cyrix.my/cms/public",
-//             project: "_",
-//             email: this.email,
-//             password: this.password
-//           })
-
-//         if (loginResponse) {
-//           Swal.fire('Login Success', 'Welcome back', 'success')
-//           sessionStorage.setItem("token", loginResponse.token);
-//           window.location.href = "../../index.html";
-
-//         }
-//       } catch (err) {
-//         Swal.fire('Something went wrong', err.message, 'error')
-//       }
-//     }
-//   }
-// })
 const url = "https://ccs.cyrix.my/CCS-API/";
 async function login() {
   event.preventDefault(); //prevent redirect/page refresh
@@ -58,10 +24,15 @@ async function login() {
         text: "Welcome back",
         type: "success"
       }).then(result => {
+        sessionStorage.setItem("role", success.role);
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);
         if (result.value) {
-          window.location.href = "page-verify.html";
+          if (success.role == "admin" || success.role == "supervisor") {
+            window.location.href = "../../index.html";
+          } else {
+            window.location.href = "page-verify.html";
+          }
         }
       });
     } else {
