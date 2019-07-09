@@ -1,23 +1,47 @@
 $(document).ready(function() {
-  // const client = new DirectusSDK({
-  //   url: "http://ccs.cyrix.my/cms/public",
-  //   project: "_"
-  // });
-
   const url = "https://ccs.cyrix.my/CCS-API/";
 
+  var role = sessionStorage.getItem("role");
+  if (role == "admin") {
+    $("ul[id='userRole']").empty();
+    $("ul[id='userRole']").append(
+      "<li><a href='#user-admin'>Admin</a></li><li><a href='#user-supervisor'>Supervisor</a></li><li><a href='#user-operator'>Operator</a></li>"
+    );
+  } else if (role == "supervisor") {
+    $("ul[id='userRole']").empty();
+    $("ul[id='userRole']").append(
+      "<li><a href='#user-operator'>Operator</a></li>"
+    );
+  } else {
+    $("li[id='users']").empty();
+  }
+
   crossroads.addRoute("/", function() {
-    var html = Template.templates.home();
-    $("#root")
-      .html(html)
-      .show();
+    if (role == "operator") {
+      var html = Template.templates.homeOperator();
+      $("#root")
+        .html(html)
+        .show();
+    } else {
+      var html = Template.templates.home();
+      $("#root")
+        .html(html)
+        .show();
+    }
   });
 
   crossroads.addRoute("/home", function() {
-    var html = Template.templates.home();
-    $("#root")
-      .html(html)
-      .show();
+    if (role == "operator") {
+      var html = Template.templates.homeOperator();
+      $("#root")
+        .html(html)
+        .show();
+    } else {
+      var html = Template.templates.home();
+      $("#root")
+        .html(html)
+        .show();
+    }
   });
 
   crossroads.addRoute("/user-admin", function() {
