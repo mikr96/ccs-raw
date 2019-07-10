@@ -125,29 +125,6 @@ $(document).ready(function() {
     }
   };
 
-  // async function operator() {
-  //   try {
-  //     const res = await fetch(`${url}profiles/role/operator`, {
-  //       method: "get",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-type": "application/json",
-  //         Authorization: `bearer ${sessionStorage.getItem("token")}`
-  //       }
-  //     });
-
-  //     const oper = await res.json();
-  //     console.log(oper);
-  //     var html = Template.templates.userOperator({ oper });
-  //     $("#root").empty();
-  //     $("#root")
-  //       .html(html)
-  //       .show();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
   crossroads.addRoute("/", home);
   crossroads.addRoute("/home", home);
   crossroads.addRoute("/user-supervisor", () => getRole("supervisor"));
@@ -170,30 +147,63 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function() {
-    // client
-    //   .getItems("set_soalan", {
-    //     fields: "*.*"
-    //   })
-    //   .then(res => {
-    //     size = Object.keys(res).length;
-    //     data = [];
-    //     for (i = 0; i <= size; i++) {
-    //       data.push({
-    //         id: res.data[i].id,
-    //         name: res.data[i].name,
-    //         date: res.data[i].created_on,
-    //         questions: res.data[i].questions,
-    //         category: res.data[i].category,
-    //         status: res.data[i].status
-    //       });
-    //     }
-    //     html = Template.templates.soalanSet({ data });
-    //     $("#root").empty();
-    //     $("#root")
-    //       .html(html)
-    //       .show();
-    //   });
+  async function question() {
+    try {
+      const res = await fetch(`${url}/questions`, {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        }
+      });
+
+      const ques = await res.json();
+      sessionStorage.setItem("question", ques);
+      var html = Template.templates.questionSet({ ques });
+      $("#root").empty();
+      $("#root")
+        .html(html)
+        .show();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  crossroads.addRoute("/question-set", question);
+
+  // crossroads.addRoute("/soalan-set", function() {
+  //   // client
+  //   //   .getItems("set_soalan", {
+  //   //     fields: "*.*"
+  //   //   })
+  //   //   .then(res => {
+  //   //     size = Object.keys(res).length;
+  //   //     data = [];
+  //   //     for (i = 0; i <= size; i++) {
+  //   //       data.push({
+  //   //         id: res.data[i].id,
+  //   //         name: res.data[i].name,
+  //   //         date: res.data[i].created_on,
+  //   //         questions: res.data[i].questions,
+  //   //         category: res.data[i].category,
+  //   //         status: res.data[i].status
+  //   //       });
+  //   //     }
+  //   html = Template.templates.soalanSet();
+  //   $("#root").empty();
+  //   $("#root")
+  //     .html(html)
+  //     .show();
+  //   //   });
+  // });
+
+  crossroads.addRoute("/new-question", function() {
+    var html = Template.templates.newQuestion();
+    $("#root").empty();
+    $("#root")
+      .html(html)
+      .show();
   });
 
   crossroads.addRoute("/result", function() {

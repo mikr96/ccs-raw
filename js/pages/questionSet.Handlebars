@@ -1,0 +1,182 @@
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h2>List of Questions</h2>
+    </div>
+    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb justify-content-end">
+        <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+        <li class="breadcrumb-item">Questions</li>
+        <li class="breadcrumb-item active">List of Questions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="card">
+    <div class="header">
+      <h2>List of Questions</h2>
+    </div>
+    <div class="body">
+      <div>
+        <a href="#new-question" class="btn btn-primary"
+          style="-webkit-writing-mode: horizontal-tb !important; text-rendering: auto; letter-spacing: normal; word-spacing: normal; text-indent: 0px; text-shadow: none; align-items: flex-start; font: 400 13.3333px Arial;">Add
+          New Question</a>
+      </div>
+      <br />
+      <div class="table-responsive">
+        <table class="table center-aligned-table">
+          <thead>
+            <tr style="text-align: center">
+              <th>Set #</th>
+              <th>Set Name</th>
+              <th>Date created</th>
+              <th>No. of Questions</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each ques}}
+              <tr style="text-align: center">
+                <td>{{set_id}}</td>
+                <td>{{set_name}}</td>
+                <td>{{date_created}}</td>
+                <td>{{questions}}</td>
+                <td>{{category}}</td>
+                <td><label class="badge">{{status}}</label></td>
+                <td>
+                  <button @click="viewQuestionsModal(i)" class="btn btn-success btn-sm">View Set
+                  </button>
+                </td>
+                <td>
+                  <button onclick="editSet('{{{set_id}}}')" class="btn btn-info btn-sm"><i
+                      class="icon-pencil"></i></button>
+                </td>
+                <td>
+                  <button onclick="deleteSet('{{{set_id}}}')" class="btn btn-danger btn-sm"><i
+                      class="icon-trash"></i></button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  async function editSet(set_id) {
+    console.log("ayam6")
+    var question = {{{ json question }}};
+  const setList = oper.filter(profiles => set_id === profiles.set_id);
+
+  const { value: formValues } = await Swal.fire({
+    title: 'Edit admin',
+    html: '<br/><input type="text" class="form-control" id="set_id" value="' + setList[0].set_id + '"><br/>' + '<input type="text" class="form-control" id="set_name" value="' + setList[0].set_name + '"><br/>' + '<input type="text" class="form-control" id="date_created" placeholder="' + setList[0].date_created + '"><br/>' + '<input type="text" class="form-control" id="category" value="' + setList[0].category + '"><br/>' + '<input type="text" class="form-control" id="questions" placeholder="' + setList[0].questions + '"><br/><select class="form-control" id="status">' + '<option selected value="" disabled>"' + setList[0].status + '"</option>' + '<option value="Active">Active</option>' + '<option value="Inactive">Inactive</option></select><br/>',
+    focusConfirm: false,
+    preConfirm: () => {
+      return [
+        document.getElementById('set_id').value,
+        document.getElementById('set_name').value,
+        document.getElementById('date_created').value,
+        document.getElementById('category').value,
+        document.getElementById('questions').value,
+        document.getElementById('status').value,
+      ]
+    }
+  })
+
+  if (formValues) {
+    try {
+
+      var formData = JSON.stringify({
+        set_id: formValues[0],
+        set_name: formValues[1],
+        date_created: formValues[2],
+        category: formValues[3],
+        questions: formValues[4],
+        status: formValues[5]
+      });
+
+      const questionCreate = await fetch(`${url}question/${set_id}/edit`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        },
+        body: formData
+      });
+      if (questionCreate) {
+        const created = await questionCreate.json();
+
+        console.log(created);
+
+        if (created.editstatus) {
+          Swal.fire({
+            title: "Congratulation",
+            text: "Successfully Created",
+            type: "success"
+          }).then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Fail",
+            text: "Please refill the form",
+            type: "error"
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      Swal.fire("Something went wrong", err.message, "error");
+    }
+  }
+  }
+
+  async function deleteSet(set_id) {
+    try {
+
+      const req = await swal.fire({
+        title: "Are you sure?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel please!"
+      })
+
+      const status = await req;
+
+      if (status.value) {
+        const res = await fetch(`${url}questions/${set_id}/delete`, {
+          method: "get",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+            Authorization: `bearer ${sessionStorage.getItem("token")}`
+          }
+
+        });
+
+        const deleted = await res;
+        swal.fire("Successfully deleted", "success")
+          .then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+</script>

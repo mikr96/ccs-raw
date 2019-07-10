@@ -1,0 +1,81 @@
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h2>Tambah Set Soalan</h2>
+    </div>
+    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb justify-content-end">
+        <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+        <li class="breadcrumb-item">Soalan</li>
+        <li class="breadcrumb-item active">Tambah Set</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="col-lg-6 col-md-12">
+  <div class="card">
+    <div class="header">
+      <h2>Tetapan Soalan</h2>
+    </div>
+    <div class="body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Set #</span>
+        </div>
+        <input type="text" v-model="name" class="form-control" placeholder="Qxx" aria-label="SetName"
+          aria-describedby="basic-addon1">
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelectCategory">Kategori</label>
+        </div>
+        <select class="custom-select" v-model="category" id="inputGroupSelectCategory" required>
+          <option selected value="" disabled>Pilih...</option>
+          <option value="umum">Umum</option>
+          <option value="feedback">Feedback</option>
+          <option value="keberkesanan">Keberkesanan</option>
+        </select>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelectNumber">Bilangan Soalan</label>
+        </div>
+        <select class="custom-select" v-model="noOfQuestion" id="inputGroupSelectNumber">
+          <option value=3>3</option>
+          <option value=4>4</option>
+          <option value=5>5</option>
+          <option value=6>6</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="col-lg-6 col-md-12">
+  <div class="card">
+    <div class="header">
+      <h2>Soalan</h2>
+    </div>
+    <div class="body">
+      <div v-for="q,index in questions" class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Soalan {{index}}</span>
+        </div>
+        <textarea class="form-control" v-model="questions[index]" aria-label="With textarea">{{q}}</textarea>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-12 text-right">
+  <div class="card">
+    <div class="body">
+      <a class="btn btn-primary" href="javascript:void(0);" role="button">Link</a>
+      <button @click="submitQuestion" class="btn btn-primary" type="submit">Submit</button>
+      <input @click="resetQuestion" class="btn btn-primary" type="button" value="Reset">
+
+    </div>
+  </div>
+</div>
