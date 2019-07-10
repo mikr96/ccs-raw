@@ -1,9 +1,13 @@
-$(document).ready(function() {
+$(document).ready(function () {
   var token = sessionStorage.getItem("token");
   console.log(token);
   if (token == null) {
     window.location.href = "js/pages/page-login.html";
   }
+
+  Handlebars.registerHelper('json', function (content) {
+    return JSON.stringify(content);
+  });
 
   // const url = "https://ccs.cyrix.my/CCS-API/";
   const url = "http://localhost/CCS-API/";
@@ -56,7 +60,7 @@ $(document).ready(function() {
           .html(html)
           .show();
 
-        crossroads.addRoute("/home", function() {
+        crossroads.addRoute("/home", function () {
           if (role == "operator") {
             var html = Template.templates.homeOperator();
             $("#root")
@@ -75,12 +79,12 @@ $(document).ready(function() {
     }
   }
 
-  async function getRole(arg) {
+  const getRole = async arg => {
     try {
       if (sessionStorage.role == "supervisor") {
-        newurl = "http://localhost/CCS-API/profiles/role/operator";
+        newurl = `${url}profiles/role/operator`;
       } else {
-        newurl = "http://localhost/CCS-API/profiles/role/?role='" + arg + "'";
+        newurl = `${url}profiles/role/${arg}`;
       }
 
       const res = await fetch(newurl, {
@@ -134,7 +138,6 @@ $(document).ready(function() {
 
       const oper = await res.json();
       console.log(oper);
-      sessionStorage.setItem("operator", oper);
       var html = Template.templates.userOperator({ oper });
       $("#root").empty();
       $("#root")
@@ -146,11 +149,11 @@ $(document).ready(function() {
   }
   crossroads.addRoute("/", home);
   crossroads.addRoute("/home", home);
-  // crossroads.addRoute("/user-supervisor", getRole("supervisor"));
+  crossroads.addRoute("/user-supervisor", () => getRole("supervisor"));
   crossroads.addRoute("/user-operator", operator);
-  // crossroads.addRoute("/user-admin", getRole("admin"));
+  crossroads.addRoute("/user-admin", () => getRole("admin"));
 
-  crossroads.addRoute("/record-statistics", function() {
+  crossroads.addRoute("/record-statistics", function () {
     var html = Template.templates.recordStatistics();
     $("#root").empty();
     $("#root")
@@ -158,7 +161,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/record-region", function() {
+  crossroads.addRoute("/record-region", function () {
     var html = Template.templates.recordRegion();
     $("#root").empty();
     $("#root")
@@ -166,7 +169,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/soalan-set", function() {
+  crossroads.addRoute("/soalan-set", function () {
     // client
     //   .getItems("set_soalan", {
     //     fields: "*.*"
@@ -192,7 +195,7 @@ $(document).ready(function() {
     //   });
   });
 
-  crossroads.addRoute("/result", function() {
+  crossroads.addRoute("/result", function () {
     var html = Template.templates.result();
     $("#root").empty();
     $("#root")
@@ -201,7 +204,7 @@ $(document).ready(function() {
   });
 
   $(".knob2").knob({
-    format: function(value) {
+    format: function (value) {
       return value + "%";
     }
   });
@@ -349,9 +352,9 @@ $(document).ready(function() {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function(_, axis) {
+    $.each(plot.getXAxes(), function (_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -369,7 +372,7 @@ $(document).ready(function() {
   // Visitors Statistics ============= end
 });
 
-$(function() {
+$(function () {
   "use strict";
   // var options;
 
