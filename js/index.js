@@ -75,66 +75,80 @@ $(document).ready(function() {
     }
   }
 
-  crossroads.addRoute("/", home);
-
-  crossroads.addRoute("/home", home);
-
-  crossroads.addRoute("/user-admin", function() {
-    client
-      .getItems("set_soalan", {
-        fields: "*.*"
-      })
-      .then(res => {
-        size = Object.keys(res).length;
-        data = [];
-        for (i = 0; i <= size; i++) {
-          data.push({
-            id: res.data[i].id,
-            name: res.data[i].name,
-            date: res.data[i].created_on,
-            questions: res.data[i].questions,
-            category: res.data[i].category,
-            status: res.data[i].status
-          });
-        }
-        html = Template.templates.userAdmin();
-        $("#root").empty();
-        $("#root")
-          .html(html)
-          .show();
-      });
-    $("#root")
-      .html(html)
-      .show();
-  });
-
-  crossroads.addRoute("/user-supervisor", function() {
-    var html = Template.templates.userSupervisor();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
-  });
-
-  crossroads.addRoute("/user-operator", function() {
-    fetch(url + "profiles", {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+  async function getRole(arg) {
+    try {
+      if (sessionStorage.role == "supervisor") {
+        newurl = "http://localhost/CCS-API/profiles/role/operator";
+      } else {
+        newurl = "http://localhost/CCS-API/profiles/role/?role='" + arg + "'";
       }
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        var html = Template.templates.userOperator({ res });
+
+      const res = await fetch(newurl, {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        }
+      });
+
+      const oper = await res.json();
+      console.log(oper);
+      if (
+        sessionStorage.role == "supervisor" ||
+        (sessionStorage.role == "admin" && arg == "operator")
+      ) {
+        var html = Template.templates.userOperator({ oper });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
+      } else if (sessionStorage.role == "admin" && arg == "admin") {
+        var html = Template.templates.userAdmin({ oper });
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      } else if (sessionStorage.role == "admin" && arg == "supervisor") {
+        var html = Template.templates.userSupervisor({ oper });
+        $("#root").empty();
+        $("#root")
+          .html(html)
+          .show();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function operator() {
+    try {
+      const res = await fetch(`${url}profiles/role/operator`, {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        }
       });
-  });
+
+      const oper = await res.json();
+      console.log(oper);
+      sessionStorage.setItem("operator", oper);
+      var html = Template.templates.userOperator({ oper });
+      $("#root").empty();
+      $("#root")
+        .html(html)
+        .show();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  crossroads.addRoute("/", home);
+  crossroads.addRoute("/home", home);
+  // crossroads.addRoute("/user-supervisor", getRole("supervisor"));
+  crossroads.addRoute("/user-operator", operator);
+  // crossroads.addRoute("/user-admin", getRole("admin"));
 
   crossroads.addRoute("/record-statistics", function() {
     var html = Template.templates.recordStatistics();

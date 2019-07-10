@@ -17,11 +17,11 @@
         <div class="col-lg-12">
                 <div class="card">
                         <div class="header">
-                                <h2>Senarai Operator</h2>
+                                <h2>List of Operators</h2>
                         </div>
                         <div class="body">
-                                <button id="addToTable" class="btn btn-primary m-b-15" type="button">
-                                        <i class="icon wb-plus" aria-hidden="true"></i> Tambah Operator
+                                <button onclick="add()" class="btn btn-primary m-b-15" type="button">
+                                        <i class="icon wb-plus" aria-hidden="true"></i> New Operator
                                 </button>
                                 <div class="table-responsive">
                                         <table class="table table-bordered table-hover table-striped"
@@ -39,7 +39,7 @@
                                                         </tr>
                                                 </thead>
                                                 <tbody>
-                                                        {{#each res}}
+                                                        {{#each oper}}
                                                                 <tr class="gradeA">
                                                                         <td>{{fullname}}</td>
                                                                         <td>{{username}}</td>
@@ -49,24 +49,16 @@
                                                                         <td>{{laptop_id}}</td>
                                                                         <td>{{region}}</td>
                                                                         <td class="actions">
-                                                                                <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
-                                                                                        data-toggle="tooltip"
-                                                                                        data-original-title="Save"
-                                                                                        hidden><i class="icon-drawer"
-                                                                                                aria-hidden="true"></i></button>
-                                                                                <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
-                                                                                        data-toggle="tooltip"
-                                                                                        data-original-title="Discard"
-                                                                                        hidden><i class="icon-close"
-                                                                                                aria-hidden="true"></i></button>
                                                                                 <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
                                                                                         data-toggle="tooltip"
-                                                                                        data-original-title="Edit"><i
+                                                                                        data-original-title="Edit"
+                                                                                        onclick="edit({{username}})"><i
                                                                                                 class="icon-pencil"
                                                                                                 aria-hidden="true"></i></button>
                                                                                 <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
                                                                                         data-toggle="tooltip"
-                                                                                        data-original-title="Remove"><i
+                                                                                        data-original-title="Remove"
+                                                                                        onclick="delete({{username}})"><i
                                                                                                 class="icon-trash"
                                                                                                 aria-hidden="true"></i></button>
                                                                         </td>
@@ -91,3 +83,206 @@
                 </div>
         </div>
 </div>
+<script>
+        const url = "http://localhost/CCS-API/";
+
+        async function add() {
+                console.log("ayam6")
+                try {
+                        const { value: formValues } = await Swal.fire({
+                                title: 'Add new operator',
+                                html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" placeholder="Enter region"><br/>' + '<input type="text" class="form-control" id="laptopId" placeholder="Enter laptop ID"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+                                focusConfirm: false,
+                                preConfirm: () => {
+                                        return [
+                                                document.getElementById('fullname').value,
+                                                document.getElementById('username').value,
+                                                document.getElementById('password').value,
+                                                document.getElementById('gender').value,
+                                                document.getElementById('race').value,
+                                                document.getElementById('age').value,
+                                                document.getElementById('role').value,
+                                                document.getElementById('region').value,
+                                                document.getElementById('laptopId').value
+                                        ]
+                                }
+                        })
+                } catch (err) {
+                        console.log(err);
+                }
+
+                if (formValues) {
+                        try {
+                                var formData = JSON.stringify({
+                                        fullname: formValues[0],
+                                        username: formValues[1],
+                                        password: formValues[2],
+                                        gender: formValues[3],
+                                        race: formValues[4],
+                                        age: formValues[5],
+                                        role: formValues[6],
+                                        laptop_id: formValues[7]
+                                });
+                                const accountCreate = await fetch(`${url}registration`, {
+                                        method: "post",
+                                        headers: {
+                                                Accept: "application/json",
+                                                "Content-Type": "application/json"
+                                        },
+                                        body: formData
+                                });
+
+                                const created = await accountCreate.json();
+
+                                console.log(created);
+
+                                if (created.insertstatus) {
+                                        Swal.fire({
+                                                title: "Congratulation",
+                                                text: "Successfully Created",
+                                                type: "success"
+                                        }).then(result => {
+                                                if (result.value) {
+                                                        window.location.reload();
+                                                }
+                                        });
+                                } else {
+                                        Swal.fire({
+                                                title: "Fail",
+                                                text: "Please refill the registration form",
+                                                type: "error"
+                                        });
+                                }
+                        } catch (err) {
+                                Swal.fire("Something went wrong", err.message, "error");
+                        }
+                }
+        }
+
+
+        async function edit(username) {
+                try {
+                        console.log("ayam6")
+                        var oper = sessionStorage.getItem('operator');
+                        var nameList = oper.map(e => {
+                                return [e.username]
+                        })
+                        var size = Object.keys(nameList).length;
+                        var index;
+                        for (i = 0; i < size; i++) {
+                                if (nameList[i] == username) {
+                                        index = i;
+                                }
+                        }
+
+                        const { value: formValues } = await Swal.fire({
+                                title: 'Add new operator',
+                                html: '<br/><input type="text" class="form-control" id="fullname" placeholder="' + oper[index].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" placeholder="' + oper[index].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + oper[index].password + '"><br/>' + '<input type="age" class="form-control" id="age" placeholder="' + oper[index].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + oper[index].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + oper[index].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" placeholder="' + oper[index].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" placeholder="' + oper[index].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+                                focusConfirm: false,
+                                preConfirm: () => {
+                                        return [
+                                                document.getElementById('fullname').value,
+                                                document.getElementById('username').value,
+                                                document.getElementById('password').value,
+                                                document.getElementById('gender').value,
+                                                document.getElementById('race').value,
+                                                document.getElementById('role').value,
+                                                document.getElementById('region').value,
+                                                document.getElementById('laptopId').value
+                                        ]
+                                }
+                        })
+                } catch (err) {
+                        console.log(err);
+                }
+
+                if (formValues) {
+                        try {
+                                var formData = JSON.stringify({
+                                        fullname: formValues[0],
+                                        username: formValues[1],
+                                        password: formValues[2],
+                                        gender: formValues[3],
+                                        race: formValues[4],
+                                        age: formValues[5],
+                                        role: formValues[6],
+                                        laptop_id: formValues[7]
+                                });
+                                const accountCreate = await fetch(`${url}profiles/${username}/edit`, {
+                                        method: "post",
+                                        headers: {
+                                                Accept: "application/json",
+                                                "Content-Type": "application/json",
+                                                Authorization: `bearer ${sessionStorage.getItem("token")}`
+                                        },
+                                        body: formData
+                                });
+
+                                const created = await accountCreate.json();
+
+                                console.log(created);
+
+                                if (created.insertstatus) {
+                                        Swal.fire({
+                                                title: "Congratulation",
+                                                text: "Successfully Created",
+                                                type: "success"
+                                        }).then(result => {
+                                                if (result.value) {
+                                                        window.location.reload();
+                                                }
+                                        });
+                                } else {
+                                        Swal.fire({
+                                                title: "Fail",
+                                                text: "Please refill the registration form",
+                                                type: "error"
+                                        });
+                                }
+                        } catch (err) {
+                                Swal.fire("Something went wrong", err.message, "error");
+                        }
+                }
+        }
+
+        async function delete (username) {
+                try {
+                        swal.fire({
+                                title: "Are you sure?",
+                                text: "But you will still be able to retrieve this file.",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Yes, archive it!",
+                                cancelButtonText: "No, cancel please!",
+                                closeOnConfirm: false,
+                                closeOnCancel: false
+                        }).then(isConfirm => {
+                                if (isConfirm) {
+                                        const res = await fetch(`${url}profiles/${username}/delete`, {
+                                                method: "get",
+                                                headers: {
+                                                        Accept: "application/json",
+                                                        "Content-type": "application/json",
+                                                        Authorization: `bearer ${sessionStorage.getItem("token")}`
+                                                }.then(res => {
+                                                        Swal.fire({
+                                                                title: "Delete Successfully",
+                                                                type: "success"
+                                                        })
+                                                });
+                                        } else {
+                                                        swal.fire({ "Cancelled", "Your imaginary file is safe :)", "error"});
+                                                }
+                        })
+                        function (isConfirm) {
+
+                        });
+                }
+
+                } catch (err) {
+                console.log(err);
+        }
+        }
+
+</script>

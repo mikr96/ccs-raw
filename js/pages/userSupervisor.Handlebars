@@ -27,77 +27,53 @@
           <table class="table table-bordered table-hover table-striped" id="addrowExample">
             <thead>
               <tr>
-                <th>Nama</th>
+                <th>Full Name</th>
                 <th>Username</th>
-                <th>Password</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Laptop ID</th>
+                <th>Region</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
 
-              <tr class="gradeA">
-                <td>Mohd Matril</td>
-                <td>mmatril</td>
-                <td>Sid321ney</td>
-                <td class="actions">
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
-                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
-                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
-                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
-                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash"
-                      aria-hidden="true"></i></button>
-                </td>
-              </tr>
-              <tr class="gradeA">
-                <td>Sukinah Mansore</td>
-                <td>eppyjomblo</td>
-                <td>pergi342</td>
-                <td class="actions">
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
-                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
-                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
-                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
-                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash"
-                      aria-hidden="true"></i></button>
-                </td>
-              </tr>
-              <tr class="gradeA">
-                <td>Prescott Junior</td>
-                <td>precicily</td>
-                <td>kolkol98765</td>
-                <td class="actions">
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
-                    data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
-                    data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
-                    data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil"
-                      aria-hidden="true"></i></button>
-                  <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
-                    data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash"
-                      aria-hidden="true"></i></button>
-                </td>
-              </tr>
+              {{#each oper}}
+                <tr class="gradeA">
+                  <td>{{fullname}}</td>
+                  <td>{{username}}</td>
+                  <td>{{age}}</td>
+                  <td>{{gender}}</td>
+                  <td>{{race}}</td>
+                  <td>{{laptop_id}}</td>
+                  <td>{{region}}</td>
+                  <td class="actions">
+                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing m-r-5 button-save"
+                      data-toggle="tooltip" data-original-title="Save" hidden><i class="icon-drawer"
+                        aria-hidden="true"></i></button>
+                    <button class="btn btn-sm btn-icon btn-pure btn-default on-editing button-discard"
+                      data-toggle="tooltip" data-original-title="Discard" hidden><i class="icon-close"
+                        aria-hidden="true"></i></button>
+                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
+                      data-toggle="tooltip" data-original-title="Edit"><i class="icon-pencil"
+                        aria-hidden="true"></i></button>
+                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                      data-toggle="tooltip" data-original-title="Remove"><i class="icon-trash"
+                        aria-hidden="true"></i></button>
+                  </td>
+                </tr>
+              {{/each}}
             </tbody>
             <tfoot>
               <tr>
-                <th>Nama</th>
+                <th>Full Name</th>
                 <th>Username</th>
-                <th>Password</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Laptop ID</th>
+                <th>Region</th>
                 <th>Actions</th>
               </tr>
             </tfoot>
