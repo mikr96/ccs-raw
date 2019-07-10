@@ -4,7 +4,7 @@
   "description": "Service Centre",
   "main": "Gruntfile.js",
   "scripts": {
-    "compile": "grunt uglify:my_target && grunt handlebars:compile",
+    "compile": "grunt handlebars:compile && grunt uglify:my_target",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "index.html"
   },
