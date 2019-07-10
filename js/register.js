@@ -13,7 +13,8 @@ async function registration() {
     race: $("#race").val(),
     age: $("#age").val(),
     role: "operator",
-    laptop_id: "L000"
+    laptop_id: "L000",
+    region: "undefined"
   });
   console.log(formData);
   try {
