@@ -1,11 +1,15 @@
-$(document).ready(function() {
+$(document).ready(function () {
   var token = sessionStorage.getItem("token");
   console.log(token);
   if (token == null) {
     window.location.href = "js/pages/page-login.html";
   }
 
-  Handlebars.registerHelper("json", function(content) {
+  Handlebars.registerHelper("date", function (timestamp) {
+    return moment(timestamp).format('DD MMMM YYYY')
+  });
+
+  Handlebars.registerHelper("json", function (content) {
     return JSON.stringify(content);
   });
 
@@ -64,7 +68,7 @@ $(document).ready(function() {
           .html(html)
           .show();
 
-        crossroads.addRoute("/home", function() {
+        crossroads.addRoute("/home", function () {
           if (role == "operator") {
             var html = Template.templates.homeOperator();
             $("#root")
@@ -135,7 +139,7 @@ $(document).ready(function() {
   crossroads.addRoute("/user-operator", () => getRole("operator"));
   crossroads.addRoute("/user-admin", () => getRole("admin"));
 
-  crossroads.addRoute("/record-statistics", function() {
+  crossroads.addRoute("/record-statistics", function () {
     var html = Template.templates.recordStatistics();
     $("#root").empty();
     $("#root")
@@ -143,7 +147,7 @@ $(document).ready(function() {
       .show();
   });
 
-  crossroads.addRoute("/record-region", function() {
+  crossroads.addRoute("/record-region", function () {
     var html = Template.templates.recordRegion();
     $("#root").empty();
     $("#root")
@@ -198,7 +202,7 @@ $(document).ready(function() {
   });
 
   $(".knob2").knob({
-    format: function(value) {
+    format: function (value) {
       return value + "%";
     }
   });
@@ -346,9 +350,9 @@ $(document).ready(function() {
   };
   var plot = $.plot("#Visitors_chart", [d], options);
   // now connect the two
-  $("#Visitors_chart").bind("plotselected", function(event, ranges) {
+  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
     // do the zooming
-    $.each(plot.getXAxes(), function(_, axis) {
+    $.each(plot.getXAxes(), function (_, axis) {
       var opts = axis.options;
       opts.min = ranges.xaxis.from;
       opts.max = ranges.xaxis.to;
@@ -366,7 +370,7 @@ $(document).ready(function() {
   // Visitors Statistics ============= end
 });
 
-$(function() {
+$(function () {
   "use strict";
   // var options;
 
