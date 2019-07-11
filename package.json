@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "grunt handlebars:compile && grunt uglify:my_target",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "index.html"
+    "start": "grunt handlebars:compile && grunt uglify:my_target && index.html"
   },
   "directories": {
     "doc": "doc"
