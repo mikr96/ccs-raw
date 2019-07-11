@@ -44,7 +44,7 @@
               <tr style="text-align: center">
                 <td>{{@index}}</td>
                 <td>{{set_name}}</td>
-                <td>{{date_created}}</td>
+                <td>{{date date_created}}</td>
                 <td>{{{len questions}}}</td>
                 <td>{{category}}</td>
                 <td><label class="badge">{{status}}</label></td>
@@ -54,7 +54,7 @@
                 </td>
                 <td>
                   <button onclick="editSet('{{{set_id}}}')" class="btn btn-info btn-sm"><i
-                      class="icon-pencil"></i></button>
+                    class="icon-pencil"></i></button>
                 </td>
                 <td>
                   <button onclick="deleteSet('{{{set_id}}}')" class="btn btn-danger btn-sm"><i
@@ -87,8 +87,8 @@
         </div>
 
 <script>
-
-  const url = "http://localhost/CCS-API/";
+  if (!url) 
+  var url = "http://localhost/CCS-API/";
 
   async function editSet(set_id) {
     var ques = {{{ json ques }}};
@@ -102,7 +102,23 @@
 
   const { value: formValues } = await Swal.fire({
     title: 'Edit question',
-    html: '<br/><input type="text" class="form-control" id="set_id" value="' + setList[0].set_id + '" readonly><br/>' + '<input type="text" class="form-control" id="set_name" value="' + setList[0].set_name + '"><br/>' + '<input type="text" class="form-control" id="date_created" placeholder="' + setList[0].date_created + '"><br/>' + '<input type="text" class="form-control" id="category" value="' + setList[0].category + '"><br/>' + string + '<select class="form-control" id="status">' + '<option selected value="'+ setList[0].status +'">' + setList[0].status + '</option>' + '<option value="Active">Active</option>' + '<option value="Inactive">Inactive</option></select><br/>',
+    html: `
+      <br/>
+      <input type="text" class="form-control" id="set_id" value="${setList[0].set_id}" readonly>
+      <br/>
+      <input type="text" class="form-control" id="set_name" value="${setList[0].set_name}"><br/>
+      <select class="form-control" id="category">
+        <option ${setList[0].category == 'umum' ? 'selected' : ''} value="umum">Umum</option>
+        <option ${setList[0].category == 'feedback' ? 'selected' : ''} value="feedback">Feedback</option>
+        <option ${setList[0].category == 'keberkesanan' ? 'selected' : ''} value="keberkesanan">Keberkesanan</option>
+      </select><br/>
+      ${string}
+      <select class="form-control" id="status">
+        <option selected value="${setList[0].status}">${setList[0].status}</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+      <br/>`,
     focusConfirm: false,
     preConfirm: () => {
       return [
