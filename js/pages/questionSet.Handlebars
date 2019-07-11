@@ -12,7 +12,6 @@
     </div>
   </div>
 </div>
-
 <div class="col-md-12">
   <div class="card">
     <div class="header">
@@ -43,14 +42,14 @@
           <tbody>
             {{#each ques}}
               <tr style="text-align: center">
-                <td>{{set_id}}</td>
+                <td>{{@index}}</td>
                 <td>{{set_name}}</td>
                 <td>{{date_created}}</td>
-                <td>{{questions}}</td>
+                <td>{{{len questions}}}</td>
                 <td>{{category}}</td>
                 <td><label class="badge">{{status}}</label></td>
                 <td>
-                  <button @click="viewQuestionsModal(i)" class="btn btn-success btn-sm">View Set
+                  <button onclick="viewSet('{{{set_name}}}')" class="btn btn-success btn-sm">View Set
                   </button>
                 </td>
                 <td>
@@ -69,23 +68,46 @@
     </div>
   </div>
 </div>
+<div class="modal" tabindex="-1" id="questionsModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Question List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="qModal" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 <script>
+
+  const url = "http://localhost/CCS-API/";
+
   async function editSet(set_id) {
-    console.log("ayam6")
-    var question = {{{ json question }}};
-  const setList = oper.filter(profiles => set_id === profiles.set_id);
+    var ques = {{{ json ques }}};
+    const setList = ques.filter(questions => set_id == questions.set_id);
+    var size = Object.keys(setList[0].questions).length;
+
+    var string = "";
+    for(i=0;i<size;i++){
+      string = string + '<input type="text" class="form-control" name="question" id="question" value="' + setList[0].questions[i] + '"><br/>';
+    }
 
   const { value: formValues } = await Swal.fire({
-    title: 'Edit admin',
-    html: '<br/><input type="text" class="form-control" id="set_id" value="' + setList[0].set_id + '"><br/>' + '<input type="text" class="form-control" id="set_name" value="' + setList[0].set_name + '"><br/>' + '<input type="text" class="form-control" id="date_created" placeholder="' + setList[0].date_created + '"><br/>' + '<input type="text" class="form-control" id="category" value="' + setList[0].category + '"><br/>' + '<input type="text" class="form-control" id="questions" placeholder="' + setList[0].questions + '"><br/><select class="form-control" id="status">' + '<option selected value="" disabled>"' + setList[0].status + '"</option>' + '<option value="Active">Active</option>' + '<option value="Inactive">Inactive</option></select><br/>',
+    title: 'Edit question',
+    html: '<br/><input type="text" class="form-control" id="set_id" value="' + setList[0].set_id + '" readonly><br/>' + '<input type="text" class="form-control" id="set_name" value="' + setList[0].set_name + '"><br/>' + '<input type="text" class="form-control" id="date_created" placeholder="' + setList[0].date_created + '"><br/>' + '<input type="text" class="form-control" id="category" value="' + setList[0].category + '"><br/>' + string + '<select class="form-control" id="status">' + '<option selected value="'+ setList[0].status +'">' + setList[0].status + '</option>' + '<option value="Active">Active</option>' + '<option value="Inactive">Inactive</option></select><br/>',
     focusConfirm: false,
     preConfirm: () => {
       return [
-        document.getElementById('set_id').value,
         document.getElementById('set_name').value,
-        document.getElementById('date_created').value,
         document.getElementById('category').value,
-        document.getElementById('questions').value,
         document.getElementById('status').value,
       ]
     }
@@ -93,15 +115,19 @@
 
   if (formValues) {
     try {
-
-      var formData = JSON.stringify({
-        set_id: formValues[0],
-        set_name: formValues[1],
-        date_created: formValues[2],
-        category: formValues[3],
-        questions: formValues[4],
-        status: formValues[5]
+      var questionsVal = []
+      $('input[name="question"]').each(function() {
+        questionsVal.push($(this).val());
       });
+      console.log(questionsVal);
+      var formData = JSON.stringify({
+        set_name: formValues[0],
+        category: formValues[1],
+        questions: questionsVal,
+        status: formValues[2]
+      });
+
+      console.log(formData);
 
       const questionCreate = await fetch(`${url}question/${set_id}/edit`, {
         method: "post",
@@ -112,12 +138,13 @@
         },
         body: formData
       });
+
       if (questionCreate) {
         const created = await questionCreate.json();
 
         console.log(created);
 
-        if (created.editstatus) {
+        if (created.status) {
           Swal.fire({
             title: "Congratulation",
             text: "Successfully Created",
@@ -144,7 +171,6 @@
 
   async function deleteSet(set_id) {
     try {
-
       const req = await swal.fire({
         title: "Are you sure?",
         type: "warning",
@@ -178,5 +204,17 @@
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function viewSet(set_name) {
+    var ques = {{{ json ques }}};
+    const setList = ques.filter(questions => set_name === questions.set_name);
+    console.log(setList[0].questions);
+
+    $('#questionsModal').modal(); 
+      setList[0].questions.forEach(e => {
+        $('#qModal').append(e);
+        $('#qModal').append("<br/>");
+      });
   }
 </script>

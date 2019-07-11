@@ -9,6 +9,10 @@ $(document).ready(function() {
     return JSON.stringify(content);
   });
 
+  Handlebars.registerHelper("len", function(json) {
+    return Object.keys(json).length;
+});
+
   // const url = "https://ccs.cyrix.my/CCS-API/";
   const url = "http://localhost/CCS-API/";
 
@@ -159,7 +163,8 @@ $(document).ready(function() {
       });
 
       const ques = await res.json();
-      sessionStorage.setItem("question", ques);
+      console.log(ques);
+      sessionStorage.setItem("question", JSON.stringify(ques));
       var html = Template.templates.questionSet({ ques });
       $("#root").empty();
       $("#root")
@@ -170,41 +175,19 @@ $(document).ready(function() {
     }
   }
 
+  function newQuestion() {
+      var ques = JSON.parse(sessionStorage.getItem("question"));
+      var id = Object.keys(ques).length;
+      id = id + 1;
+      var html = Template.templates.newQuestion({ id });
+      $("#root").empty();
+      $("#root")
+        .html(html)
+        .show();
+  }
+
   crossroads.addRoute("/question-set", question);
-
-  // crossroads.addRoute("/soalan-set", function() {
-  //   // client
-  //   //   .getItems("set_soalan", {
-  //   //     fields: "*.*"
-  //   //   })
-  //   //   .then(res => {
-  //   //     size = Object.keys(res).length;
-  //   //     data = [];
-  //   //     for (i = 0; i <= size; i++) {
-  //   //       data.push({
-  //   //         id: res.data[i].id,
-  //   //         name: res.data[i].name,
-  //   //         date: res.data[i].created_on,
-  //   //         questions: res.data[i].questions,
-  //   //         category: res.data[i].category,
-  //   //         status: res.data[i].status
-  //   //       });
-  //   //     }
-  //   html = Template.templates.soalanSet();
-  //   $("#root").empty();
-  //   $("#root")
-  //     .html(html)
-  //     .show();
-  //   //   });
-  // });
-
-  crossroads.addRoute("/new-question", function() {
-    var html = Template.templates.newQuestion();
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
-  });
+  crossroads.addRoute("/new-question", newQuestion);
 
   crossroads.addRoute("/result", function() {
     var html = Template.templates.result();
