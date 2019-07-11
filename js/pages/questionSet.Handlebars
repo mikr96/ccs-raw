@@ -1,0 +1,236 @@
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h2>List of Questions</h2>
+    </div>
+    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb justify-content-end">
+        <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+        <li class="breadcrumb-item">Questions</li>
+        <li class="breadcrumb-item active">List of Questions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="col-md-12">
+  <div class="card">
+    <div class="header">
+      <h2>List of Questions</h2>
+    </div>
+    <div class="body">
+      <div>
+        <a href="#new-question" class="btn btn-primary"
+          style="-webkit-writing-mode: horizontal-tb !important; text-rendering: auto; letter-spacing: normal; word-spacing: normal; text-indent: 0px; text-shadow: none; align-items: flex-start; font: 400 13.3333px Arial;">Add
+          New Question</a>
+      </div>
+      <br />
+      <div class="table-responsive">
+        <table class="table center-aligned-table">
+          <thead>
+            <tr style="text-align: center">
+              <th>Set #</th>
+              <th>Set Name</th>
+              <th>Date created</th>
+              <th>No. of Questions</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each ques}}
+              <tr style="text-align: center">
+                <td>{{@index}}</td>
+                <td>{{set_name}}</td>
+                <td>{{date date_created}}</td>
+                <td>{{{len questions}}}</td>
+                <td>{{category}}</td>
+                <td><label class="badge">{{status}}</label></td>
+                <td>
+                  <button onclick="viewSet('{{{set_name}}}')" class="btn btn-success btn-sm">View Set
+                  </button>
+                </td>
+                <td>
+                  <button onclick="editSet('{{{set_id}}}')" class="btn btn-info btn-sm"><i
+                    class="icon-pencil"></i></button>
+                </td>
+                <td>
+                  <button onclick="deleteSet('{{{set_id}}}')" class="btn btn-danger btn-sm"><i
+                      class="icon-trash"></i></button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" id="questionsModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Question List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="qModal" class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+  if (!url) 
+  var url = "http://localhost/CCS-API/";
+
+  async function editSet(set_id) {
+    var ques = {{{ json ques }}};
+    const setList = ques.filter(questions => set_id == questions.set_id);
+    var size = Object.keys(setList[0].questions).length;
+
+    var string = "";
+    for(i=0;i<size;i++){
+      string = string + '<input type="text" class="form-control" name="question" id="question" value="' + setList[0].questions[i] + '"><br/>';
+    }
+
+  const { value: formValues } = await Swal.fire({
+    title: 'Edit question',
+    html: `
+      <br/>
+      <input type="text" class="form-control" id="set_id" value="${setList[0].set_id}" readonly>
+      <br/>
+      <input type="text" class="form-control" id="set_name" value="${setList[0].set_name}"><br/>
+      <select class="form-control" id="category">
+        <option ${setList[0].category == 'umum' ? 'selected' : ''} value="umum">Umum</option>
+        <option ${setList[0].category == 'feedback' ? 'selected' : ''} value="feedback">Feedback</option>
+        <option ${setList[0].category == 'keberkesanan' ? 'selected' : ''} value="keberkesanan">Keberkesanan</option>
+      </select><br/>
+      ${string}
+      <select class="form-control" id="status">
+        <option selected value="${setList[0].status}">${setList[0].status}</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+      <br/>`,
+    focusConfirm: false,
+    preConfirm: () => {
+      return [
+        document.getElementById('set_name').value,
+        document.getElementById('category').value,
+        document.getElementById('status').value,
+      ]
+    }
+  })
+
+  if (formValues) {
+    try {
+      var questionsVal = []
+      $('input[name="question"]').each(function() {
+        questionsVal.push($(this).val());
+      });
+      console.log(questionsVal);
+      var formData = JSON.stringify({
+        set_name: formValues[0],
+        category: formValues[1],
+        questions: questionsVal,
+        status: formValues[2]
+      });
+
+      console.log(formData);
+
+      const questionCreate = await fetch(`${url}question/${set_id}/edit`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        },
+        body: formData
+      });
+
+      if (questionCreate) {
+        const created = await questionCreate.json();
+
+        console.log(created);
+
+        if (created.status) {
+          Swal.fire({
+            title: "Congratulation",
+            text: "Successfully Created",
+            type: "success"
+          }).then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Fail",
+            text: "Please refill the form",
+            type: "error"
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      Swal.fire("Something went wrong", err.message, "error");
+    }
+  }
+  }
+
+  async function deleteSet(set_id) {
+    try {
+      const req = await swal.fire({
+        title: "Are you sure?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel please!"
+      })
+
+      const status = await req;
+
+      if (status.value) {
+        const res = await fetch(`${url}questions/${set_id}/delete`, {
+          method: "get",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+            Authorization: `bearer ${sessionStorage.getItem("token")}`
+          }
+
+        });
+
+        const deleted = await res;
+        swal.fire("Successfully deleted", "success")
+          .then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function viewSet(set_name) {
+    var ques = {{{ json ques }}};
+    const setList = ques.filter(questions => set_name === questions.set_name);
+    console.log(setList[0].questions);
+
+    $('#questionsModal').modal(); 
+      setList[0].questions.forEach(e => {
+        $('#qModal').append(e);
+        $('#qModal').append("<br/>");
+      });
+  }
+</script>

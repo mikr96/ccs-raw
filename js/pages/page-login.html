@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>:: CCS :: Login</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta name="description" content="CCS Bootstrap 4.1.1 Admin Template" />
+    <meta name="author" content="ThemeMakker, design by: ThemeMakker.com" />
+
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/animate.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="../../css/bootstrap-progressbar-3.3.4.min.css"
+    />
+    <link rel="stylesheet" href="../../css/chartist.min.css" />
+    <link rel="stylesheet" href="../../css/chartist-plugin-tooltip.css" />
+    <link
+      rel="stylesheet"
+      href="../../node_modules/sweetalert2/dist/sweetalert2.min.css"
+    />
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="../../css/color_skins.css" />
+  </head>
+
+  <body class="theme-blue">
+    <!-- WRAPPER -->
+    <div id="wrapper">
+      <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+          <div class="auth-box">
+            <div class="mobile-logo">
+              <a href="../../index.html"
+                ><img src="../../img/logo.png" alt="CCS"
+              /></a>
+            </div>
+            <div class="auth-left">
+              <div class="left-top">
+                <a href="../../index.html">
+                  <img src="../../img/logo.png" alt="CCS" />
+                  <span>CCS</span>
+                </a>
+              </div>
+              <div class="left-slider">
+                <img src="../../img/1.jpg" class="img-fluid" alt="" />
+              </div>
+            </div>
+            <div class="auth-right">
+              <div class="right-top">
+                <ul class="list-unstyled clearfix d-flex">
+                  <li>
+                    <a href="../../index.html"><i class="fa fa-home"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0);">Help</a></li>
+                  <li><a href="javascript:void(0);">Contact</a></li>
+                </ul>
+              </div>
+              <div class="card">
+                <div class="header">
+                  <p class="lead">Log in</p>
+                </div>
+                <div class="body">
+                  <form method="POST">
+                    <div class="form-auth-small">
+                      <div class="form-group">
+                        <label for="username" class="control-label sr-only"
+                          >Username</label
+                        >
+                        <input
+                          class="form-control"
+                          id="username"
+                          placeholder="username"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="password" class="control-label sr-only"
+                          >Password</label
+                        >
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          placeholder="Password"
+                        />
+                      </div>
+                      <div class="form-group clearfix">
+                        <label class="fancy-checkbox element-left">
+                          <input type="checkbox" />
+                          <span>Remember me</span>
+                        </label>
+                      </div>
+                      <button
+                        onclick="login()"
+                        class="btn btn-primary btn-lg btn-block"
+                      >
+                        LOGIN
+                      </button>
+                      <div class="bottom">
+                        <span class="helper-text m-b-10"
+                          ><i class="fa fa-lock"></i>
+                          <a href="#">Forgot password?</a></span
+                        >
+                        <span
+                          >Don't have an account?
+                          <a href="page-register.html">Register</a></span
+                        >
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END WRAPPER -->
+    <script src="../../js/libscripts.bundle.js"></script>
+    <script src="../../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="../login.js"></script>
+  </body>
+</html>

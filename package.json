@@ -1,26 +1,38 @@
 {
-  "name": "ccs",
+  "name": "web",
   "version": "1.0.0",
-  "description": "CCS Bootstrap 4.1.1 Admin Dashboard",
+  "description": "Service Centre",
   "main": "Gruntfile.js",
+  "scripts": {
+    "compile": "grunt handlebars:compile && grunt uglify:my_target",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "grunt handlebars:compile && grunt uglify:my_target && index.html"
+  },
   "directories": {
     "doc": "doc"
   },
-  "scripts": {
-    "start": "index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikr96/ccs-raw.git"
   },
   "keywords": [
-    "CCS",
-    "Version"
+    "bootstrap 4 template"
   ],
-  "author": "ThemeMakker.com",
+  "author": "Irsyadkamil.com",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikr96/ccs-raw/issues"
+  },
+  "homepage": "https://github.com/mikr96/ccs-raw#readme",
   "dependencies": {
+    "directus-sdk-javascript": "^2.15.0",
     "grunt": "^1.0.2",
-    "metismenu": "^2.7.7"
+    "metismenu": "^2.7.7",
+    "moment": "^2.24.0",
+    "sweetalert2": "^8.13.1"
   },
   "devDependencies": {
+    "grunt-contrib-handlebars": "^1.0.0",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-sass": "^2.1.0"
   }

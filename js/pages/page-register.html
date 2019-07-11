@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>:: CCS :: Sign Up</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta name="description" content="CCS Bootstrap 4.1.1 Admin Template" />
+    <meta name="author" content="ThemeMakker, design by: ThemeMakker.com" />
+
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon" />
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/animate.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css" />
+    <link
+      rel="stylesheet"
+      href="../../css/bootstrap-progressbar-3.3.4.min.css"
+    />
+    <link rel="stylesheet" href="../../css/chartist.min.css" />
+    <link rel="stylesheet" href="../../css/chartist-plugin-tooltip.css" />
+    <link
+      rel="stylesheet"
+      href="../../node_modules/sweetalert2/dist/sweetalert2.min.css"
+    />
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="../../css/main.css" />
+    <link rel="stylesheet" href="../../css/color_skins.css" />
+  </head>
+
+  <body class="theme-blue">
+    <!-- WRAPPER -->
+    <div id="wrapper">
+      <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+          <div class="auth-box">
+            <div class="mobile-logo">
+              <a href="index.html"
+                ><img src="../../img/thumbnail.png" alt="CCS"
+              /></a>
+            </div>
+            <div class="auth-left">
+              <div class="left-top">
+                <a href="index.html">
+                  <img src="../../img/thumbnail.png" alt="CCS" />
+                  <span>CCS</span>
+                </a>
+              </div>
+              <div class="left-slider">
+                <img src="../../img/1.jpg" class="img-fluid" alt="" />
+              </div>
+            </div>
+
+            <div class="auth-right">
+              <div class="right-top">
+                <ul class="list-unstyled clearfix d-flex">
+                  <li>
+                    <a href="index.html"><i class="fa fa-home"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0);">Help</a></li>
+                  <li><a href="javascript:void(0);">Contact</a></li>
+                </ul>
+              </div>
+              <form id="registrationForm" method="POST">
+                <fieldset>
+                  <div class="card">
+                    <div class="header">
+                      <p class="lead">Create an account</p>
+                    </div>
+                    <div class="body">
+                      <div class="form-auth-small">
+                        <div class="form-group">
+                          <label for="username" class="control-label sr-only"
+                            >Username</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="username"
+                            placeholder="Your Username"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="password" class="control-label sr-only"
+                            >Password</label
+                          >
+                          <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            placeholder="Password"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="fullname" class="control-label sr-only"
+                            >FullName</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="fullname"
+                            placeholder="Your Full Name"
+                          />
+                        </div>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="gender"
+                              >Gender</label
+                            >
+                          </div>
+                          <select class="custom-select" id="gender" required>
+                            <option selected value="" disabled>Choose..</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+                        </div>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <label class="input-group-text" for="race"
+                              >Race</label
+                            >
+                          </div>
+                          <select class="custom-select" id="race" required>
+                            <option selected value="" disabled>Choose..</option>
+                            <option value="Melayu">Melayu</option>
+                            <option value="Cina">Cina</option>
+                            <option value="Penan">Penan</option>
+                            <option value="Iban">Iban/Sea Dayak</option>
+                            <option value="Bumiputra">Bumiputra Sarawak</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="age" class="control-label sr-only"
+                            >Age</label
+                          >
+                          <input
+                            type="username"
+                            class="form-control"
+                            id="age"
+                            placeholder="Age"
+                          />
+                        </div>
+                        <button
+                          class="btn btn-primary btn-lg btn-block"
+                          onclick="registration()"
+                        >
+                          REGISTER
+                        </button>
+                        <div class="bottom">
+                          <span class="helper-text"
+                            >Already have an account?
+                            <a href="page-login.html">Login</a></span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END WRAPPER -->
+    <script src="../../js/libscripts.bundle.js"></script>
+    <script src="../../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="../register.js"></script>
+  </body>
+</html>

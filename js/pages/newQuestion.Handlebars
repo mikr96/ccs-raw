@@ -1,0 +1,161 @@
+<div class="block-header">
+  <div class="row">
+    <div class="col-lg-5 col-md-8 col-sm-12">
+      <h2>Tambah Set Soalan</h2>
+    </div>
+    <div class="col-lg-7 col-md-4 col-sm-12 text-right">
+      <ul class="breadcrumb justify-content-end">
+        <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+        <li class="breadcrumb-item">Soalan</li>
+        <li class="breadcrumb-item active">Tambah Set</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<form id="form" method="POST">
+  <div class="row clearfix">
+    <div class="col-lg-6 col-md-12">
+      <div class="card">
+        <div class="header">
+          <h2>Survey Questions</h2>
+        </div>
+        <div class="body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Set #</span>
+            </div>
+            <input type="text" id="set_id" class="form-control" value="{{{id}}}" aria-label="SetId"
+              aria-describedby="basic-addon1" readonly>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Name</span>
+            </div>
+            <input type="text" id="set_name" class="form-control" placeholder="Set name" aria-label="SetName"
+              aria-describedby="basic-addon1">
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelectCategory">Category</label>
+            </div>
+            <select class="custom-select" id="category" id="inputGroupSelectCategory" required>
+              <option selected value="" disabled>Choose</option>
+              <option value="umum">Umum</option>
+              <option value="feedback">Feedback</option>
+              <option value="keberkesanan">Keberkesanan</option>
+            </select>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="numQ">Num. of Questions</label>
+            </div>
+            <select onchange="changeNumQ(event)" class="custom-select" id="numQ">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+      <div class="card">
+        <div class="header">
+          <h2>Questions</h2>
+        </div>
+        <div id="qGroup" class="body">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Q1</span>
+            </div>
+            <textarea class="form-control" id="1" aria-label="With textarea"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 text-right">
+      <div class="card">
+        <div class="body">
+          <button onclick="submitQuestion()" class="btn btn-primary">Submit</button>
+          <input onclick="reset()" class="btn btn-primary" type="button" value="Reset">
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  var num = 1;
+  function changeNumQ(event) {
+    num = event.target.value;
+    $('#qGroup').empty();
+    for (i = 1; i <= event.target.value; i++) {
+      $('#qGroup').append('<div class="input-group"><div class="input-group-prepend"><span class="input-group-text">Q' + i + '</span></div><textarea id="' + i + '"class="form-control" aria-label="With textarea"></textarea></div>');
+      $('#qGroup').append('<br/>');
+    }
+  }
+
+  async function submitQuestion() {
+    event.preventDefault(); //prevent redirect/page refresh
+    console.log("submitted");
+    var arr = [];
+    for (i = 1; i <= num; i++) {
+      arr.push($(`#${i}`).val());
+    }
+    console.log(arr);
+    try {
+      var formData = JSON.stringify({
+        set_name: $("#set_name").val(),
+        category: $("#category").val(),
+        questions: arr,
+        status: 'active'
+      });
+      const questionCreate = await fetch(`${url}question/create`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        },
+        body: formData
+      });
+
+      const created = await questionCreate.json();
+
+      console.log(created);
+
+      if (created.insertstatus) {
+        Swal.fire({
+          title: "Congratulation",
+          text: "Successfully Created",
+          type: "success"
+        }).then(result => {
+          if (result.value) {
+            window.location.href = "#question-set";
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Fail",
+          text: "Please refill the form",
+          type: "error"
+        });
+      }
+    } catch (err) {
+      Swal.fire("Something went wrong", err.message, "error");
+    }
+  }
+
+  function reset() {
+    document.getElementById("form").reset();
+  }
+
+</script>
