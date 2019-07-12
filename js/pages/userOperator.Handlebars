@@ -77,7 +77,7 @@
 </div>
 <script>
   async function add() {
-    console.log("ayam6")
+
     try {
       const { value } = await Swal.fire({
         title: 'Add new operator',
@@ -122,8 +122,6 @@
 
           const created = await accountCreate.json();
 
-          console.log(created);
-
           if (created.insertstatus) {
             Swal.fire({
               title: "Congratulation",
@@ -153,7 +151,6 @@
 
 
   async function edit(username) {
-    console.log("ayam6")
     var oper = {{{json oper}}}
     const nameList = oper.filter(profiles => username === profiles.username);
 
@@ -202,8 +199,6 @@
         });
         if (accountCreate){
           const created = await accountCreate.json();
-
-          console.log(created);
 
           if (created.editstatus) {
             Swal.fire({

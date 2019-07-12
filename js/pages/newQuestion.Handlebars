@@ -105,12 +105,10 @@
 
   async function submitQuestion() {
     event.preventDefault(); //prevent redirect/page refresh
-    console.log("submitted");
     var arr = [];
     for (i = 1; i <= num; i++) {
       arr.push($(`#${i}`).val());
     }
-    console.log(arr);
     try {
       var formData = JSON.stringify({
         set_name: $("#set_name").val(),
@@ -129,8 +127,6 @@
       });
 
       const created = await questionCreate.json();
-
-      console.log(created);
 
       if (created.insertstatus) {
         Swal.fire({

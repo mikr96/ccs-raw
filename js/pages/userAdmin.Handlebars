@@ -124,8 +124,6 @@
 
           const created = await accountCreate.json();
 
-          console.log(created);
-
           if (created.insertstatus) {
             Swal.fire({
               title: "Congratulation",
@@ -155,7 +153,6 @@
 
 
   async function edit(username) {
-    console.log("ayam6")
     var oper = {{{ json oper }}};
   const nameList = oper.filter(profiles => username === profiles.username);
 
@@ -205,7 +202,6 @@
       if (accountCreate) {
         const created = await accountCreate.json();
 
-        console.log(created);
 
         if (created.editstatus) {
           Swal.fire({

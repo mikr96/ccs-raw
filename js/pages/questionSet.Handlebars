@@ -132,15 +132,13 @@
       $('input[name="question"]').each(function() {
         questionsVal.push($(this).val());
       });
-      console.log(questionsVal);
+
       var formData = JSON.stringify({
         set_name: formValues[0],
         category: formValues[1],
         questions: questionsVal,
         status: formValues[2]
       });
-
-      console.log(formData);
 
       const questionCreate = await fetch(`${{{url}}}question/${set_id}/edit`, {
         method: "post",
@@ -154,8 +152,6 @@
 
       if (questionCreate) {
         const created = await questionCreate.json();
-
-        console.log(created);
 
         if (created.status) {
           Swal.fire({
@@ -222,7 +218,6 @@
   function viewSet(set_name) {
     var ques = {{{ json ques }}};
     const setList = ques.filter(questions => set_name === questions.set_name);
-    console.log(setList[0].questions);
 
     $('#questionsModal').modal(); 
       setList[0].questions.forEach(e => {

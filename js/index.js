@@ -1,6 +1,5 @@
 $(document).ready(function () {
   var token = sessionStorage.getItem("token");
-  console.log(token);
   if (token == null) {
     window.location.href = "js/pages/page-login.html";
   }
@@ -109,7 +108,6 @@ $(document).ready(function () {
       });
 
       const oper = await res.json();
-      console.log(oper);
       if (
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
@@ -171,7 +169,6 @@ $(document).ready(function () {
       });
 
       const ques = await res.json();
-      console.log(ques);
       sessionStorage.setItem("question", JSON.stringify(ques));
       var html = Template.templates.questionSet({ ques, url });
       $("#root").empty();

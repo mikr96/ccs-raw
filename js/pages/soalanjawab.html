@@ -339,7 +339,6 @@
         fields: "*.*"
     }).then(res => {
         app.set = res.data;
-        console.log(res.data)
         let answers = [];
         let output = [];
         for (let i = 0; i < 27; i++) {
@@ -520,9 +519,7 @@
         methods: {
             answerQuestion: function (i, j, k) {
                 this.answers[i].answers[j] = k;
-                console.log(this.answers[i].answers);
                 let res = parseAnswers(this.answers[i].answers);
-                console.log(res);
                 this.$set(app.output, i, res);
                 if(res){
                     client.createItem("jawapan", {

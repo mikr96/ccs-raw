@@ -3,7 +3,6 @@
 const url = "http://localhost/CCS-API/";
 async function registration() {
   event.preventDefault(); //prevent redirect/page refresh
-  console.log("submitted");
 
   var formData = JSON.stringify({
     fullname: $("#fullname").val(),
@@ -16,7 +15,7 @@ async function registration() {
     laptop_id: "L000",
     region: "undefined"
   });
-  console.log(formData);
+
   try {
     const accountCreate = await fetch(url + "registration", {
       method: "post",
@@ -28,8 +27,6 @@ async function registration() {
     });
 
     const created = await accountCreate.json();
-
-    console.log(created);
 
     if (created.insertstatus) {
       Swal.fire({
