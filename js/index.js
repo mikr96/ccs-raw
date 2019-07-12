@@ -5,6 +5,7 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html";
   }
 
+  console.log(token);
   Handlebars.registerHelper("date", function (timestamp) {
     return moment(timestamp).format('DD MMMM YYYY')
   });
