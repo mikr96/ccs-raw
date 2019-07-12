@@ -42,7 +42,7 @@
           <tbody>
             {{#each ques}}
               <tr style="text-align: center">
-                <td>{{@index}}</td>
+                <td>{{index @index}}</td>
                 <td>{{set_name}}</td>
                 <td>{{date date_created}}</td>
                 <td>{{{len questions}}}</td>
@@ -87,9 +87,6 @@
         </div>
 
 <script>
-  if (!url) 
-  var url = "http://localhost/CCS-API/";
-
   async function editSet(set_id) {
     var ques = {{{ json ques }}};
     const setList = ques.filter(questions => set_id == questions.set_id);
@@ -145,7 +142,7 @@
 
       console.log(formData);
 
-      const questionCreate = await fetch(`${url}question/${set_id}/edit`, {
+      const questionCreate = await fetch(`${{{url}}}question/${set_id}/edit`, {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -199,7 +196,7 @@
       const status = await req;
 
       if (status.value) {
-        const res = await fetch(`${url}questions/${set_id}/delete`, {
+        const res = await fetch(`${{{url}}}questions/${set_id}/delete`, {
           method: "get",
           headers: {
             Accept: "application/json",

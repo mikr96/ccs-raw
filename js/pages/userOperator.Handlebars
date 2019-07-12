@@ -76,8 +76,6 @@
   </div>
 </div>
 <script>
-  const url = "http://localhost/CCS-API/";
-
   async function add() {
     console.log("ayam6")
     try {
@@ -113,7 +111,7 @@
             password: value[7],
             region: value[8]
           });
-          const accountCreate = await fetch(`${url}registration`, {
+          const accountCreate = await fetch(`${{{url}}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",

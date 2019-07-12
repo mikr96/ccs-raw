@@ -79,8 +79,6 @@
 </div>
 
 <script>
-  const url = "http://localhost/CCS-API/";
-
   async function add() {
     try {
       const { value } = await Swal.fire({
@@ -115,7 +113,7 @@
             password: value[7],
             region: value[8]
           });
-          const accountCreate = await fetch(`${url}registration`, {
+          const accountCreate = await fetch(`${{{url}}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",
@@ -195,7 +193,7 @@
         region: formValues[8]
       });
 
-      const accountCreate = await fetch(`${url}profile/${username}/edit`, {
+      const accountCreate = await fetch(`${{{url}}}profile/${username}/edit`, {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -249,7 +247,7 @@
       const status = await req;
 
       if (status.value) {
-        const res = await fetch(`${url}profile/${username}/delete`, {
+        const res = await fetch(`${{{url}}}profile/${username}/delete`, {
           method: "get",
           headers: {
             Accept: "application/json",
