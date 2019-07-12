@@ -1,6 +1,5 @@
 $(document).ready(function () {
   var token = sessionStorage.getItem("token");
-  console.log(token);
   if (token == null) {
     window.location.href = "js/pages/page-login.html";
   }
@@ -14,9 +13,13 @@ $(document).ready(function () {
     return JSON.stringify(content);
   });
 
-  Handlebars.registerHelper("len", function(json) {
+  Handlebars.registerHelper("len", function (json) {
     return Object.keys(json).length;
-});
+  });
+
+  Handlebars.registerHelper("index", function (index) {
+    return index + 1;
+  });
 
   // const url = "https://ccs.cyrix.my/CCS-API/";
   const url = "http://localhost/CCS-API/";
@@ -38,7 +41,7 @@ $(document).ready(function () {
 
   async function home() {
     if (role == "operator") {
-      var html = Template.templates.homeOperator();
+      var html = Template.templates.homeOperator({ url });
       $("#root")
         .html(html)
         .show();
@@ -64,19 +67,19 @@ $(document).ready(function () {
           { operator: 0, supervisor: 0 }
         );
 
-        var html = Template.templates.home({ totalProfiles });
+        var html = Template.templates.home({ totalProfiles, url });
         $("#root")
           .html(html)
           .show();
 
         crossroads.addRoute("/home", function () {
           if (role == "operator") {
-            var html = Template.templates.homeOperator();
+            var html = Template.templates.homeOperator({ url });
             $("#root")
               .html(html)
               .show();
           } else {
-            var html = Template.templates.home();
+            var html = Template.templates.home({ url });
             $("#root")
               .html(html)
               .show();
@@ -106,24 +109,23 @@ $(document).ready(function () {
       });
 
       const oper = await res.json();
-      console.log(oper);
       if (
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ oper });
+        var html = Template.templates.userOperator({ oper, url });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "admin") {
-        var html = Template.templates.userAdmin({ oper });
+        var html = Template.templates.userAdmin({ oper, url });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "supervisor") {
-        var html = Template.templates.userSupervisor({ oper });
+        var html = Template.templates.userSupervisor({ oper, url });
         $("#root").empty();
         $("#root")
           .html(html)
@@ -141,7 +143,7 @@ $(document).ready(function () {
   crossroads.addRoute("/user-admin", () => getRole("admin"));
 
   crossroads.addRoute("/record-statistics", function () {
-    var html = Template.templates.recordStatistics();
+    var html = Template.templates.recordStatistics({ url });
     $("#root").empty();
     $("#root")
       .html(html)
@@ -149,7 +151,7 @@ $(document).ready(function () {
   });
 
   crossroads.addRoute("/record-region", function () {
-    var html = Template.templates.recordRegion();
+    var html = Template.templates.recordRegion({ url });
     $("#root").empty();
     $("#root")
       .html(html)
@@ -168,9 +170,8 @@ $(document).ready(function () {
       });
 
       const ques = await res.json();
-      console.log(ques);
       sessionStorage.setItem("question", JSON.stringify(ques));
-      var html = Template.templates.questionSet({ ques });
+      var html = Template.templates.questionSet({ ques, url });
       $("#root").empty();
       $("#root")
         .html(html)
@@ -181,21 +182,21 @@ $(document).ready(function () {
   }
 
   function newQuestion() {
-      var ques = JSON.parse(sessionStorage.getItem("question"));
-      var id = Object.keys(ques).length;
-      id = id + 1;
-      var html = Template.templates.newQuestion({ id });
-      $("#root").empty();
-      $("#root")
-        .html(html)
-        .show();
+    var ques = JSON.parse(sessionStorage.getItem("question"));
+    var id = Object.keys(ques).length;
+    id = id + 1;
+    var html = Template.templates.newQuestion({ id, url });
+    $("#root").empty();
+    $("#root")
+      .html(html)
+      .show();
   }
 
   crossroads.addRoute("/question-set", question);
   crossroads.addRoute("/new-question", newQuestion);
 
-  crossroads.addRoute("/result", function() {
-    var html = Template.templates.result();
+  crossroads.addRoute("/result", function () {
+    var html = Template.templates.result({ url });
     $("#root").empty();
     $("#root")
       .html(html)

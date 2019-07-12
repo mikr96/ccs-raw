@@ -374,7 +374,6 @@
         fields: "*.*"
     }).then(res => {
         app.set = res.data;
-        console.log(res.data)
     });
     let app = new Vue({
         el: '#main-content',
@@ -403,7 +402,6 @@
                 let qId = this.set[this.currentSet].questions.map((a) => {
                     return a.id;
                 });
-                console.log(qId);
                 //return;
                 client.updateItems("soalan", [
                     { id: qId[0], question: this.questions[0].question },
@@ -415,7 +413,7 @@
                 let qId = this.set[i].questions.map((a) => {
                     return a.id;
                 });
-                console.log(qId);
+
                 client.deleteItems("soalan", qId);
                 client.deleteItem("set_soalan", this.set[i].id);
                 this.set.splice(i, 1);

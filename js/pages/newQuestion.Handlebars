@@ -94,7 +94,6 @@
 
 <script>
   var num = 1;
-  const url = "http://localhost/CCS-API/";
   function changeNumQ(event) {
     num = event.target.value;
     $('#qGroup').empty();
@@ -106,12 +105,10 @@
 
   async function submitQuestion() {
     event.preventDefault(); //prevent redirect/page refresh
-    console.log("submitted");
     var arr = [];
     for (i = 1; i <= num; i++) {
       arr.push($(`#${i}`).val());
     }
-    console.log(arr);
     try {
       var formData = JSON.stringify({
         set_name: $("#set_name").val(),
@@ -119,7 +116,7 @@
         questions: arr,
         status: 'active'
       });
-      const questionCreate = await fetch(`${url}question/create`, {
+      const questionCreate = await fetch(`${{{url}}}question/create`, {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -130,8 +127,6 @@
       });
 
       const created = await questionCreate.json();
-
-      console.log(created);
 
       if (created.insertstatus) {
         Swal.fire({

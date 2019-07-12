@@ -274,13 +274,11 @@
         url: "http://ccs.cyrix.my/cms/public",
     });
     client.getItems("jawapan").then(res => {
-        console.log(res.data);
-
         let series = [0,0,0,0,0];
         res.data.map((a)=> {
             return series[a.result-1]++;
         });
-        console.log(series);
+
         let dataPie = {
             series: series
         };

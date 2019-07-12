@@ -441,7 +441,6 @@
             answered:0
         }
     }).then(res => {
-        //console.log(res.data);
         app.sasaran = res.data[0];
         findPropertyNameByRegex(res.data[0],/tel/);
 
@@ -450,7 +449,6 @@
         fields: "*.*"
     }).then(res => {
         app.set = res.data;
-        //console.log(res.data)
         let answers = [];
         let output = [];
         for (let i = 0; i < 3; i++) {
@@ -466,7 +464,6 @@
 
     function findPropertyNameByRegex(o, r) {
         for (var key in o) {
-            //console.log(key.match(r))
             if (key.match(r) && o[key]) {
                 let data = {
                     key:key,
@@ -660,13 +657,11 @@
             },
             answerQuestion: function (i, j, k) {
                 this.answers[i].answers[j] = k;
-                console.log(this.answers[i].answers);
                 let res = parseAnswers(this.answers[i].answers);
-                console.log("RES",res);
+
                 if(res){
                     this.res = res;
                     this.$set(app.output, i, res);
-                    console.log("output",this.output);
                 }
 
             },

@@ -78,8 +78,6 @@
   </div>
 </div>
 <script>
-  const url = "http://localhost/CCS-API/";
-
   async function add() {
     try {
       const { value } = await Swal.fire({
@@ -114,7 +112,7 @@
             password: value[7],
             region: value[8]
           });
-          const accountCreate = await fetch(`${url}registration`, {
+          const accountCreate = await fetch(`${{{url}}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",
@@ -125,7 +123,6 @@
 
           const created = await accountCreate.json();
 
-          console.log(created);
 
           if (created.insertstatus) {
             Swal.fire({
@@ -156,7 +153,6 @@
 
 
   async function edit(username) {
-    console.log("ayam6");
     var oper = {{{ json oper }}};
   const nameList = oper.filter(profiles => username === profiles.username);
 
@@ -194,7 +190,7 @@
         region: formValues[8]
       });
 
-      const accountCreate = await fetch(`${url}profile/${username}/edit`, {
+      const accountCreate = await fetch(`${{{url}}}profile/${username}/edit`, {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -205,8 +201,6 @@
       });
       if (accountCreate) {
         const created = await accountCreate.json();
-
-        console.log(created);
 
         if (created.editstatus) {
           Swal.fire({
@@ -248,7 +242,7 @@
       const status = await req;
 
       if (status.value) {
-        const res = await fetch(`${url}profile/${username}/delete`, {
+        const res = await fetch(`${{{url}}}profile/${username}/delete`, {
           method: "get",
           headers: {
             Accept: "application/json",

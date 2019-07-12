@@ -76,10 +76,8 @@
   </div>
 </div>
 <script>
-  const url = "http://localhost/CCS-API/";
-
   async function add() {
-    console.log("ayam6")
+
     try {
       const { value } = await Swal.fire({
         title: 'Add new operator',
@@ -113,7 +111,7 @@
             password: value[7],
             region: value[8]
           });
-          const accountCreate = await fetch(`${url}registration`, {
+          const accountCreate = await fetch(`${{{url}}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",
@@ -123,8 +121,6 @@
           });
 
           const created = await accountCreate.json();
-
-          console.log(created);
 
           if (created.insertstatus) {
             Swal.fire({
@@ -155,7 +151,6 @@
 
 
   async function edit(username) {
-    console.log("ayam6")
     var oper = {{{json oper}}}
     const nameList = oper.filter(profiles => username === profiles.username);
 
@@ -204,8 +199,6 @@
         });
         if (accountCreate){
           const created = await accountCreate.json();
-
-          console.log(created);
 
           if (created.editstatus) {
             Swal.fire({
