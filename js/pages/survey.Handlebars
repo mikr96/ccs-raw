@@ -1,0 +1,311 @@
+<div class="block-header">
+<div class="row">
+		<div class="col-lg-5 col-md-8 col-sm-12">
+				<h2>Survey</h2>
+		</div>
+		<div class="col-lg-7 col-md-4 col-sm-12 text-right">
+				<ul class="breadcrumb justify-content-end">
+						<li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+						<li class="breadcrumb-item">Operator</li>
+						<li class="breadcrumb-item active">Survey</li>
+				</ul>
+		</div>
+</div>
+</div>
+
+<div class="row clearfix">
+<div class="col-lg-8 col-md-12">
+		<div class="card w_profile">
+				<div class="body" style="padding-top: 30px; padding-bottom: 30px">
+						<div class="row">
+								<div class="col-lg-4 col-md-4 col-12">
+									{{#if gender}}
+										<div class="profile-image float-md-right"> <img src="/img/avatar6.jpg" alt=""> </div>
+									{{else}}
+										<div class="profile-image float-md-right"> <img src="/img/avatar22.jpg" alt=""> </div>
+										{{/if}}
+								</div>
+								<div class="col-lg-8 col-md-8 col-12">
+										<h4 class="m-t-0 m-b-0">{{survey.[0].name}}</h4>
+
+										<p>{{survey.[0].address}}</p>
+
+										<div class="row">
+												<div class="col-4">
+														<h5>{{survey.[0].gender}}</h5>
+														<small>Jantina</small>
+												</div>
+												<div class="col-4">
+														<h5>{{survey.[0].race}}</h5>
+														<small>Bangsa</small>
+												</div>
+												<div class="col-4">
+														<h5>{{survey.[0].location}}</h5>
+														<small>Lokasi</small>
+												</div>
+										</div>
+										<div class="m-t-15">
+												<button class="btn btn-primary js-sweetalert" onclick="startSurvey()">Mula Survey</button>
+												<button class="btn btn-success">Reset Caller</button>
+										</div>
+								</div>
+						</div>
+				</div>
+		</div>
+		<div class="card">
+				<h5 class="card-header">Pembuka Kata</h5>
+				<div class="card-body">
+						<h5 class="card-title">Pastikan anda tidak tinggikan suara</h5>
+						<p class="card-text">Selamat pagi/petang Nur Hafizah haraf maaf kerana menggangu. Saya (Nama Operator) ingin membuat.......</p>
+
+				</div>
+		</div>
+</div>
+
+<div class="col-lg-4 col-md-12">
+		<div class="card member-card">
+				<div class="header bg-info">
+						<h4 class="m-t-5 text-light"><strong>Operator</strong></h4>
+				</div>
+				<div class="member-img">
+						<a href="javascript:void(0);"><img src="img/avatar2.jpg" class="rounded-circle" alt="profile-image"></a>
+				</div>
+				<div class="body">
+						<div class="col-12">
+								<h4 class="m-t-5"><strong>Abdullah Hassan</strong></h4>
+								<p class="text-muted">13 / 03 / 2019 <br> Lokasi CCS</p>
+						</div>
+						<hr>
+						<div class="row">
+								<div class="col-4">
+										<h5>40</h5>
+										<small>Survey Berjaya</small>
+								</div>
+								<div class="col-4">
+										<h5>NB205</h5>
+										<small>Caller ID</small>
+								</div>
+								<div class="col-4">
+										<h5>656</h5>
+										<small>Jumlah Survey</small>
+								</div>
+						</div>
+				</div>
+		</div>
+</div>
+</div>
+
+
+
+<div class="row clearfix">
+<div class="col-lg-8 col-md-12">
+
+		<div class="card">
+				<div class="header">
+						<h2>Nombor Telefon</h2>
+				</div>
+				<div class="body">
+						<div class="table-responsive">
+								<table class="table table-hover m-b-0 c_list">
+										<thead>
+										<tr>
+												<th>
+														<label class="fancy-checkbox">
+																<input class="select-all" type="checkbox" name="checkbox">
+																<span></span>
+														</label>
+												</th>
+												<th>Phone</th>
+												<th>Tindakan</th>
+												<th>Status</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+												<td style="width: 50px;">
+														<label class="fancy-checkbox">
+																<input class="checkbox-tick" type="checkbox" name="checkbox">
+																<span></span>
+														</label>
+												</td>
+
+												<td>
+														<span class="phone"><i class="fa fa-phone m-r-10"></i>{{survey.[0].phone}}</span>
+												</td>
+												<td>
+
+														<button type="button" class="btn btn-info" title="Edit"><i class="icon-call-out"></i></button>
+														<button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-refresh"></i></button>
+												</td>
+												<td>
+														<select class="custom-select" v-model="category" id="inputGroupSelectCategory" required>
+																<option selected value="" disabled>Pilih...</option>
+																<option value="salahno">Salah Nombor</option>
+																<option value="takwujud">Tidak Wujud</option>
+																<option value="hubungikemudian">Hubungi Kemudian</option>
+																<option value="takminat">Tidak Berminat</option>
+														</select>
+												</td>
+										</tr>
+										</tbody>
+								</table>
+						</div>
+				</div>
+		</div>
+
+
+
+
+		<div class="card">
+				<div class="header">
+					<h2>Malaysia 101</h2>
+				</div>
+				<div class="body">
+						<div class="table-responsive">
+								<table class="table table-hover m-b-0 c_list">
+										<thead>
+										<tr>
+												<th>Soalan</th>
+												<th>Ya</th>
+												<th>Tidak</th>
+												<th>Tak Pasti</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+												<td>
+														<p class="c_name">Soalan 1 </p>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih" value="ya" type="radio" ><span><i></i>Ya</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih" value="tidak" type="radio" ><span><i></i>Tidak</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
+
+														</div>
+												</td>
+										</tr>
+										<tr>
+												<td>
+														<p class="c_name">Soalan 2 </p>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih2" value="ya" type="radio" ><span><i></i>Ya</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih2" value="tidak" type="radio" ><span><i></i>Tidak</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih2" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
+
+														</div>
+												</td>
+										</tr>
+										<tr>
+												<td>
+														<p class="c_name">Soalan 3 </p>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih3" value="ya" type="radio"><span><i></i>Ya</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih3" value="tidak" type="radio"><span><i></i>Tidak</span></label>
+
+														</div>
+												</td>
+												<td>
+														<div class="fancy-radio">
+																<label><input name="pilih3" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
+
+														</div>
+												</td>
+										</tr>
+										<tr>
+										</tbody>
+								</table>
+						</div>
+
+				</div>
+		</div>
+</div>
+<div class="col-lg-4 col-md-12">
+		<div class="card">
+				<div class="header">
+						<h2>Comments <small>Komen yang diterima daripada pemanggil.</small></h2>
+				</div>
+				<div class="body">
+						<h6>Jenis Komen</h6>
+						<div class="input-group mb-3">
+								<div class="input-group-prepend">
+										<label class="input-group-text" for="inputGroupSelect01">Options</label>
+								</div>
+								<select class="custom-select" id="inputGroupSelect01">
+										<option selected>Pilihan...</option>
+										<option value="1">Info</option>
+										<option value="2">Wakil Rakyat</option>
+										<option value="3">Lain-Lain</option>
+								</select>
+						</div>
+						<div class="input-group">
+								<div class="input-group-prepend">
+										<span class="input-group-text">Komen</span>
+								</div>
+								<textarea class="form-control" aria-label="Komen"></textarea>
+						</div>
+
+				</div>
+		</div>
+		<div class="card">
+				<div class="header">
+						<h2>Terima kasih kerana membantu kajiselidik ini. Adakah tuan/puan berminat untuk menyumbang kepada pembangunan negeri?</h2>
+				</div>
+				<div class="body">
+						<div class="fancy-radio">
+								<label><input name="kawalan" value="ya" type="radio" ><span><i></i>Ya</span></label>
+								<label><input name="kawalan" value="ya" type="radio" ><span><i></i>Tidak</span></label>
+						</div>
+				</div>
+		</div>
+		<div class="card">
+				<div class="body">
+				<h6>Pastikan semua info di atas ada tepat</h6>
+						<button type="button" class="btn btn-success" onclick="submitSurvey()">Submit</button>
+						<button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">Reset</button>
+				</div>
+		</div>
+</div>
+</div>
+<script>
+	function submitSurvey(){
+		window.location.href = "#home;";
+	}
+
+	function startSurvey(){
+			Swal.fire({
+        title: "Survey",
+        text: "The time starts now !",
+        type: "success"
+			});
+	}
+</script>
