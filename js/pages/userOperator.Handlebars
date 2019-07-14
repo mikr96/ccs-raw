@@ -19,7 +19,7 @@
         <h2>List of Operators</h2>
       </div>
       <div class="body">
-        <button onclick="add()" class="btn btn-primary m-b-15" type="button">
+        <button id="add" onclick="add()" class="btn btn-primary m-b-15" type="button">
           <i class="icon wb-plus" aria-hidden="true"></i> New Operator
         </button>
         <div class="table-responsive">
@@ -33,6 +33,7 @@
                 <th>Race</th>
                 <th>Laptop ID</th>
                 <th>Region</th>
+                <th>Set Name</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -46,11 +47,12 @@
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
                   <td>{{region}}</td>
+                  <td>setname</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
                       data-toggle="tooltip" data-original-title="Edit" onclick="edit('{{{username}}}')"><i
                         class="icon-pencil" aria-hidden="true"></i></button>
-                    <button class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
+                    <button id="delete" class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
                       data-toggle="tooltip" data-original-title="Remove" onclick="del('{{{username}}}')"><i
                         class="icon-trash" aria-hidden="true"></i></button>
                   </td>
@@ -66,6 +68,7 @@
                 <th>Race</th>
                 <th>Laptop ID</th>
                 <th>Region</th>
+                <th>Set Name</th>
                 <th>Actions</th>
               </tr>
             </tfoot>
@@ -76,6 +79,9 @@
   </div>
 </div>
 <script>
+
+  sessionStorage.getItem("role") === "supervisor" ? $("#add, #delete").hide() : $("#add, #delete").show();
+
   async function add() {
 
     try {
@@ -153,7 +159,9 @@
   async function edit(username) {
     var oper = {{{json oper}}}
     const nameList = oper.filter(profiles => username === profiles.username);
+    const nameList = oper.filter(profiles => laptop_id === profiles.laptop_id);
 
+    if(sessionStorage.getItem("role") === "admin") {
     const { value: formValues } = await Swal.fire({
       title: 'Add new operator',
       html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
@@ -171,7 +179,26 @@
             document.getElementById('region').value
         ]
       }
+    })} else {
+          const { value: formValues } = await Swal.fire({
+      title: 'Add new operator',
+      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '" readonly><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '" readonly><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"readonly><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '</select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '</select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+      focusConfirm: false,
+      preConfirm: () => {
+        return [
+            document.getElementById('fullname').value,
+            document.getElementById('username').value,
+            document.getElementById('race').value,
+            document.getElementById('age').value,
+            document.getElementById('role').value,
+            document.getElementById('laptopId').value,
+            document.getElementById('gender').value,
+            document.getElementById('password').value,
+            document.getElementById('region').value
+        ]
+      }
     })
+    }
 
     if (formValues) {
       try {

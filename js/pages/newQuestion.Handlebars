@@ -54,9 +54,7 @@
               <label class="input-group-text" for="numQ">Num. of Questions</label>
             </div>
             <select onchange="changeNumQ(event)" class="custom-select" id="numQ">
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
+              <option value="3" selected>3</option>
               <option value="4">4</option>
               <option value="5">5</option>
               <option value="6">6</option>
@@ -71,12 +69,24 @@
         <div class="header">
           <h2>Questions</h2>
         </div>
-        <div id="qGroup" class="body">
-          <div class="input-group">
+        <div id="qGroup" class="body test">
+          <div class="input-group" style="padding-bottom:20px;">
             <div class="input-group-prepend">
               <span class="input-group-text">Q1</span>
             </div>
             <textarea class="form-control" id="1" aria-label="With textarea"></textarea>
+          </div>
+          <div class="input-group" style="padding-bottom:20px;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Q2</span>
+            </div>
+            <textarea class="form-control" id="2" aria-label="With textarea"></textarea>
+          </div>
+          <div class="input-group" style="padding-bottom: 20px;">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Q3</span>
+            </div>
+            <textarea class="form-control" id="3" aria-label="With textarea"></textarea>
           </div>
         </div>
       </div>
@@ -85,7 +95,7 @@
       <div class="card">
         <div class="body">
           <button onclick="submitQuestion()" class="btn btn-primary">Submit</button>
-          <input onclick="reset()" class="btn btn-primary" type="button" value="Reset">
+          <a id="resetButton" class="btn btn-primary" style="font-color:white;">Reset</a>
         </div>
       </div>
     </div>
@@ -98,8 +108,7 @@
     num = event.target.value;
     $('#qGroup').empty();
     for (i = 1; i <= event.target.value; i++) {
-      $('#qGroup').append('<div class="input-group"><div class="input-group-prepend"><span class="input-group-text">Q' + i + '</span></div><textarea id="' + i + '"class="form-control" aria-label="With textarea"></textarea></div>');
-      $('#qGroup').append('<br/>');
+      $('#qGroup').append('<div id="'+ i +'" class="input-group"  style="padding-bottom:20px;"><div class="input-group-prepend"><span class="input-group-text">Q' + i + '</span></div><textarea id="' + i + '"class="form-control" aria-label="With textarea"></textarea></div>');
     }
   }
 
@@ -150,8 +159,11 @@
     }
   }
 
-  function reset() {
-    document.getElementById("form").reset();
-  }
+  $('#resetButton').click(() => {
+    $('#form').trigger("reset");
+    $('#4').remove();
+    $('#5').remove();
+    $('#6').remove();
+  });
 
 </script>

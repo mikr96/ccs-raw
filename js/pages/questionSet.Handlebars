@@ -216,6 +216,7 @@
   }
 
   function viewSet(set_name) {
+     $('#qModal').empty();
     var ques = {{{ json ques }}};
     const setList = ques.filter(questions => set_name === questions.set_name);
 

@@ -8,7 +8,8 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html";
   }
 
-  console.log(token);
+  $('#logout').click(()=> { sessionStorage.clear(); window.location.href = "js/pages/page-login.html"; });
+
   Handlebars.registerHelper("date", function (timestamp) {
     return moment(timestamp).format('DD MMMM YYYY')
   });
@@ -41,11 +42,50 @@ $(document).ready(function () {
     );
   } else {
     $("li[id='users']").empty();
+    $("ul[id='main-menu']").children().empty();
+    $("body.theme-blue").addClass("menu-icon");
   }
 
   async function home() {
     if (role == "operator") {
-      var html = Template.templates.homeOperator({ url });
+      var survey = [
+        {
+          name: "Muhammad Izzad Rasyidi bin Jahan",
+          gender: "Male",
+          race: "Johorean",
+          address: "Felda Ulu Taib Andak, Kulai Johor",
+          phone: "0123456789",
+          location: "Johor"
+        },
+        {
+          name: "Ahmad Azamuddin bin Hasni",
+          gender: "Male",
+          race: "Johorean",
+          address: "Masai Johor",
+          phone: "0123344876",
+          location: "Johor"
+        },
+        {
+          name: "Nurul Nazihah binti Jamal",
+          gender: "Female",
+          race: "Pahangian",
+          address: "Kuantan Pahang",
+          phone: "0115234532",
+          location: "Pahang"
+        },
+        {
+          name: "Ameera Akmalia binti Alias",
+          gender: "Female",
+          race: "Unknown",
+          address: "Puncak Alam, Selangor",
+          phone: "0176754281",
+          location: "Selangor"
+        }
+      ]
+
+      sessionStorage.setItem("surveys", JSON.stringify(survey));
+
+      var html = Template.templates.homeOperator({ survey, url });
       $("#root")
         .html(html)
         .show();
@@ -164,6 +204,22 @@ $(document).ready(function () {
 
   crossroads.addRoute("/record-region", function () {
     var html = Template.templates.recordRegion({ url });
+    $("#root").empty();
+    $("#root")
+      .html(html)
+      .show();
+  });
+
+  crossroads.addRoute("/survey", function () {
+    var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
+    console.log(survey);
+    var gender = survey[0].gender;
+    if (gender === "Male") {
+      gender = true;
+    } else {
+      gender = false;
+    }
+    var html = Template.templates.survey({ survey, gender, url });
     $("#root").empty();
     $("#root")
       .html(html)
