@@ -87,6 +87,11 @@
         </div>
 
 <script>
+
+    $(document).ready(() => {
+      $("table.datatable").dataTable();
+  })
+
   async function editSet(set_id) {
     var ques = {{{ json ques }}};
     const setList = ques.filter(questions => set_id == questions.set_id);

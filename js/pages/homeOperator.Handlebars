@@ -69,6 +69,10 @@
 </div>
 </div>
 <script>
+    $(document).ready(() => {
+      $("table.datatable").dataTable();
+  })
+
     function survey(name) {
         var surveys = {{{json survey}}}; 
         const surveyList = surveys.filter(survey => name == survey.name);

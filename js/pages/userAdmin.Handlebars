@@ -79,6 +79,11 @@
 </div>
 
 <script>
+
+    $(document).ready(() => {
+    $("table.datatable").dataTable();
+  })
+  
   async function add() {
     try {
       const { value } = await Swal.fire({

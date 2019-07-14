@@ -47,7 +47,7 @@
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
                   <td>{{region}}</td>
-                  <td>setname</td>
+                  <td>{{set_id}}</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
                       data-toggle="tooltip" data-original-title="Edit" onclick="edit('{{{username}}}')"><i
@@ -81,6 +81,9 @@
 <script>
 
   sessionStorage.getItem("role") === "supervisor" ? $("#add, #delete").hide() : $("#add, #delete").show();
+  $(document).ready(() => {
+    $("table.datatable").dataTable();
+  })
 
   async function add() {
 
@@ -159,7 +162,6 @@
   async function edit(username) {
     var oper = {{{json oper}}}
     const nameList = oper.filter(profiles => username === profiles.username);
-    const nameList = oper.filter(profiles => laptop_id === profiles.laptop_id);
 
     if(sessionStorage.getItem("role") === "admin") {
     const { value: formValues } = await Swal.fire({
