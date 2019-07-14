@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+var http = require('http');
 const app = express();
+const router = express.Router();
 
 app.use(function(req, res, next) {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -42,6 +44,14 @@ app.use(express.static(__dirname + '/index.html')); // set the static files loca
 
 // app.use(function(err, req, res, next) {
 //     return res.status(500).json({ message: err.message });
+// });
+
+http.createServer(function (req, res) {
+	res.sendFile(path.join(__dirname + "/index.html"));
+})
+
+// router.get("/", function(req, res) {
+//   res.sendFile(path.join(__dirname + "/index.html"));
 // });
 
 

@@ -1,13 +1,9 @@
+'use strict';
 module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-handlebars");
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    shell: {
-      connect: {
-          command: 'node server.js'
-      }
-    },
     sass: {
       options: {
         includePaths: ["node_modules/bootstrap-sass/assets/stylesheets"]
@@ -131,6 +127,24 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("buildcss", ["sass"]);
   grunt.registerTask("buildjs", ["uglify"]);
-    // Default task(s).
-    grunt.registerTask('default', ['uglify']);
+  // Build the production application
+  // grunt.registerTask('build', 'Compile on dist folder', function () {
+
+//     grunt.task.run([
+//         'clean:dist',
+//         'ngconstant:production',
+//         'wiredep',
+//         'sass',
+//         'concurrent:dist',
+//         'autoprefixer:dist'
+//     ]);
+//   });
+//   };
+
+//   // Build the production application
+// grunt.registerTask('webconnect', 'connect web server', function () {
+
+//   grunt.task.run([
+//       'connect:dist'
+//   ]);
 };
