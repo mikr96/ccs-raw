@@ -12,7 +12,7 @@ app.use(function(req, res, next) {
 		"Access-Control-Allow-Headers",
 		"Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
 	);
-	res.Header("Content-Security-Policy", "script-src 'self' https://apis.google.com");
+	res.header("Content-Security-Policy", "script-src 'self' https://apis.google.com");
 	next();
 });
 
