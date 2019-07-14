@@ -48,11 +48,7 @@ app.use(express.static(__dirname + '/')); // set the static files location
 // });
 
 http.createServer(function (req, res) {
-	//res.sendFile(path.join(__dirname + "/index.html"));
-	res.writeHead(200, {
-		'Content-Type': 'text/html',
-		'Access-Control-Allow-Origin' : '*'
-});
+	res.sendFile(path.join(__dirname + "/index.html"));
 })
 
 // router.get("/", function(req, res) {
