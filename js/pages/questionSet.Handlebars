@@ -140,7 +140,7 @@
         status: formValues[2]
       });
 
-      const questionCreate = await fetch(`${{{url}}}question/${set_id}/edit`, {
+      const questionCreate = await fetch(`{{url}}question/${set_id}/edit`, {
         method: "post",
         headers: {
           Accept: "application/json",
@@ -192,7 +192,7 @@
       const status = await req;
 
       if (status.value) {
-        const res = await fetch(`${{{url}}}questions/${set_id}/delete`, {
+        const res = await fetch(`{{url}}questions/${set_id}/delete`, {
           method: "get",
           headers: {
             Accept: "application/json",
