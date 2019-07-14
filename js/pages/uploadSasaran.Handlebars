@@ -1,0 +1,112 @@
+<div class="row clearfix">
+  <div class="col-lg-12 col-md-12">
+    <div class="card">
+      <div class="header">
+        <h2>Limit file type <small>only accept excel file</small></h2>
+      </div>
+      <form id="csvForm">
+        <div class="body">
+          <input type="file" class="dropify" id="file" data-allowed-file-extensions="xls xlsx csv">
+          <div class="d-flex justify-content-end my-2">
+            <input type="submit" value="Submit" class="btn btn-info">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('.dropify').dropify()
+
+  let data = []
+
+  $("#file").change(function(e){
+    if(e.target.files.length){
+      var reader = new FileReader();
+      reader.onload = async function(e){
+        csvResult = e.target.result.split(/\r|\n|\r\n/);
+        const csvKeys = csvResult[0]
+          .split(',')
+
+        const csv = csvResult
+          .map(res => res.split(','))
+          .filter(arr => arr.length > 1)
+        console.log(csv)
+        data = (await applyValues(csv, csvKeys))
+          .filter(d => d)
+          .filter(d => d.hasOwnProperty('alamatterkinidaerah'))
+        
+      }
+      reader.readAsText(e.target.files.item(0));
+  	}
+
+    const applyValues = async (arr, objects) => {
+      return new Promise(async (resolve, reject) => {
+        const values = arr.map((outer, i) => {
+          if (i > 0) {
+            let obj = {}
+            outer.forEach((inner, index, arr) => {
+              if (arr.length > 1){
+                obj[objects[index]] = inner
+              }
+            })
+            return obj
+          }
+        })
+
+        return resolve(values)
+      })
+    }
+  });
+
+  $('#csvForm').submit(async e => {
+    e.preventDefault()
+    if (data.length) {
+      const submitData = data.map(res => {
+        const {nama, nric, gender, age, bangsa, dun, lokaliti, alamatterkinilokaliti, alamatterkinilokaliti2, alamatterkinirumah, alamatterkiniposkod, alamatterkininegeri} = res
+        const phone = []
+        for (let i = 1; i <= 42; i++) {
+          const currPhone = res[`tel${i}`]
+          if (currPhone)
+            phone.push(currPhone)
+        }
+        return {
+          ic: nric,
+          name: nama,
+          gender: gender,
+          age: age,
+          race: bangsa,
+          region: dun,
+          location: lokaliti,
+          phone: phone,
+          address: `${_(alamatterkinirumah)}${_(alamatterkinilokaliti)}${alamatterkiniposkod} ${_(alamatterkinilokaliti2)}${alamatterkininegeri}`,
+        }
+      })
+      {{!-- console.log(JSON.stringify(submitData, null, 4)) --}}
+
+      {{!-- /*try {
+        const submitSurveys = await fetch('{{url}}survey/create', {
+          headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'post',
+          body: JSON.stringify(submitData)
+        })
+
+        const submitSurveysRes = await submitSurveys.json()
+        Swal.fire('Successful', 'Data inserted', 'success')
+        if (submitSurveysRes)
+          window.location.reload()
+      } catch(err) {
+        console.log(err)
+        Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
+      }*/ --}}
+    }
+  })
+
+  const _ = str => str ? `${str}, ` : '';
+
+</script>
