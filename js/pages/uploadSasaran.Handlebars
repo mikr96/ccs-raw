@@ -30,9 +30,9 @@
           .split(',')
 
         const csv = csvResult
-          .map(res => res.split(','))
+          .map(res => res.split(/,(?![ {1}])/gm))
           .filter(arr => arr.length > 1)
-        console.log(csv)
+
         data = (await applyValues(csv, csvKeys))
           .filter(d => d)
           .filter(d => d.hasOwnProperty('alamatterkinidaerah'))
@@ -83,9 +83,8 @@
           address: `${_(alamatterkinirumah)}${_(alamatterkinilokaliti)}${alamatterkiniposkod} ${_(alamatterkinilokaliti2)}${alamatterkininegeri}`,
         }
       })
-      {{!-- console.log(JSON.stringify(submitData, null, 4)) --}}
 
-      {{!-- /*try {
+      try {
         const submitSurveys = await fetch('{{url}}survey/create', {
           headers: {
             'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
@@ -95,15 +94,19 @@
           method: 'post',
           body: JSON.stringify(submitData)
         })
-
+        if (submitSurveys.status === 401){
+          Swal.fire('Ouupps', 'You are not authorized for this, pls re-login', 'error')
+          setTimeout(() => window.location = '/js/pages/page-login.html', 1000) 
+        }
         const submitSurveysRes = await submitSurveys.json()
+
         Swal.fire('Successful', 'Data inserted', 'success')
         if (submitSurveysRes)
           window.location.reload()
       } catch(err) {
         console.log(err)
         Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
-      }*/ --}}
+      }
     }
   })
 
