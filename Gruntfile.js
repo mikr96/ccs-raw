@@ -2,6 +2,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-handlebars");
 
   grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    shell: {
+      connect: {
+          command: 'node server.js'
+      }
+    },
     sass: {
       options: {
         includePaths: ["node_modules/bootstrap-sass/assets/stylesheets"]
@@ -114,6 +120,10 @@ module.exports = function (grunt) {
             "js/compiled.js"
           ]
         }
+      },
+      build: {
+        src: 'src/factorial.js',
+        dest: 'build/factorial.min.js'
       }
     }
   });

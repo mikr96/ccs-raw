@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "grunt handlebars:compile && grunt uglify:my_target",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "grunt handlebars:compile && grunt uglify:my_target && index.html"
+    "build": "grunt handlebars:compile && grunt uglify:my_target && index.html",
+    "start": "node server.js"
   },
   "directories": {
     "doc": "doc"
@@ -25,16 +26,21 @@
   },
   "homepage": "https://github.com/mikr96/ccs-raw#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "directus-sdk-javascript": "^2.15.0",
     "dropify": "^0.2.2",
+    "express": "^4.17.1",
     "grunt": "^1.0.2",
     "metismenu": "^2.7.7",
     "moment": "^2.24.0",
+    "path": "^0.12.7",
     "sweetalert2": "^8.13.1"
   },
   "devDependencies": {
     "grunt-contrib-handlebars": "^1.0.0",
     "grunt-contrib-uglify": "^3.3.0",
-    "grunt-sass": "^2.1.0"
+    "grunt-sass": "^2.1.0",
+    "grunt-shell": "^3.0.1",
+    "load-grunt-tasks": "^5.0.0"
   }
 }

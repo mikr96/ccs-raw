@@ -100,9 +100,14 @@
         }
         const submitSurveysRes = await submitSurveys.json()
 
-        Swal.fire('Successful', 'Data inserted', 'success')
-        if (submitSurveysRes)
-          window.location.reload()
+        if (submitSurveysRes) {
+          Swal.fire('Successful', 'Data inserted', 'success')
+          .then(result => {
+              if (result.value) {
+                window.location.reload();
+              }
+          });
+        }
       } catch(err) {
         console.log(err)
         Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
