@@ -22,7 +22,7 @@
       </div>
       <div class="body">
         <div class="table-responsive">
-          <table class="table table-bordered table-hover table-striped" id="addrowExample">
+          <table class="table table-bordered table-hover table-striped datatable" id="addrowExample">
             <thead>
               <tr style="text-align: center;">
                 <th>Name</th>
@@ -70,9 +70,9 @@
 </div>
 <script>
     function survey(name) {
-        var surveys = JSON.parse(sessionStorage.getItem("surveys")); 
+        var surveys = {{{json survey}}}; 
         const surveyList = surveys.filter(survey => name == survey.name);
         sessionStorage.setItem("targetedSurvey", JSON.stringify(surveyList));
-        window.location.href = "#survey";
+        window.location.href = "index.html#survey";
     }
 </script>

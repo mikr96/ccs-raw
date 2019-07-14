@@ -1,14 +1,13 @@
-window.require = require
-const utils = require('./utils/utils');
-
 $(document).ready(function () {
-
   var token = sessionStorage.getItem("token");
   if (token == null) {
     window.location.href = "js/pages/page-login.html";
   }
 
-  $('#logout').click(()=> { sessionStorage.clear(); window.location.href = "js/pages/page-login.html"; });
+  $('#logout').click(() => {
+    sessionStorage.clear()
+    window.location.href = "js/pages/page-login.html"
+  });
 
   Handlebars.registerHelper("date", function (timestamp) {
     return moment(timestamp).format('DD MMMM YYYY')
@@ -30,6 +29,7 @@ $(document).ready(function () {
   const url = "http://localhost/CCS-API/";
 
   var role = sessionStorage.getItem("role");
+
   if (role == "admin") {
     $("ul[id='userRole']").empty();
     $("ul[id='userRole']").append(
@@ -82,8 +82,6 @@ $(document).ready(function () {
           location: "Selangor"
         }
       ]
-
-      sessionStorage.setItem("surveys", JSON.stringify(survey));
 
       var html = Template.templates.homeOperator({ survey, url });
       $("#root")
@@ -142,7 +140,7 @@ $(document).ready(function () {
       .html(html)
       .show();
   })
-  
+
   const getRole = async arg => {
     try {
       if (sessionStorage.role == "supervisor") {
@@ -438,56 +436,6 @@ $(document).ready(function () {
   // Add the Flot version string to the footer
   $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
   // Visitors Statistics ============= end
-});
-
-$(function () {
-  "use strict";
-  // var options;
-
-  // var data = {
-  //   labels: [
-  //     "Jan",
-  //     "Feb",
-  //     "Mar",
-  //     "Apr",
-  //     "May",
-  //     "Jun",
-  //     "Jul",
-  //     "Aug",
-  //     "Sep",
-  //     "Oct",
-  //     "Nov",
-  //     "Dec"
-  //   ],
-  //   series: [
-  //     {
-  //       name: "series-real",
-  //       data: [200, 289, 263, 278, 320, 450, 359, 400, 369, 479, 628, 530]
-  //     },
-  //     {
-  //       name: "series-projection",
-  //       data: [240, 502, 360, 380, 505, 520, 590, 523, 600, 650, 790, 1020]
-  //     }
-  //   ]
-  // };
-
-  // // area chart
-  // options = {
-  //   height: "255px",
-  //   showArea: false,
-  //   showLine: true,
-  //   showPoint: true,
-  //   axisX: {
-  //     showGrid: false
-  //   },
-  //   axisY: {
-  //     labelInterpolationFnc: function(value) {
-  //       return value / 1000 + "k";
-  //     }
-  //   },
-  //   lineSmooth: true
-  // };
-  // new Chartist.Line("#Sales_Overview", data, options);
 
   function parseHash(newHash, oldHash) {
     crossroads.parse(newHash);
