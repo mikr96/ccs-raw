@@ -116,10 +116,6 @@ module.exports = function (grunt) {
             "js/compiled.js"
           ]
         }
-      },
-      build: {
-        src: 'src/factorial.js',
-        dest: 'build/factorial.min.js'
       }
     }
   });
@@ -127,18 +123,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("buildcss", ["sass"]);
   grunt.registerTask("buildjs", ["uglify"]);
-  // Build the production application
-  grunt.registerTask('build', 'Compile on dist folder', function () {
-
-    grunt.task.run([
-        'clean:dist',
-        'ngconstant:production',
-        'wiredep',
-        'sass',
-        'concurrent:dist',
-        'autoprefixer:dist'
-    ]);
-  });
   // };
 
 //   // Build the production application

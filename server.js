@@ -48,7 +48,7 @@ app.use(express.static(__dirname + '/')); // set the static files location
 // });
 
 http.createServer(function (req, res) {
-	res.sendFile(path.join(__dirname + "/index.html"));
+	res.sendFile(path.join(__dirname + "/js/pages/page-login.html"));
 })
 
 // router.get("/", function(req, res) {
