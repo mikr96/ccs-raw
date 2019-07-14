@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname + '/index.html')); // set the static files location
+app.use(express.static(__dirname + '/')); // set the static files location
 // app.use(morgan('dev'));
 
 // app.use(cookieParser());
