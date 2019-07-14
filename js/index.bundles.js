@@ -1,3 +1,4 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 window.require = require
 const utils = require('./utils/utils');
 
@@ -8,8 +9,7 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html";
   }
 
-  $('#logout').click(()=> { sessionStorage.clear(); window.location.href = "js/pages/page-login.html"; });
-
+  console.log(token);
   Handlebars.registerHelper("date", function (timestamp) {
     return moment(timestamp).format('DD MMMM YYYY')
   });
@@ -42,50 +42,11 @@ $(document).ready(function () {
     );
   } else {
     $("li[id='users']").empty();
-    $("ul[id='main-menu']").children().empty();
-    $("body.theme-blue").addClass("menu-icon");
   }
 
   async function home() {
     if (role == "operator") {
-      var survey = [
-        {
-          name: "Muhammad Izzad Rasyidi bin Jahan",
-          gender: "Male",
-          race: "Johorean",
-          address: "Felda Ulu Taib Andak, Kulai Johor",
-          phone: "0123456789",
-          location: "Johor"
-        },
-        {
-          name: "Ahmad Azamuddin bin Hasni",
-          gender: "Male",
-          race: "Johorean",
-          address: "Masai Johor",
-          phone: "0123344876",
-          location: "Johor"
-        },
-        {
-          name: "Nurul Nazihah binti Jamal",
-          gender: "Female",
-          race: "Pahangian",
-          address: "Kuantan Pahang",
-          phone: "0115234532",
-          location: "Pahang"
-        },
-        {
-          name: "Ameera Akmalia binti Alias",
-          gender: "Female",
-          race: "Unknown",
-          address: "Puncak Alam, Selangor",
-          phone: "0176754281",
-          location: "Selangor"
-        }
-      ]
-
-      sessionStorage.setItem("surveys", JSON.stringify(survey));
-
-      var html = Template.templates.homeOperator({ survey, url });
+      var html = Template.templates.homeOperator({ url });
       $("#root")
         .html(html)
         .show();
@@ -204,22 +165,6 @@ $(document).ready(function () {
 
   crossroads.addRoute("/record-region", function () {
     var html = Template.templates.recordRegion({ url });
-    $("#root").empty();
-    $("#root")
-      .html(html)
-      .show();
-  });
-
-  crossroads.addRoute("/survey", function () {
-    var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
-    console.log(survey);
-    var gender = survey[0].gender;
-    if (gender === "Male") {
-      gender = true;
-    } else {
-      gender = false;
-    }
-    var html = Template.templates.survey({ survey, gender, url });
     $("#root").empty();
     $("#root")
       .html(html)
@@ -496,3 +441,27 @@ $(function () {
   hasher.changed.add(parseHash); //parse hash changes
   hasher.init(); //start listening for history change
 });
+
+},{"./utils/utils":2}],2:[function(require,module,exports){
+function extractIC(x) {
+  var data = String(x).split(/[eE]/);
+  if (data.length == 1) return data[0];
+
+  var z = '', sign = x < 0 ? '-' : '',
+    str = data[0].replace('.', ''),
+    mag = Number(data[1]) + 1;
+
+  if (mag < 0) {
+    z = sign + '0.';
+    while (mag++) z += '0';
+    return z + str.replace(/^\-/, '');
+  }
+  mag -= str.length;
+  while (mag--) z += '0';
+  return str + z;
+}
+
+module.exports = {
+  extractIC
+}
+},{}]},{},[1]);
