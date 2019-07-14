@@ -125,7 +125,7 @@
         questions: arr,
         status: 'active'
       });
-      const questionCreate = await fetch(`${{{url}}}question/create`, {
+      const questionCreate = await fetch(`{{url}}question/create`, {
         method: "post",
         headers: {
           Accept: "application/json",

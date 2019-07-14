@@ -79,4 +79,8 @@
         sessionStorage.setItem("targetedSurvey", JSON.stringify(surveyList));
         window.location.href = "index.html#survey";
     }
+
+    $(document).ready(() => {
+      $('table.datatable').dataTable()
+    })
 </script>
