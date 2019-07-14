@@ -128,18 +128,18 @@ module.exports = function (grunt) {
   grunt.registerTask("buildcss", ["sass"]);
   grunt.registerTask("buildjs", ["uglify"]);
   // Build the production application
-  // grunt.registerTask('build', 'Compile on dist folder', function () {
+  grunt.registerTask('build', 'Compile on dist folder', function () {
 
-//     grunt.task.run([
-//         'clean:dist',
-//         'ngconstant:production',
-//         'wiredep',
-//         'sass',
-//         'concurrent:dist',
-//         'autoprefixer:dist'
-//     ]);
-//   });
-//   };
+    grunt.task.run([
+        'clean:dist',
+        'ngconstant:production',
+        'wiredep',
+        'sass',
+        'concurrent:dist',
+        'autoprefixer:dist'
+    ]);
+  });
+  // };
 
 //   // Build the production application
 // grunt.registerTask('webconnect', 'connect web server', function () {

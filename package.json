@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "grunt handlebars:compile && grunt uglify:my_target",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "grunt handlebars:compile && grunt uglify && index.html",
+    "build": "grunt handlebars:compile && grunt uglify",
     "start": "node server.js"
   },
   "directories": {
