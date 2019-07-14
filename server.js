@@ -1,7 +1,5 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const path = require("path");
-app.disable('x-powered-by');
 const app = express();
 
 app.use(function(req, res, next) {

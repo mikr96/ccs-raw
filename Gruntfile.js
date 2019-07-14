@@ -131,4 +131,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("buildcss", ["sass"]);
   grunt.registerTask("buildjs", ["uglify"]);
+    // Default task(s).
+    grunt.registerTask('default', ['uglify']);
 };
