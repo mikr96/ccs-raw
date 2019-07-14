@@ -19,42 +19,11 @@ app.use(function(req, res, next) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static(__dirname + '/')); // set the static files location
-// app.use(morgan('dev'));
-
-// app.use(cookieParser());
-// app.use(expressSession({
-//     secret: 'secret',
-//     resave: true,
-//     saveUninitialized: false
-// }));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-// require('./server/config/passport')(app, passport);
-// require('./server/route')(app, passport);
-// app.use(flash());
-// if (config.env === 'development') {
-
-//     app.use(function(err, req, res, next) {
-//         console.log(err);
-//         return res.status(500).json({ message: err.message });
-//     });
-
-// }
-
-// app.use(function(err, req, res, next) {
-//     return res.status(500).json({ message: err.message });
-// });
+app.use(express.static(__dirname + '/')); // mcm tak guna je ... 
 
 http.createServer(function (req, res) {
 	res.sendFile(path.join(__dirname + "/js/pages/page-login.html"));
 })
-
-// router.get("/", function(req, res) {
-//   res.sendFile(path.join(__dirname + "/index.html"));
-// });
-
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
