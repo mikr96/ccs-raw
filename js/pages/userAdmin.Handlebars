@@ -204,11 +204,9 @@
         },
         body: formData
       });
-      if (accountCreate) {
-        const created = await accountCreate.json();
-
-
-        if (created.editstatus) {
+      
+      const created = await accountCreate.json();
+        if (created.status) {
           Swal.fire({
             title: "Congratulation",
             text: "Successfully Created",
@@ -225,7 +223,6 @@
             type: "error"
           });
         }
-      }
     } catch (err) {
       console.log(err)
       Swal.fire("Something went wrong", err.message, "error");
@@ -259,13 +256,15 @@
         });
 
         const deleted = await res;
+        if(deleted.status) {
         swal.fire("Successfully deleted", "success")
           .then(result => {
             if (result.value) {
               window.location.reload();
             }
           });
-      }
+        }
+        }
     } catch (err) {
       console.log(err);
     }

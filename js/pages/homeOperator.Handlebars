@@ -71,20 +71,62 @@
 </div>
 </div>
 <script>
-    $(document).ready(() => {
-      $("table.datatable").dataTable();
+  $(document).ready(() => {
+    $("table.datatable").dataTable();
   })
 
-    function survey(name) {
-        var surveys = {{{ json surveys }}}; 
-        const surveyList = surveys.filter(survey => name == survey.name);
-        sessionStorage.removeItem("targetedSurvey");
-        sessionStorage.removeItem("phone");
-        console.log(JSON.stringify(surveyList[0].phone));
-        sessionStorage.setItem("targetedSurvey", JSON.stringify(surveyList));
-        sessionStorage.setItem("phone", JSON.stringify(surveyList[0].phone));
+  async function survey(name) {
+    try {
+      var surveys = {{{ json surveys }}}
+      const surveyList = surveys.filter(survey => name == survey.name)
+      sessionStorage.removeItem("targetedSurvey")
+      sessionStorage.removeItem("phone")
+      sessionStorage.setItem("targetedSurvey", JSON.stringify(surveyList))
+      sessionStorage.setItem("phone", JSON.stringify(surveyList[0].phone))
+      var profile = JSON.parse(sessionStorage.getItem("profile"))
+
+      var id = surveyList[0].id;
+      var formData = JSON.stringify({
+        id: surveyList[0].id,
+        gender: surveyList[0].gender,
+        phone: surveyList[0].phone,
+        race: surveyList[0].race,
+        name:surveyList[0].name,
+        address: surveyList[0].address,
+        question_survey: null,
+        comment: null,
+        status_survey: null,
+        call_duration: null,
+        operator_id: profile.username,
+        status_phone: null,
+        status: 1
+      });
+      console.log(formData)
+      const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
+        method: "post",
+        headers: {
+        credentials: 'include',
+        Accept: "application/json",
+        "Content-type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        },
+        body: formData
+      });
+
+      const pending = await updateStatus.json();
+
+      if (pending.status) {
         window.location.href = "index.html#survey";
-    }
+      } else {
+        Swal.fire({
+          title: "Fail",
+          text: "Fail update status",
+          type: "error"
+        });
+      }
+    } catch (err) { 
+      console.log(err) }
+  }
 
     $(document).ready(() => {
       $('table.datatable').dataTable()
