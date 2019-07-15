@@ -23,24 +23,24 @@
 										<div class="profile-image float-md-right"> <img src="/img/avatar6.jpg" alt=""> </div>
 									{{else}}
 										<div class="profile-image float-md-right"> <img src="/img/avatar22.jpg" alt=""> </div>
-										{{/if}}
+									{{/if}}
 								</div>
 								<div class="col-lg-8 col-md-8 col-12">
-										<h4 class="m-t-0 m-b-0">{{survey.[0].name}}</h4>
+										<h4 class="m-t-0 m-b-0 survey">{{survey.[0].name}}</h4>
 
-										<p>{{survey.[0].address}}</p>
+										<p class="survey">{{survey.[0].address}}</p>
 
 										<div class="row">
 												<div class="col-4">
-														<h5>{{survey.[0].gender}}</h5>
+														<h5 class="survey">{{survey.[0].gender}}</h5>
 														<small>Jantina</small>
 												</div>
 												<div class="col-4">
-														<h5>{{survey.[0].race}}</h5>
+														<h5 class="survey">{{survey.[0].race}}</h5>
 														<small>Bangsa</small>
 												</div>
-												<div class="col-4">
-														<h5>{{survey.[0].location}}</h5>
+												<div>
+														<h5 class="survey">{{survey.[0].location}}</h5>
 														<small>Lokasi</small>
 												</div>
 										</div>
@@ -72,21 +72,21 @@
 				</div>
 				<div class="body">
 						<div class="col-12">
-								<h4 class="m-t-5"><strong>Abdullah Hassan</strong></h4>
+								<h4 class="m-t-5"><strong>{{profile.username}}</strong></h4>
 								<p class="text-muted">13 / 03 / 2019 <br> Lokasi CCS</p>
 						</div>
 						<hr>
 						<div class="row">
 								<div class="col-4">
-										<h5>40</h5>
+										<h5>0</h5>
 										<small>Survey Berjaya</small>
 								</div>
 								<div class="col-4">
-										<h5>NB205</h5>
+										<h5>{{profile.laptop_id}}</h5>
 										<small>Caller ID</small>
 								</div>
 								<div class="col-4">
-										<h5>656</h5>
+										<h5>0</h5>
 										<small>Jumlah Survey</small>
 								</div>
 						</div>
@@ -121,6 +121,7 @@
 										</tr>
 										</thead>
 										<tbody>
+											{{#each phone}}
 										<tr>
 												<td style="width: 50px;">
 														<label class="fancy-checkbox">
@@ -130,7 +131,7 @@
 												</td>
 
 												<td>
-														<span class="phone"><i class="fa fa-phone m-r-10"></i>{{survey.[0].phone}}</span>
+														<span class="phone"><i class="fa fa-phone m-r-10"></i>{{this}}</span>
 												</td>
 												<td>
 
@@ -138,7 +139,7 @@
 														<button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-refresh"></i></button>
 												</td>
 												<td>
-														<select class="custom-select" v-model="category" id="inputGroupSelectCategory" required>
+														<select class="custom-select" id="phoneStatus" required>
 																<option selected value="" disabled>Pilih...</option>
 																<option value="salahno">Salah Nombor</option>
 																<option value="takwujud">Tidak Wujud</option>
@@ -147,14 +148,12 @@
 														</select>
 												</td>
 										</tr>
+										{{/each}}
 										</tbody>
 								</table>
 						</div>
 				</div>
 		</div>
-
-
-
 
 		<div class="card">
 				<div class="header">
@@ -214,7 +213,6 @@
 												<td>
 														<div class="fancy-radio">
 																<label><input name="pilih2" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
-
 														</div>
 												</td>
 										</tr>
@@ -225,19 +223,16 @@
 												<td>
 														<div class="fancy-radio">
 																<label><input name="pilih3" value="ya" type="radio"><span><i></i>Ya</span></label>
-
 														</div>
 												</td>
 												<td>
 														<div class="fancy-radio">
 																<label><input name="pilih3" value="tidak" type="radio"><span><i></i>Tidak</span></label>
-
 														</div>
 												</td>
 												<td>
 														<div class="fancy-radio">
 																<label><input name="pilih3" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
-
 														</div>
 												</td>
 										</tr>
@@ -258,9 +253,9 @@
 						<h6>Jenis Komen</h6>
 						<div class="input-group mb-3">
 								<div class="input-group-prepend">
-										<label class="input-group-text" for="inputGroupSelect01">Options</label>
+										<label class="input-group-text" for="comment">Options</label>
 								</div>
-								<select class="custom-select" id="inputGroupSelect01">
+								<select class="custom-select" name="comment">
 										<option selected>Pilihan...</option>
 										<option value="1">Info</option>
 										<option value="2">Wakil Rakyat</option>
@@ -271,7 +266,7 @@
 								<div class="input-group-prepend">
 										<span class="input-group-text">Komen</span>
 								</div>
-								<textarea class="form-control" aria-label="Komen"></textarea>
+								<textarea class="form-control" name="comment" aria-label="Komen"></textarea>
 						</div>
 
 				</div>
@@ -297,9 +292,29 @@
 </div>
 </div>
 <script>
+	$(".survey").text(function () {
+    return $(this).text().replace(/(\w)(\w*)/g, (_, firstChar, rest) => firstChar + rest.toLowerCase()); 
+	});
+
 	function submitSurvey(){
-		window.location.href = "#home;";
-	}
+
+		var formData = JSON.stringify({
+			phone: $("#phoneStatus").val(),
+			comment: $('select[name="comment"], textarea[name="comment"]').val(),
+		});
+
+		console.log(formData);
+
+		Swal.fire({
+			title: "Survey",
+			text: "Survey submitted !",
+			type: "success"
+		}).then(result => {
+					if (result.value) {
+						window.location.href = "index.html#home";
+					}
+				});
+		}	
 
 	function startSurvey(){
 			Swal.fire({

@@ -123,12 +123,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("buildcss", ["sass"]);
   grunt.registerTask("buildjs", ["uglify"]);
-  // };
 
-//   // Build the production application
-// grunt.registerTask('webconnect', 'connect web server', function () {
-
-//   grunt.task.run([
-//       'connect:dist'
-//   ]);
 };

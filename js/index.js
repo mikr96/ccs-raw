@@ -48,42 +48,17 @@ $(document).ready(function () {
 
   async function home() {
     if (role == "operator") {
-      var survey = [
-        {
-          name: "Muhammad Izzad Rasyidi bin Jahan",
-          gender: "Male",
-          race: "Johorean",
-          address: "Felda Ulu Taib Andak, Kulai Johor",
-          phone: "0123456789",
-          location: "Johor"
-        },
-        {
-          name: "Ahmad Azamuddin bin Hasni",
-          gender: "Male",
-          race: "Johorean",
-          address: "Masai Johor",
-          phone: "0123344876",
-          location: "Johor"
-        },
-        {
-          name: "Nurul Nazihah binti Jamal",
-          gender: "Female",
-          race: "Pahangian",
-          address: "Kuantan Pahang",
-          phone: "0115234532",
-          location: "Pahang"
-        },
-        {
-          name: "Ameera Akmalia binti Alias",
-          gender: "Female",
-          race: "Unknown",
-          address: "Puncak Alam, Selangor",
-          phone: "0176754281",
-          location: "Selangor"
+      const res = await fetch(`${url}surveys`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
-      ]
+      });
+      const surveys = await res.json();
+      console.log(surveys);
 
-      var html = Template.templates.homeOperator({ survey, url });
+      var html = Template.templates.homeOperator({ surveys, url });
       $("#root")
         .html(html)
         .show();
@@ -158,12 +133,23 @@ $(document).ready(function () {
         }
       });
 
+      const req = await fetch(`${url}regions`, {
+        method: "get",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        }
+      });
+      
       const oper = await res.json();
+      const region = await req.json();
+
       if (
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ oper, url });
+        var html = Template.templates.userOperator({ region, oper, url });
         $("#root").empty();
         $("#root")
           .html(html)
@@ -210,14 +196,15 @@ $(document).ready(function () {
 
   crossroads.addRoute("/survey", function () {
     var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
-    console.log(survey);
+    var phone = JSON.parse(sessionStorage.getItem("phone"));
+    var profile = JSON.parse(sessionStorage.getItem("profile"));
     var gender = survey[0].gender;
     if (gender === "Male") {
       gender = true;
     } else {
       gender = false;
     }
-    var html = Template.templates.survey({ survey, gender, url });
+    var html = Template.templates.survey({ survey, profile, gender, phone, url });
     $("#root").empty();
     $("#root")
       .html(html)

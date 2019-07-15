@@ -25,6 +25,7 @@ async function login() {
         text: "Welcome back",
         type: "success"
       }).then(result => {
+        sessionStorage.setItem("profile", JSON.stringify(success));
         sessionStorage.setItem("role", success.role);
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);

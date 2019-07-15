@@ -46,7 +46,7 @@
                   <td>{{gender}}</td>
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
-                  <td>{{region}}</td>
+                  <td>{{region_id}}</td>
                   <td>{{set_id}}</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
@@ -85,12 +85,23 @@
     $("table.datatable").dataTable();
   })
 
+
   async function add() {
 
     try {
+      var operator = {{{json oper}}}
+      var used_id = operator.map(res => res.laptop_id);
+      var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
+      const id = laptopId.filter(id => used_id != id);
+      var available_id = '<select class="form-control" id="laptopId">';
+      id.forEach(id => {
+        let option = '<option value="' + id + '">' + id + '</option>';
+        available_id = available_id + option;
+      })
+      available_id = available_id + '</select><br/>';
       const { value } = await Swal.fire({
         title: 'Add new operator',
-        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" placeholder="Enter region"><br/>' + '<input type="text" class="form-control" id="laptopId" placeholder="Enter laptop ID"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" placeholder="Enter region"><br/>' + available_id + '<input type="text" class="form-control" id="role" value="operator" readonly>',
         focusConfirm: false,
         preConfirm: () => {
           return [
@@ -160,13 +171,26 @@
 
 
   async function edit(username) {
-    var oper = {{{json oper}}}
-    const nameList = oper.filter(profiles => username === profiles.username);
+
+    var operator = {{{json oper}}}
+
+    const nameList = operator.filter(profiles => username === profiles.username);
+    var used_id = operator.map(res => res.laptop_id);
+    var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
+    const id = laptopId.filter(id => used_id != id); //filter id yang belum guna
+    var available_id = '<select class="form-control" id="laptopId">';
+    var selected = '<option value="' + nameList[0].laptop_id + '" selected>' + nameList[0].laptop_id + '</option>'; // selected laptop id
+    available_id = available_id + selected;
+    id.forEach(id => {
+      let option = '<option value="' + id + '">' + id + '</option>';
+      available_id = available_id + option;
+    })
+    available_id = available_id + '</select>';
 
     if(sessionStorage.getItem("role") === "admin") {
     const { value: formValues } = await Swal.fire({
       title: 'Add new operator',
-      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + available_id + '<br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
       focusConfirm: false,
       preConfirm: () => {
         return [
@@ -183,24 +207,24 @@
       }
     })} else {
           const { value: formValues } = await Swal.fire({
-      title: 'Add new operator',
-      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '" readonly><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '" readonly><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"readonly><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '</select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '</select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
-      focusConfirm: false,
-      preConfirm: () => {
-        return [
-            document.getElementById('fullname').value,
-            document.getElementById('username').value,
-            document.getElementById('race').value,
-            document.getElementById('age').value,
-            document.getElementById('role').value,
-            document.getElementById('laptopId').value,
-            document.getElementById('gender').value,
-            document.getElementById('password').value,
-            document.getElementById('region').value
-        ]
+          title: 'Add new operator',
+          html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '" readonly><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '" readonly><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"readonly><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '</select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '</select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + available_id + '<br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+          focusConfirm: false,
+          preConfirm: () => {
+          return [
+              document.getElementById('fullname').value,
+              document.getElementById('username').value,
+              document.getElementById('race').value,
+              document.getElementById('age').value,
+              document.getElementById('role').value,
+              document.getElementById('laptopId').value,
+              document.getElementById('gender').value,
+              document.getElementById('password').value,
+              document.getElementById('region').value
+          ]
+        }
+      })
       }
-    })
-    }
 
     if (formValues) {
       try {
