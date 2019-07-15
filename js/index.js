@@ -124,10 +124,10 @@ $(document).ready(function () {
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       },
       method: 'get'
-    })
+    });
 
-    const regions = await regionRes.json()
-    console.log(regions)
+    const regions = await regionRes.json();
+    console.log(regions);
     try {
       if (sessionStorage.role == "supervisor") {
         newurl = `${url}profiles/role/operator`;
@@ -143,24 +143,15 @@ $(document).ready(function () {
           Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
       });
-
-      const req = await fetch(`${url}regions`, {
-        method: "get",
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
-        }
-      });
       
       const oper = await res.json();
-      const region = await req.json();
+      console.log(oper);
 
       if (
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ oper, url, regions });
+        var html = Template.templates.userOperator({ regions, oper, url });
         $("#root").empty();
         $("#root")
           .html(html)

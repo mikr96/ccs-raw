@@ -46,7 +46,11 @@
                   <td>{{gender}}</td>
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
-                  <td>{{region_id}}</td>
+                  
+                  <td>{{#each regions}} 
+                    {{oper.[0].region_id}} == {{id}} ? {{name}} : null
+                  {{/each}}</td>
+                  
                   <td>{{set_id}}</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
@@ -189,7 +193,7 @@
 
     if(sessionStorage.getItem("role") === "admin") {
     const { value: formValues } = await Swal.fire({
-      title: 'Add new operator',
+      title: 'Edit operator',
       html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + `
       <select name="region_id" id="region_id" class="form-control">
         <option value="">-- SELECT REGION --</option>
@@ -255,7 +259,8 @@
             document.getElementById('region_id').value
         ]
       }
-
+    })
+    }
     if (formValues) {
       try {
 
