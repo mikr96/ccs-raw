@@ -142,6 +142,17 @@ $(document).ready(function () {
   })
 
   const getRole = async arg => {
+    const regionRes = await fetch(`${url}regions`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      },
+      method: 'get'
+    })
+
+    const regions = await regionRes.json()
+    console.log(regions)
     try {
       if (sessionStorage.role == "supervisor") {
         newurl = `${url}profiles/role/operator`;
@@ -163,19 +174,19 @@ $(document).ready(function () {
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ oper, url });
+        var html = Template.templates.userOperator({ oper, url, regions });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "admin") {
-        var html = Template.templates.userAdmin({ oper, url });
+        var html = Template.templates.userAdmin({ oper, url, regions });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "supervisor") {
-        var html = Template.templates.userSupervisor({ oper, url });
+        var html = Template.templates.userSupervisor({ oper, url, regions });
         $("#root").empty();
         $("#root")
           .html(html)
