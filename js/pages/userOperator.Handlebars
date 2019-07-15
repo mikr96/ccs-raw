@@ -46,11 +46,9 @@
                   <td>{{gender}}</td>
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
-                  
-                  <td>{{#each regions}} 
-                    {{{ternary 'hi' 'everyoney' 'hello' }}}
-                  {{/each}}</td>
-                  
+                  <td>
+                    {{printRegion oper=oper regions=regions }}
+                  </td>                  
                   <td>{{set_id}}</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"

@@ -13,6 +13,14 @@ $(document).ready(function () {
     return moment(timestamp).format('DD MMMM YYYY')
   });
 
+  Handlebars.registerHelper("printRegion", function ({ data }) {
+    const { oper, regions } = data.root
+    const { index } = data
+    const operator = oper[index]
+    const region = regions.find(region => region.id === operator.region_id)
+    return region ? region.name : 'NULL'
+  });
+
   Handlebars.registerHelper("json", function (content) {
     return JSON.stringify(content);
   });
@@ -148,7 +156,7 @@ $(document).ready(function () {
           Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
       });
-      
+
       const oper = await res.json();
       console.log(oper);
 
