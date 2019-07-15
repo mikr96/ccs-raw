@@ -47,9 +47,9 @@
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
                   
-                  <td>{{#each regions}} 
-                    {{oper.[0].region_id}} == {{id}} ? {{name}} : null
-                  {{/each}}</td>
+                  <td>
+                    {{printRegion oper=oper regions=regions }}
+                  </td>
                   
                   <td>{{set_id}}</td>
                   <td class="actions">
