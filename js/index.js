@@ -25,6 +25,11 @@ $(document).ready(function () {
     return index + 1;
   });
 
+  Handlebars.registerHelper("ternary", function(value, yes, no) {
+    console.log(value);
+    return value ? yes : no;
+  });
+
   // const url = "https://ccs.cyrix.my/CCS-API/";
   const url = "http://localhost/CCS-API/";
 

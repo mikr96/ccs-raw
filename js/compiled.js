@@ -200,15 +200,11 @@ this["Template"]["templates"]["userOperator"] = Handlebars.template({"1":functio
     + ((stack1 = ((helper = (helper = helpers.username || (depth0 != null ? depth0.username : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"username","hash":{},"data":data}) : helper))) != null ? stack1 : "")
     + "')\"><i\r\n                        class=\"icon-trash\" aria-hidden=\"true\"></i></button>\r\n                  </td>\r\n                </tr>\r\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, alias1=container.escapeExpression, alias2=depth0 != null ? depth0 : (container.nullContext || {}), alias3=helpers.helperMissing, alias4="function";
+    var stack1;
 
   return " \r\n                    "
-    + alias1(container.lambda(((stack1 = ((stack1 = (depth0 != null ? depth0.oper : depth0)) != null ? stack1["0"] : stack1)) != null ? stack1.region_id : stack1), depth0))
-    + " == "
-    + alias1(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"id","hash":{},"data":data}) : helper)))
-    + " ? "
-    + alias1(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias3),(typeof helper === alias4 ? helper.call(alias2,{"name":"name","hash":{},"data":data}) : helper)))
-    + " : null\r\n                  ";
+    + ((stack1 = (helpers.ternary || (depth0 && depth0.ternary) || helpers.helperMissing).call(depth0 != null ? depth0 : (container.nullContext || {}),"hi","everyone","hello",{"name":"ternary","hash":{},"data":data})) != null ? stack1 : "")
+    + "\r\n                  ";
 },"4":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
