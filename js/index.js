@@ -165,7 +165,6 @@ $(document).ready(function () {
     });
 
     const ques = await quesRes.json();
-    console.log(ques);
 
     try {
       if (sessionStorage.role == "supervisor") {
