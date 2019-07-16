@@ -208,9 +208,7 @@
           });
 
           const created = await accountCreate.json();
-
-
-          if (created.insertstatus) {
+          if (created.status) {
             Swal.fire({
               title: "Congratulation",
               text: "Successfully Created",
