@@ -140,7 +140,7 @@ $(document).ready(function () {
     });
 
     const regions = await regionRes.json();
-    console.log(regions);
+
     try {
       if (sessionStorage.role == "supervisor") {
         newurl = `${url}profiles/role/operator`;
@@ -158,7 +158,6 @@ $(document).ready(function () {
       });
 
       const oper = await res.json();
-      console.log(oper);
 
       if (
         sessionStorage.role == "supervisor" ||
