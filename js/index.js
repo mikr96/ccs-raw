@@ -318,9 +318,27 @@ $(document).ready(function () {
       .show();
   }
 
+  async function surveyRecord() {
+    // const res = await fetch(`${url}regions`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `bearer ${sessionStorage.getItem("token")}`
+    //   }
+    // });
+    // const regions = await res.json()
+    // console.log(regions)
+    var html = Template.templates.result({ url })
+    $("#root").empty();
+    $("#root")
+      .html(html)
+      .show();
+  }
+
   crossroads.addRoute("/question-set", question);
   crossroads.addRoute("/new-question", newQuestion);
   crossroads.addRoute("/result", result);
+  crossroads.addRoute("/survey-record", surveyRecord);
 
   $(".knob2").knob({
     format: function (value) {

@@ -1,3 +1,15 @@
+<style>
+  .btn-result {
+    color: #fff; 
+    background-color: #4d62a7; 
+    border-color: #4d62a7;
+}
+.btn-result:hover, .btn-result:focus, .btn-result:active, .btn-result.active, .open>.dropdown-toggle.btn-result {
+    color: #fff;
+    background-color: #3e4c77;
+    border-color: #1a2d3d; /*set the color you want here*/
+}
+</style>
 <div class="block-header">
   <div class="row">
     <div class="col-lg-5 col-md-8 col-sm-12">
@@ -24,25 +36,43 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row m-b-20">
   <div class="col-lg-12">
     <div class="card">
       <div class="body">
-        <div class="row">
+        <div class="row m-b-20">
           <div class="col-md-6">
-            <div id="call-chart" class="status-call"></div> <!-- Status call percentage -->
+            <div id="survey-chart" class="status-survey"></div> <!-- Status call percentage -->
           </div>
           <div class="col-md-6">
-            <div id="pie-chart" class="status-comment"></div> <!-- Status call percentage -->
+            <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div id="phone-chart" class="status-phone"></div> <!-- Status call percentage -->
+          </div>
+          <div class="col-md-6">
+            <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<div id="bottomCard" class="row">
+  <div class="col-sm-12">
+    <div class="card" style="padding:15px; text-align:center;">
+      <button class="btn btn-result" onclick="viewDetails()">View Details</button>
+      <a class="btn" style="border-color: #4d62a7; background: white;" id="csv">CSV</a>
+    </div>
+  </div>
+</div>
 
 <script>
+  $("#bottomCard").hide()
   async function regionSelection(e) {
+    $("#bottomCard").show()
     console.log(e.target.value);
     var region_id = e.target.value;
     const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
@@ -56,17 +86,19 @@
     console.log(regionRecord)
     
     if(regionRecord) {
-      callChart(regionRecord);
+      surveyChart(regionRecord);
+      commentChart(regionRecord);
+      phoneChart(regionRecord);
     }
 
   } 
 
-  function callChart(callRecord) {
+  function surveyChart(surveyRecord) {
+    $(".status-survey").empty()
     var done = 0;
     var undone = 0;
-    console.log(callRecord)
-    var call = callRecord.map(e => e.status)
-    call.forEach(e => {
+    var survey = surveyRecord.map(e => e.status)
+    survey.forEach(e => {
       if(e == 0){
         done=+1;
       } else if( e == 2){
@@ -75,35 +107,148 @@
     })
 
     var data = {
+      labels: ['Passed Surveys', 'Pending Surveys'],
       series: [done, undone]
     };
 
+    var options = {
+      labelInterpolationFnc: function(value) {
+        return value[0]
+      }
+    };
+
+    var responsiveOptions = [
+      ['screen and (min-width: 640px)', {
+        chartPadding: 30,
+        labelOffset: 100,
+        labelDirection: 'explode',
+        labelInterpolationFnc: function(value) {
+          return value;
+        }
+      }],
+      ['screen and (min-width: 1024px)', {
+        labelOffset: 60,
+        chartPadding: 20
+      }]
+    ];
+
     var sum = function(a, b) { return a + b };
 
-    new Chartist.Pie('.status-call', data, {
-      labelInterpolationFnc: function(value) {
-        return Math.round(value / data.series.reduce(sum) * 100) + '%';
-      }
-    });
+    new Chartist.Pie('.status-survey', data, options, responsiveOptions);
 
-    $(".status-call").append('<label for="call-chart" class="col-form-label" style="display: block; text-align:center;">Call Status</label>')
+    $(".status-survey").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Survey Status</label>')
   }
 
+  function commentChart(commentRecord) {
+    $(".status-comment").empty()
+    var info = 3
+    var wr = 2
+    var dll = 5
+    var comment = commentRecord.map(e => e.comment)
+    comment.forEach(e => {
+      if (e != null) {
+        var temp = JSON.parse(e).shift();
+        if (temp == "info"){
+          info=+1
+        } else if (temp == "wakil rakyat") {
+          wr=+1
+        } else if (temp == "lain-lain") {
+          dll=+1
+        }
+      }
+    })
 
+    var data = {
+      labels: ['Info', 'Wakil Rakyat', 'Lain-Lain'],
+      series: [info, wr, dll]
+    }
 
+    var options = {
+      labelInterpolationFnc: function(value) {
+        return value[0]
+      }
+    }
 
-
-  {{!-- var line = {
-    // A labels array that can contain any sort of values
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-    // Our series array that contains series objects or in this case series data arrays
-    series: [
-      [5, 2, 4, 2, 0]
+    var responsiveOptions = [
+      ['screen and (min-width: 640px)', {
+        chartPadding: 30,
+        labelOffset: 100,
+        labelDirection: 'explode',
+        labelInterpolationFnc: function(value) {
+          return value;
+        }
+      }],
+      ['screen and (min-width: 1024px)', {
+        labelOffset: 50,
+        chartPadding: 20
+      }]
     ]
-  }; --}}
 
-  // Create a new line chart object where as first parameter we pass in a selector
-  // that is resolving to our chart container element. The Second parameter
-  // is the actual data object.
-  //new Chartist.Line('.ct-chart', line);
+    new Chartist.Pie('.status-comment', data, options, responsiveOptions)
+
+    $(".status-comment").append('<label for="comment-chart" class="col-form-label" style="display: block; text-align:center;">Comment Record</label>')
+  }
+
+  function phoneChart(phoneRecord) {
+    $(".status-phone").empty()
+
+    var sn = 0    //salah nombor
+    var tw = 0    //tidak wujud
+    var hk = 0    //hubungi kemudian
+    var tm = 0    //tidak berminat
+
+    var phone = phoneRecord.map(e => e.status_phone)
+
+    phone.forEach(e => {
+      if (e != null) {
+        var len = JSON.parse(e).length
+        var temp = JSON.parse(e)
+        for(i=0;i<len;i++){
+          if (temp[i] == "Salah No"){
+            sn=+1
+          } else if (temp[i] == "Tak Wujud") {
+            tw=+1
+          } else if (temp[i] == "Hubungi Kemudian") {
+            hk=+1
+          } else if (temp[i] == "Tak Minat") {
+            tm=+1
+          }
+        }
+      }
+    })
+
+    var data = {
+      labels: ['Salah Nombor', 'Tidak Wujud', 'Hubungi Kemudian', "Tak Berminat"],
+      series: [sn, tw, hk, tm]
+    }
+
+    var options = {
+      labelInterpolationFnc: function(value) {
+        return value[0]
+      }
+    }
+
+    var responsiveOptions = [
+      ['screen and (min-width: 640px)', {
+        chartPadding: 30,
+        labelOffset: 100,
+        labelDirection: 'explode',
+        labelInterpolationFnc: function(value) {
+          return value;
+        }
+      }],
+      ['screen and (min-width: 1024px)', {
+        labelOffset: 60,
+        chartPadding: 20
+      }]
+    ]
+
+    new Chartist.Pie('.status-phone', data, options, responsiveOptions)
+
+    $(".status-phone").append('<label for="phone-chart" class="col-form-label" style="display: block; text-align:center;">Phone Record</label>')
+  }
+
+  function viewDetails() {
+    window.location.href = "index.html#surveyRecord";
+  }
 </script>
