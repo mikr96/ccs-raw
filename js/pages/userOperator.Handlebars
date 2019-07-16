@@ -277,105 +277,67 @@
 
   async function edit(username) {
     try {
-    var operator = {{{json oper}}}
+      var operator = {{{json oper}}}
 
-    const nameList = operator.filter(profiles => username === profiles.username);
-    var used_id = operator.map(res => res.laptop_id);
-    var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
-    const id = laptopId.filter(id => used_id != id); //filter id yang belum guna
-    var available_id = '<select class="form-control" id="laptopId">';
-    var selected = '<option value="' + nameList[0].laptop_id + '" selected>' + nameList[0].laptop_id + '</option>'; // selected laptop id
-    available_id = available_id + selected;
-    id.forEach(id => {
-      let option = '<option value="' + id + '">' + id + '</option>';
-      available_id = available_id + option;
-    })
-    available_id = available_id + '</select>';
+      const nameList = operator.filter(profiles => username === profiles.username);
+      var used_id = operator.map(res => res.laptop_id);
+      var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
+      const id = laptopId.filter(id => used_id != id); //filter id yang belum guna
+      var available_id = '<select class="form-control" id="laptopId">';
+      var selected = '<option value="' + nameList[0].laptop_id + '" selected>' + nameList[0].laptop_id + '</option>'; // selected laptop id
+      available_id = available_id + selected;
+      id.forEach(id => {
+        let option = '<option value="' + id + '">' + id + '</option>';
+        available_id = available_id + option;
+      })
+      available_id = available_id + '</select>';
 
-    var token = sessionStorage.getItem("role");
-    if(token === "admin") {
-    const { value: formValues } = await Swal.fire({
-      title: 'Edit operator',
-      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + `
-      <select name="region_id" id="region_id" class="form-control">
-        <option value="">-- SELECT REGION --</option>
-        {{#each regions}}
-            <option ${"{{id}}" == nameList[0].region_id ? 'selected' : ''} value="{{id}}">{{name}}</option>
-          {{/each}}
-      </select> <br/>` + available_id + '<br/>' + `
-      <select name="set_id" id="set_id" class="form-control">
-        <option value="">-- SELECT SET --</option>
-        {{#each ques}}
-            <option ${"{{set_id}}" == nameList[0].set_id ? 'selected' : ''} value="{{set_id}}">{{set_name}}</option>
-          {{/each}}
-      </select> <br/>` + '<input type="text" class="form-control" id="role" value="operator" readonly>',
-      focusConfirm: false,
-      preConfirm: () => {
-        return [
-            document.getElementById('fullname').value,
-            document.getElementById('username').value,
-            document.getElementById('race').value,
-            document.getElementById('age').value,
-            document.getElementById('role').value,
-            document.getElementById('laptopId').value,
-            document.getElementById('gender').value,
-            document.getElementById('password').value,
-            document.getElementById('region_id').value,
-            document.getElementById('set_id').value
-        ]
+      var token = sessionStorage.getItem("role");
+      let value = null
+
+      if(token === "admin") {
+      value = await Swal.fire({
+          title: 'Edit operator',
+          html: editForm(nameList[0], available_id),
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+                document.getElementById('fullname').value,
+                document.getElementById('username').value,
+                document.getElementById('race').value,
+                document.getElementById('age').value,
+                document.getElementById('role').value,
+                document.getElementById('laptopId').value,
+                document.getElementById('gender').value,
+                document.getElementById('region_id').value,
+                document.getElementById('set_id').value
+            ]
+          }
+        })
+      } else {
+        value = await Swal.fire({
+          title: 'Edit operator',
+          html: editForm(nameList[0], available_id),
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+                document.getElementById('fullname').value,
+                document.getElementById('username').value,
+                document.getElementById('race').value,
+                document.getElementById('age').value,
+                document.getElementById('role').value,
+                document.getElementById('laptopId').value,
+                document.getElementById('gender').value,
+                document.getElementById('region_id').value,
+                document.getElementById('set_id').value
+            ]
+          }
+        })
       }
-    })} else {
-          var { value } = await Swal.fire({
-      title: 'Edit operator',
-      html: `
-        <br/>
-        <input type="text" class="form-control" id="fullname" value="${nameList[0].fullname}" readonly>
-        <br/>
-        <input type="text" class="form-control" id="username" value="${nameList[0].username}" readonly>
-        <br/>
-        <input type="password" class="form-control" id="password" placeholder="${nameList[0].password}"readonly>
-        <br/>
-        <input type="age" class="form-control" id="age" value="${nameList[0].age}"readonly>
-        <br/>
-        <input type="age" class="form-control" id="gender" value="${nameList[0].gender}" readonly>
-        <br/>
-        <input type="age" class="form-control" id="race" value="${nameList[0].race}" readonly>
-        <br/>
-        <select name="region_id" id="region_id" class="form-control">
-          <option value="">-- SELECT REGION --</option>
-          {{#each regions}}
-            <option ${"{{id}}" == nameList[0].region_id ? 'selected' : ''} value="{{id}}">{{name}}</option>
-          {{/each}}
-        </select><br/>`
-        + available_id +
-        `<br/>
-        <select name="set_id" id="set_id" class="form-control">
-          <option value="">-- SELECT SET --</option>
-          {{#each ques}}
-            <option ${"{{set_id}}" == nameList[0].set_id ? 'selected' : ''} value="{{set_id}}">{{set_name}}</option>
-          {{/each}}
-        </select><br/>
-        <input type="text" class="form-control" id="role" value="operator" readonly>`,
-      focusConfirm: false,
-      preConfirm: () => {
-        return [
-            document.getElementById('fullname').value,
-            document.getElementById('username').value,
-            document.getElementById('race').value,
-            document.getElementById('age').value,
-            document.getElementById('role').value,
-            document.getElementById('laptopId').value,
-            document.getElementById('gender').value,
-            document.getElementById('region_id').value,
-            document.getElementById('set_id').value
-        ]
-      }
-    })
-    }
 
-    const val = await value;
-    console.log(val);
-    if (val) {
+      const {value:val} = value;
+
+      if (val) {
         var formData = JSON.stringify({
             fullname: val[0],
             username: val[1],
@@ -398,64 +360,97 @@
           body: formData
         });
         const created = await accountCreate.json();
-        console.log(created);
-          if (created.status) {
-            Swal.fire({
-              title: "Congratulation",
-              text: "Successfully Created",
-              type: "success"
-            }).then(result => {
-              if (result.value) {
-                window.location.reload();
-              }
-            });
-          } else {
-            Swal.fire({
-              title: "Fail",
-              text: "Please refill the form",
-              type: "error"
-            });
-          }
-    }
+
+        if (created.status) {
+          Swal.fire({
+            title: "Congratulation",
+            text: "Successfully Editted",
+            type: "success"
+          }).then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Fail",
+            text: "Please refill the form",
+            type: "error"
+          });
+        }
+      }
     } catch (err){
       console.log(err)}
   }
 
   async function del(username) {
     try {
+      const req = await swal.fire({
+        title: "Are you sure?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel please!"
+      })
 
-        const req = await swal.fire({
-                                title: "Are you sure?",
-                                type: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#DD6B55",
-                                confirmButtonText: "Yes, delete it!",
-                                cancelButtonText: "No, cancel please!"
-                        })
+      const status = await req;
 
-        const status = await req;
-
-        if(status.value) {
-                const res = await fetch(`{{url}}profile/${username}/delete`, {
-                        method: "get",
-                        headers: {
-                                Accept: "application/json",
-                                "Content-type": "application/json",
-                                Authorization: `bearer ${sessionStorage.getItem("token")}`
-                        }
-
-                });
+      if(status.value) {
+          const res = await fetch(`{{url}}profile/${username}/delete`, {
+            method: "get",
+            headers: {
+                    Accept: "application/json",
+                    "Content-type": "application/json",
+                    Authorization: `bearer ${sessionStorage.getItem("token")}`
+            }
+          });
                 
-                const deleted = await res;
-                swal.fire("Successfully deleted", "success")
-                .then(result => {
-                        if (result.value) {
-                                window.location.reload();
-                        }
-        }); 
+          const deleted = await res;
+          swal.fire("Successfully deleted", "success")
+          .then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          }); 
         }
     } catch (err) {
       console.log(err);
     }
   }
+
+  const editForm = (nameList, available_id) => {
+    return (`
+      <br/>
+      <input type="text" placeholder="Full name" class="form-control" id="fullname" value="${nameList.fullname}" readonly>
+      <br/>
+      <input type="text" placeholder="Username" class="form-control" id="username" value="${nameList.username}" readonly>
+      <br/>
+      <input type="text" placeholder="Age" class="form-control" id="age" value="${nameList.age}">
+      <br/>
+      <select name="gender" id="gender" class="form-control">
+        <option value="">-- SELECT GENDER --</option>
+        <option class="text-capitalize" ${nameList.gender === 'male' ? 'selected': ''} value="male">Male</option>
+        <option class="text-capitalize" ${nameList.gender === 'female' ? 'selected': ''} value="female">Female</option>
+      </select>
+      <br>
+      <input type="text" class="form-control" placeholder="Race" id="race" value="${nameList.race}">
+      <br/>
+      <select name="region_id" id="region_id" class="form-control">
+        <option value="">-- SELECT REGION --</option>
+        {{#each regions}}
+          <option ${"{{id}}" == nameList.region_id ? 'selected' : ''} value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select><br/>`
+      + available_id +
+      `<br/>
+      <select name="set_id" id="set_id" class="form-control">
+        <option value="">-- SELECT SET --</option>
+        {{#each ques}}
+          <option ${"{{set_id}}" == nameList.set_id ? 'selected' : ''} value="{{set_id}}">{{set_name}}</option>
+        {{/each}}
+      </select><br/>
+      <input type="text" class="form-control" id="role" value="operator" readonly>
+    `)
+  };
 </script>
