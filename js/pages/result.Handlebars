@@ -13,7 +13,7 @@
   </div>
 </div>
 <div class="row clearfix">
-  <div class="col-lg-6 col-md-12">
+  {{!-- <div class="col-lg-6 col-md-12">
     <div class="card">
       <div class="header">
         <h2>Simple Pie Chart</h2>
@@ -22,22 +22,83 @@
         <div id="pie-chart" class="ct-chart"></div>
       </div>
     </div>
-  </div>
+  </div> --}}
+  <!-- Example single danger button -->
+<div class="col-lg-3 col-md-6">
+<div class="btn-group" style="width: 100%;">
+  <select class="btn btn-secondary" style="width: 100%;text-align:centre;" onchange="regionSelection(event)">
+    <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" selected>Select Region</option>
+    {{#each regions}}
+    <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" value="{{id}}">{{name}}</option>
+    {{/each}}
+  </select>
 </div>
-
+</div>
+<div class="body">
+    <div id="pie-chart" class="status-call"></div> <!-- Status call percentage -->
+</div>
+</div>
 <script>
+  async function regionSelection(e) {
+    console.log(e.target.value);
+    var region_id = e.target.value;
+    const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+    });
+    const regionRecord = await res.json()
+    console.log(regionRecord)
+    
+    if(regionRecord) {
+      callChart(regionRecord);
+    }
 
-  var line = {
+  } 
+
+  function callChart(callRecord) {
+    var done = 0;
+    var undone = 0;
+    {{!-- regionRecord[1].survey.map(e => {
+      if(e.status == 0) {
+        done=+1;
+      } else if(e.status == 2){
+        undone=+1;
+      }
+    }) --}}
+    console.log("dah call: " + done)
+    console.log("belum call: " + undone)
+  }
+
+
+
+
+
+
+    {{!-- var data = {
+      series: [5, 5]
+    };
+
+    var sum = function(a, b) { return a + b };
+
+    new Chartist.Pie('.ct-chart', data, {
+      labelInterpolationFnc: function(value) {
+        return Math.round(value / data.series.reduce(sum) * 100) + '%';
+      }
+    }); --}}
+  {{!-- var line = {
     // A labels array that can contain any sort of values
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
     // Our series array that contains series objects or in this case series data arrays
     series: [
       [5, 2, 4, 2, 0]
     ]
-  };
+  }; --}}
 
   // Create a new line chart object where as first parameter we pass in a selector
   // that is resolving to our chart container element. The Second parameter
   // is the actual data object.
-  new Chartist.Line('.ct-chart', line);
+  //new Chartist.Line('.ct-chart', line);
 </script>
