@@ -29,6 +29,7 @@
     "body-parser": "^1.19.0",
     "directus-sdk-javascript": "^2.15.0",
     "dropify": "^0.2.2",
+    "easytimer": "^1.1.1",
     "express": "^4.17.1",
     "grunt": "^1.0.2",
     "http": "0.0.0",

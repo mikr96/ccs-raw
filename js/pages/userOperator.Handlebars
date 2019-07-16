@@ -1,3 +1,9 @@
+<style>
+  td, select { text-transform: lowercase; }
+  td:first-letter { text-transform: uppercase; }
+  select:first-letter { text-transform: uppercase; }
+
+</style>
 <div class="block-header">
   <div class="row">
     <div class="col-lg-5 col-md-8 col-sm-12">
@@ -46,8 +52,10 @@
                   <td>{{gender}}</td>
                   <td>{{race}}</td>
                   <td>{{laptop_id}}</td>
-                  <td>{{region}}</td>
-                  <td>{{set_id}}</td>
+                  <td>
+                      {{printRegion oper=oper regions=regions }}
+                  </td>                  
+                  <td>{{printSet oper=oper ques=ques }}</td>
                   <td class="actions">
                     <button class="btn btn-sm btn-icon btn-pure btn-default on-default m-r-5 button-edit"
                       data-toggle="tooltip" data-original-title="Edit" onclick="edit('{{{username}}}')"><i
@@ -55,6 +63,9 @@
                     <button id="delete" class="btn btn-sm btn-icon btn-pure btn-default on-default button-remove"
                       data-toggle="tooltip" data-original-title="Remove" onclick="del('{{{username}}}')"><i
                         class="icon-trash" aria-hidden="true"></i></button>
+                    <button title="change password" data-toggle="modal" data-username="{{username}}" data-target="#changePasswordModal" class="btn ml-1 btn-icon btn-pure btn-default passwordModalButton">
+                      <i class="fa fa-key"></i>
+                    </button>
                   </td>
                 </tr>
               {{/each}}
@@ -78,19 +89,123 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordLabel">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="changePasswordForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-input">
+                <label for="password1" class="col-form-label">Password</label>
+                <input type="password" id="password1" class="form-control">
+              </div>
+              <div class="form-input">
+                <label for="password2" class="col-form-label">Repeat-password</label>
+                <input type="password" id="password2" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="closeChangePassword" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <script>
+
+  $(document).ready(function() {
+    const passwordForm = $('form#changePasswordForm')
+    const passwordButton = $('button.passwordModalButton')
+
+    let currentUser = null
+
+    passwordButton.click(function(e) {
+      currentUser = $(this).data('username')
+    })
+    passwordForm.submit(async function(e) {
+      e.preventDefault()
+      const password1 = $(this).find('#password1').val().trim()
+      const password2 = $(this).find('#password2').val().trim()
+      const username = currentUser.trim()
+      if (!password1 && !password2)
+        return Swal.fire('Ouupss..', 'Password cannot be blank', 'error')
+
+      if (password1.length < 5) 
+        return Swal.fire('Ouupss..', 'Password cannot be less than 5', 'error')
+        
+      if (password1 !== password2)
+        return Swal.fire('Ouupss..', 'Password not match', 'error')
+      
+      const changeRes = await fetch(`{{url}}profile/${username}/change_password`, {
+        method: 'put',
+        headers: {
+          'Authorization': `bearer ${sessionStorage.getItem('token')}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password1,
+          password2
+        })
+      })
+
+      if (changeRes.status === 401)
+        return Swal.fire('Ouupss..', 'Not Authorized', 'error')
+          .then(() => window.location.href = 'js/pages/page-login.html')
+        
+
+      const res = await changeRes.json()
+
+      if (res.status)
+        return Swal.fire('Successful', 'Password has been changed', 'success')
+        .then(() => passwordForm.find('button#closeChangePassword').click())
+    })
+  })
 
   sessionStorage.getItem("role") === "supervisor" ? $("#add, #delete").hide() : $("#add, #delete").show();
   $(document).ready(() => {
     $("table.datatable").dataTable();
   })
 
+
   async function add() {
 
     try {
+      var operator = {{{json oper}}}
+      var used_id = operator.map(res => res.laptop_id);
+      var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
+      const id = laptopId.filter(id => used_id != id);
+      var available_id = '<select class="form-control" id="laptopId">';
+      id.forEach(id => {
+        let option = '<option value="' + id + '">' + id + '</option>';
+        available_id = available_id + option;
+      })
+      available_id = available_id + '</select><br/>';
       const { value } = await Swal.fire({
         title: 'Add new operator',
-        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" placeholder="Enter region"><br/>' + '<input type="text" class="form-control" id="laptopId" placeholder="Enter laptop ID"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
+        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + `
+        <select name="region_id" id="region_id" class="form-control">
+        <option value="">-- SELECT REGION --</option>
+        {{#each regions}}
+            <option value="{{id}}">{{name}}</option>
+          {{/each}}
+        </select> <br/>` + available_id + 
+        `<select name="set_id" id="set_id" class="form-control">
+          <option value="">-- SELECT SET --</option>
+          {{#each ques}}
+            <option value="{{set_id}}">{{set_name}}</option>
+          {{/each}}
+        </select><br/><input type="text" class="form-control" id="role" value="operator" readonly>`,
         focusConfirm: false,
         preConfirm: () => {
           return [
@@ -102,7 +217,8 @@
             document.getElementById('laptopId').value,
             document.getElementById('gender').value,
             document.getElementById('password').value,
-            document.getElementById('region').value
+            document.getElementById('region_id').value,
+            document.getElementById('set_id').value
           ]
         }
       })
@@ -118,9 +234,9 @@
             laptop_id: value[5],
             gender: value[6],
             password: value[7],
-            region: value[8]
+            region_id: value[8]
           });
-          const accountCreate = await fetch(`${{{url}}}registration`, {
+          const accountCreate = await fetch(`{{url}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",
@@ -160,64 +276,81 @@
 
 
   async function edit(username) {
-    var oper = {{{json oper}}}
-    const nameList = oper.filter(profiles => username === profiles.username);
+    try {
+      var operator = {{{json oper}}}
 
-    if(sessionStorage.getItem("role") === "admin") {
-    const { value: formValues } = await Swal.fire({
-      title: 'Add new operator',
-      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
-      focusConfirm: false,
-      preConfirm: () => {
-        return [
-            document.getElementById('fullname').value,
-            document.getElementById('username').value,
-            document.getElementById('race').value,
-            document.getElementById('age').value,
-            document.getElementById('role').value,
-            document.getElementById('laptopId').value,
-            document.getElementById('gender').value,
-            document.getElementById('password').value,
-            document.getElementById('region').value
-        ]
+      const nameList = operator.filter(profiles => username === profiles.username);
+      var used_id = operator.map(res => res.laptop_id);
+      var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
+      const id = laptopId.filter(id => used_id != id); //filter id yang belum guna
+      var available_id = '<select class="form-control" id="laptopId">';
+      var selected = '<option value="' + nameList[0].laptop_id + '" selected>' + nameList[0].laptop_id + '</option>'; // selected laptop id
+      available_id = available_id + selected;
+      id.forEach(id => {
+        let option = '<option value="' + id + '">' + id + '</option>';
+        available_id = available_id + option;
+      })
+      available_id = available_id + '</select>';
+
+      var token = sessionStorage.getItem("role");
+      let value = null
+
+      if(token === "admin") {
+      value = await Swal.fire({
+          title: 'Edit operator',
+          html: editForm(nameList[0], available_id, token),
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+                document.getElementById('fullname').value,
+                document.getElementById('username').value,
+                document.getElementById('race').value,
+                document.getElementById('age').value,
+                document.getElementById('role').value,
+                document.getElementById('laptopId').value,
+                document.getElementById('gender').value,
+                document.getElementById('region_id').value,
+                document.getElementById('set_id').value
+            ]
+          }
+        })
+      } else {
+        value = await Swal.fire({
+          title: 'Edit operator',
+          html: editForm(nameList[0], available_id, token),
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+                document.getElementById('fullname').value,
+                document.getElementById('username').value,
+                document.getElementById('race').value,
+                document.getElementById('age').value,
+                document.getElementById('role').value,
+                document.getElementById('laptopId').value,
+                document.getElementById('gender').value,
+                document.getElementById('region_id').value,
+                document.getElementById('set_id').value
+            ]
+          }
+        })
       }
-    })} else {
-          const { value: formValues } = await Swal.fire({
-      title: 'Add new operator',
-      html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '" readonly><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '" readonly><br/>' + '<input type="password" class="form-control" id="password" placeholder="' + nameList[0].password + '"readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"readonly><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>"' + nameList[0].gender + '"</option>' + '</select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>"' + nameList[0].race + '"</option>' + '</select><br/>' + '<input type="text" class="form-control" id="region" value="' + nameList[0].region + '"><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="operator" readonly>',
-      focusConfirm: false,
-      preConfirm: () => {
-        return [
-            document.getElementById('fullname').value,
-            document.getElementById('username').value,
-            document.getElementById('race').value,
-            document.getElementById('age').value,
-            document.getElementById('role').value,
-            document.getElementById('laptopId').value,
-            document.getElementById('gender').value,
-            document.getElementById('password').value,
-            document.getElementById('region').value
-        ]
-      }
-    })
-    }
 
-    if (formValues) {
-      try {
+      const {value:val} = value;
 
+      if (val) {
         var formData = JSON.stringify({
-            fullname: formValues[0],
-            username: formValues[1],
-            race: formValues[2],
-            age: formValues[3],
-            role: formValues[4],
-            laptop_id: formValues[5],
-            gender: formValues[6],
-            password: formValues[7],
-            region: formValues[8]
+            fullname: val[0],
+            username: val[1],
+            race: val[2],
+            age: val[3],
+            role: val[4],
+            laptop_id: val[5],
+            gender: val[6],
+            region_id: val[7],
+            set_id: val[8]
         });
 
-        const accountCreate = await fetch(`${url}profile/${username}/edit`, {
+        const accountCreate = await fetch(`{{url}}profile/${username}/edit`, {
           method: "post",
           headers: {
             Accept: "application/json",
@@ -226,69 +359,103 @@
           },
           body: formData
         });
-        if (accountCreate){
-          const created = await accountCreate.json();
+        const created = await accountCreate.json();
 
-          if (created.editstatus) {
-            Swal.fire({
-              title: "Congratulation",
-              text: "Successfully Created",
-              type: "success"
-            }).then(result => {
-              if (result.value) {
-                window.location.reload();
-              }
-            });
-          } else {
-            Swal.fire({
-              title: "Fail",
-              text: "Please refill the form",
-              type: "error"
-            });
-          }
+        if (created.status) {
+          Swal.fire({
+            title: "Congratulation",
+            text: "Successfully Editted",
+            type: "success"
+          }).then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Fail",
+            text: "Please refill the form",
+            type: "error"
+          });
         }
-      } catch (err) {
-        console.log(err)
-        Swal.fire("Something went wrong", err.message, "error");
       }
-    }
+    } catch (err){
+      console.log(err)}
   }
 
   async function del(username) {
     try {
+      const req = await swal.fire({
+        title: "Are you sure?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel please!"
+      })
 
-        const req = await swal.fire({
-                                title: "Are you sure?",
-                                type: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#DD6B55",
-                                confirmButtonText: "Yes, delete it!",
-                                cancelButtonText: "No, cancel please!"
-                        })
+      const status = await req;
 
-        const status = await req;
-
-        if(status.value) {
-                const res = await fetch(`${url}profile/${username}/delete`, {
-                        method: "get",
-                        headers: {
-                                Accept: "application/json",
-                                "Content-type": "application/json",
-                                Authorization: `bearer ${sessionStorage.getItem("token")}`
-                        }
-
-                });
+      if(status.value) {
+          const res = await fetch(`{{url}}profile/${username}/delete`, {
+            method: "get",
+            headers: {
+                    Accept: "application/json",
+                    "Content-type": "application/json",
+                    Authorization: `bearer ${sessionStorage.getItem("token")}`
+            }
+          });
                 
-                const deleted = await res;
-                swal.fire("Successfully deleted", "success")
-                .then(result => {
-                        if (result.value) {
-                                window.location.reload();
-                        }
-        }); 
+          const deleted = await res;
+          swal.fire("Successfully deleted", "success")
+          .then(result => {
+            if (result.value) {
+              window.location.reload();
+            }
+          }); 
         }
     } catch (err) {
       console.log(err);
     }
   }
+
+  const editForm = (nameList, available_id, role) => {
+    return (`
+      <br/>
+      <input type="text" placeholder="Full name" class="form-control" id="fullname" value="${nameList.fullname}" ${role === 'admin' ? '' : 'readonly'}>
+      <br/>
+      <input type="text" placeholder="Username" class="form-control" id="username" value="${nameList.username}" readonly>
+      <br/>
+      <input type="text" placeholder="Age" class="form-control" id="age" value="${nameList.age}" ${role === 'admin' ? '' : 'readonly'}>
+      <br/>
+      ${role === 'admin' ? `
+        <select name="gender" id="gender" class="form-control">
+          <option value="">-- SELECT GENDER --</option>
+          <option class="text-capitalize" ${nameList.gender === 'male' ? 'selected': ''} value="male">Male</option>
+          <option class="text-capitalize" ${nameList.gender === 'female' ? 'selected': ''} value="female">Female</option>
+        </select>
+      ` : `
+        <input type="text" value="${nameList.gender}" id="gender" name="gender" class="form-control text-capitalize" readonly>
+      `}
+      
+      <br>
+      <input type="text" class="form-control" placeholder="Race" id="race" value="${nameList.race}" ${role === 'admin' ? '': 'readonly'}>
+      <br/>
+      <select name="region_id" id="region_id" class="form-control">
+        <option value="">-- SELECT REGION --</option>
+        {{#each regions}}
+          <option ${"{{id}}" == nameList.region_id ? 'selected' : ''} value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select><br/>`
+      + available_id +
+      `<br/>
+      <select name="set_id" id="set_id" class="form-control">
+        <option value="">-- SELECT SET --</option>
+        {{#each ques}}
+          <option ${"{{set_id}}" == nameList.set_id ? 'selected' : ''} value="{{set_id}}">{{set_name}}</option>
+        {{/each}}
+      </select><br/>
+      <input type="text" class="form-control" id="role" value="operator" readonly>
+    `)
+  };
 </script>

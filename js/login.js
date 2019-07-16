@@ -1,8 +1,8 @@
 // const url = "https://ccs.cyrix.my/CCS-API/";
-const url = "http://localhost/CCS-API/";
 
 $('form#login').submit(async function (e) {
   e.preventDefault()
+const url = "https://cyrixmy-api.herokuapp.com/";
   var formData = JSON.stringify({
     username: $("#username").val(),
     password: $("#password").val()
@@ -26,6 +26,7 @@ $('form#login').submit(async function (e) {
         text: "Welcome back",
         type: "success"
       }).then(result => {
+        sessionStorage.setItem("profile", JSON.stringify(success));
         sessionStorage.setItem("role", success.role);
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);

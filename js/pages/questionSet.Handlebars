@@ -226,8 +226,8 @@
     const setList = ques.filter(questions => set_name === questions.set_name);
 
     $('#questionsModal').modal(); 
-      setList[0].questions.forEach(e => {
-        $('#qModal').append(e);
+      setList[0].questions.forEach((index, e) => {
+        $('#qModal').append(`${e+1}. ${index}`);
         $('#qModal').append("<br/>");
       });
   }

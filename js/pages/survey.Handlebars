@@ -23,30 +23,30 @@
 										<div class="profile-image float-md-right"> <img src="/img/avatar6.jpg" alt=""> </div>
 									{{else}}
 										<div class="profile-image float-md-right"> <img src="/img/avatar22.jpg" alt=""> </div>
-										{{/if}}
+									{{/if}}
 								</div>
 								<div class="col-lg-8 col-md-8 col-12">
-										<h4 class="m-t-0 m-b-0">{{survey.[0].name}}</h4>
+										<h4 class="m-t-0 m-b-0 survey">{{survey.[0].name}}</h4>
 
-										<p>{{survey.[0].address}}</p>
+										<p class="survey">{{survey.[0].address}}</p>
 
 										<div class="row">
 												<div class="col-4">
-														<h5>{{survey.[0].gender}}</h5>
+														<h5 class="survey">{{survey.[0].gender}}</h5>
 														<small>Jantina</small>
 												</div>
 												<div class="col-4">
-														<h5>{{survey.[0].race}}</h5>
+														<h5 class="survey">{{survey.[0].race}}</h5>
 														<small>Bangsa</small>
 												</div>
 												<div class="col-4">
-														<h5>{{survey.[0].location}}</h5>
+														<h5 class="survey">{{survey.[0].location}}</h5>
 														<small>Lokasi</small>
 												</div>
 										</div>
 										<div class="m-t-15">
-												<button class="btn btn-primary js-sweetalert" onclick="startSurvey()">Mula Survey</button>
-												<button class="btn btn-success">Reset Caller</button>
+												<button id="startButton" class="btn btn-primary js-sweetalert" onclick="startSurvey()">Mula Survey</button>
+												<button id="resetButton" class="btn btn-success" onclick="startSurvey()">Reset Caller</button>
 										</div>
 								</div>
 						</div>
@@ -56,7 +56,7 @@
 				<h5 class="card-header">Pembuka Kata</h5>
 				<div class="card-body">
 						<h5 class="card-title">Pastikan anda tidak tinggikan suara</h5>
-						<p class="card-text">Selamat pagi/petang Nur Hafizah haraf maaf kerana menggangu. Saya (Nama Operator) ingin membuat.......</p>
+						<p class="card-text">Selamat pagi/petang {{survey.[0].name}} haraf maaf kerana menggangu. Saya (Nama Operator) ingin membuat.......</p>
 
 				</div>
 		</div>
@@ -72,21 +72,21 @@
 				</div>
 				<div class="body">
 						<div class="col-12">
-								<h4 class="m-t-5"><strong>Abdullah Hassan</strong></h4>
+								<h4 class="m-t-5"><strong>{{profile.username}}</strong></h4>
 								<p class="text-muted">13 / 03 / 2019 <br> Lokasi CCS</p>
 						</div>
 						<hr>
 						<div class="row">
 								<div class="col-4">
-										<h5>40</h5>
+										<h5>0</h5>
 										<small>Survey Berjaya</small>
 								</div>
 								<div class="col-4">
-										<h5>NB205</h5>
+										<h5>{{profile.laptop_id}}</h5>
 										<small>Caller ID</small>
 								</div>
 								<div class="col-4">
-										<h5>656</h5>
+										<h5>0</h5>
 										<small>Jumlah Survey</small>
 								</div>
 						</div>
@@ -121,6 +121,7 @@
 										</tr>
 										</thead>
 										<tbody>
+											{{#each phone}}
 										<tr>
 												<td style="width: 50px;">
 														<label class="fancy-checkbox">
@@ -130,39 +131,36 @@
 												</td>
 
 												<td>
-														<span class="phone"><i class="fa fa-phone m-r-10"></i>{{survey.[0].phone}}</span>
+														<span class="phone"><i class="fa fa-phone m-r-10"></i>{{this}}</span>
 												</td>
 												<td>
-
 														<button type="button" class="btn btn-info" title="Edit"><i class="icon-call-out"></i></button>
 														<button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-refresh"></i></button>
 												</td>
 												<td>
-														<select class="custom-select" v-model="category" id="inputGroupSelectCategory" required>
-																<option selected value="" disabled>Pilih...</option>
-																<option value="salahno">Salah Nombor</option>
-																<option value="takwujud">Tidak Wujud</option>
-																<option value="hubungikemudian">Hubungi Kemudian</option>
-																<option value="takminat">Tidak Berminat</option>
+														<select class="custom-select" name="phone" id="p{{index @index}}" required>
+																<option style="text-align:center;" selected>--- Pilih ---</option>
+																<option value="Salah No">Salah Nombor</option>
+																<option value="Tak Wujud">Tidak Wujud</option>
+																<option value="Hubungi Kemudian">Hubungi Kemudian</option>
+																<option value="Tak Minat">Tidak Berminat</option>
 														</select>
 												</td>
 										</tr>
+										{{/each}}
 										</tbody>
 								</table>
 						</div>
 				</div>
 		</div>
 
-
-
-
 		<div class="card">
 				<div class="header">
-					<h2>Malaysia 101</h2>
+					<h2>{{ques.set_name}}</h2>
 				</div>
 				<div class="body">
 						<div class="table-responsive">
-								<table class="table table-hover m-b-0 c_list datatable">
+								<table class="table table-hover m-b-0">
 										<thead>
 										<tr>
 												<th>Soalan</th>
@@ -172,76 +170,29 @@
 										</tr>
 										</thead>
 										<tbody>
+										{{#each soalan}}
 										<tr>
 												<td>
-														<p class="c_name">Soalan 1 </p>
+														<p>{{this}}</p>
 												</td>
 												<td>
 														<div class="fancy-radio">
-																<label><input name="pilih" value="ya" type="radio" ><span><i></i>Ya</span></label>
-
+																<label><input id="q{{index @index}}" name="soalan {{index @index}}" value="Ya" type="radio"><span><i></i>Ya</span></label>
 														</div>
 												</td>
 												<td>
 														<div class="fancy-radio">
-																<label><input name="pilih" value="tidak" type="radio" ><span><i></i>Tidak</span></label>
-
+																<label><input id="q{{index @index}}" name="soalan {{index @index}}" value="Tidak" type="radio"><span><i></i>Tidak</span></label>
 														</div>
 												</td>
 												<td>
 														<div class="fancy-radio">
-																<label><input name="pilih" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
+																<label><input id="q{{index @index}}" name="soalan {{index @index}}" value="Tidak Pasti" type="radio"><span><i></i>Tak Pasti</span></label>
 
 														</div>
 												</td>
 										</tr>
-										<tr>
-												<td>
-														<p class="c_name">Soalan 2 </p>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih2" value="ya" type="radio" ><span><i></i>Ya</span></label>
-
-														</div>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih2" value="tidak" type="radio" ><span><i></i>Tidak</span></label>
-
-														</div>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih2" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
-
-														</div>
-												</td>
-										</tr>
-										<tr>
-												<td>
-														<p class="c_name">Soalan 3 </p>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih3" value="ya" type="radio"><span><i></i>Ya</span></label>
-
-														</div>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih3" value="tidak" type="radio"><span><i></i>Tidak</span></label>
-
-														</div>
-												</td>
-												<td>
-														<div class="fancy-radio">
-																<label><input name="pilih3" value="takpasti" type="radio" checked><span><i></i>Tak Pasti</span></label>
-
-														</div>
-												</td>
-										</tr>
-										<tr>
+										{{/each}}
 										</tbody>
 								</table>
 						</div>
@@ -258,20 +209,20 @@
 						<h6>Jenis Komen</h6>
 						<div class="input-group mb-3">
 								<div class="input-group-prepend">
-										<label class="input-group-text" for="inputGroupSelect01">Options</label>
+										<label class="input-group-text" for="comment">Options</label>
 								</div>
-								<select class="custom-select" id="inputGroupSelect01">
-										<option selected>Pilihan...</option>
-										<option value="1">Info</option>
-										<option value="2">Wakil Rakyat</option>
-										<option value="3">Lain-Lain</option>
+								<select id="comment" class="custom-select">
+										<option style="text-align:center;" selected>--- Pilih ---</option>
+										<option value="info">Info</option>
+										<option value="wakil rakyat">Wakil Rakyat</option>
+										<option value="lain-lain">Lain-Lain</option>
 								</select>
 						</div>
 						<div class="input-group">
 								<div class="input-group-prepend">
 										<span class="input-group-text">Komen</span>
 								</div>
-								<textarea class="form-control" aria-label="Komen"></textarea>
+								<textarea class="form-control" id="comment2" aria-label="Komen"></textarea>
 						</div>
 
 				</div>
@@ -282,30 +233,128 @@
 				</div>
 				<div class="body">
 						<div class="fancy-radio">
-								<label><input name="kawalan" value="ya" type="radio" ><span><i></i>Ya</span></label>
-								<label><input name="kawalan" value="ya" type="radio" ><span><i></i>Tidak</span></label>
+								<label>
+									<input name="kawalan" id="status" value="Ya" type="radio" ><span><i></i>Ya</span>
+								</label>
+								<label>
+									<input name="kawalan" id="status" value="Tidak" type="radio" ><span><i></i>Tidak</span>
+								</label>
 						</div>
 				</div>
 		</div>
 		<div class="card">
 				<div class="body">
 				<h6>Pastikan semua info di atas ada tepat</h6>
-						<button type="button" class="btn btn-success" onclick="submitSurvey()">Submit</button>
-						<button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete">Reset</button>
+						<button id="stopButton" type="button" class="btn btn-success" onclick="submitSurvey()">Submit</button>
+						<button type="button" data-type="confirm" class="btn btn-danger" title="Delete" onclick="resetSurvey()">Reset</button>
 				</div>
 		</div>
 </div>
 </div>
 <script>
-	function submitSurvey(){
-		window.location.href = "#home;";
+
+	$("#q1, #q2, #q3, #status").prop('checked', false);
+
+	$(".survey").text(function () {
+    return $(this).text().replace(/(\w)(\w*)/g, (_, firstChar, rest) => firstChar + rest.toLowerCase()); 
+	});
+	
+	var timer = new Timer();
+
+	$("#startButton").click(function(){
+		timer.start();
+		Swal.fire({
+			title: "Survey",
+			text: "The time starts now !",
+			type: "success"
+		});
+	})
+
+	$("#stopButton").click(function(){
+		timer.stop();
+	})
+
+	$("#resetButton").click(function(){
+		timer.reset();
+		Swal.fire({
+			title: "Survey",
+			text: "The time has reset !",
+			type: "warning"
+		});
+	})
+	
+	function resetSurvey(){
+		$("#q1, #q2, #q3, #status").prop('checked', false);
+		$('#comment, select[name="phone"]').prop('selectedIndex',0);
+		$('#comment2').val('');
 	}
 
-	function startSurvey(){
-			Swal.fire({
-        title: "Survey",
-        text: "The time starts now !",
-        type: "success"
+	var question_response;
+
+	async function submitSurvey(){
+		try{
+			var time_taken = timer.getTimeValues().toString()
+			var arr = []	//question survey
+			var arr2 = [] //phonestatus
+			var num = {{length soalan}}
+			var num2 = {{length phone}}
+			var survey = {{{json survey}}}
+			var profile = {{{json profile}}}
+			for (i = 1; i <= num; i++) {
+				arr.push($(`input[id="q${i}"]:checked`).val());
+			}
+			for (i = 1; i <= num2; i++) {
+				arr2.push($(`select[id="p${i}"]`).val());
+			}
+
+			var comment = []
+			comment.push($('select[id="comment"]').val())
+			comment.push($('textarea#comment2').val())
+
+			var status_survey = $(`input[id="status"]:checked`).val()
+
+			var formData = JSON.stringify({
+				id: survey[0].id,
+				gender: survey[0].gender,
+				phone: survey[0].phone,
+				race: survey[0].race,
+				name:survey[0].name,
+				address: survey[0].address,
+				question_survey: arr,
+				comment: comment,
+				status_survey: status_survey,
+				call_duration: time_taken,
+				operator_id: profile.username,
+				status_phone: arr2,
+				status: 0,
 			});
-	}
+
+			var id = survey[0].id
+			const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
+				method: "post",
+				headers: {
+				credentials: 'include',
+				Accept: "application/json",
+				"Content-type": "application/json",
+				Authorization: `bearer ${sessionStorage.getItem("token")}`
+				},
+				body: formData
+			});
+
+			const updated = await updateStatus.json();
+			if(updated.status){
+				Swal.fire({
+					title: "Survey",
+					text: "Survey submitted !",
+					type: "success"
+				}).then(result => {
+							if (result.value) {
+								window.location.href = "index.html#home";
+							}
+						});
+			}
+		} catch(err) { 
+			console.log(err) }
+		}	
+
 </script>

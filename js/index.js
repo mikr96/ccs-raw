@@ -13,6 +13,28 @@ $(document).ready(function () {
     return moment(timestamp).format('DD MMMM YYYY')
   });
 
+  Handlebars.registerHelper("printRegion", function ({ data }) {
+    const { oper, regions } = data.root
+    const { index } = data
+    const operator = oper[index]
+    if(operator.region_id){
+    const region = regions.find(region => region.id === operator.region_id)
+    return region ? region.name : 'NULL'
+    } else 
+    return 'NULL'
+  });
+
+  Handlebars.registerHelper("printSet", function ({ data }) {
+    const { oper, ques } = data.root
+    const { index } = data
+    const operator = oper[index]
+    if(operator.set_id > 0){
+      const set = ques.find(set => set.set_id == operator.set_id)
+      return set ? set.set_name : 'NULL'
+    } else 
+    return 'NULL'
+  });
+
   Handlebars.registerHelper("json", function (content) {
     return JSON.stringify(content);
   });
@@ -21,12 +43,18 @@ $(document).ready(function () {
     return Object.keys(json).length;
   });
 
+  Handlebars.registerHelper("length", function (arr) {
+    return arr.length;
+  });
+
   Handlebars.registerHelper("index", function (index) {
     return index + 1;
   });
 
+
   // const url = "https://ccs.cyrix.my/CCS-API/";
-  const url = "http://localhost/CCS-API/";
+  // const url = "http://localhost/CCS-API/";
+  const url = "https://cyrixmy-api.herokuapp.com/";
 
   var role = sessionStorage.getItem("role");
 
@@ -48,42 +76,17 @@ $(document).ready(function () {
 
   async function home() {
     if (role == "operator") {
-      var survey = [
-        {
-          name: "Muhammad Izzad Rasyidi bin Jahan",
-          gender: "Male",
-          race: "Johorean",
-          address: "Felda Ulu Taib Andak, Kulai Johor",
-          phone: "0123456789",
-          location: "Johor"
-        },
-        {
-          name: "Ahmad Azamuddin bin Hasni",
-          gender: "Male",
-          race: "Johorean",
-          address: "Masai Johor",
-          phone: "0123344876",
-          location: "Johor"
-        },
-        {
-          name: "Nurul Nazihah binti Jamal",
-          gender: "Female",
-          race: "Pahangian",
-          address: "Kuantan Pahang",
-          phone: "0115234532",
-          location: "Pahang"
-        },
-        {
-          name: "Ameera Akmalia binti Alias",
-          gender: "Female",
-          race: "Unknown",
-          address: "Puncak Alam, Selangor",
-          phone: "0176754281",
-          location: "Selangor"
+      const res = await fetch(`${url}surveys/region`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
-      ]
+      });
+      const surveys = await res.json();
+      console.log(surveys);
 
-      var html = Template.templates.homeOperator({ survey, url });
+      var html = Template.templates.homeOperator({ surveys, url });
       $("#root")
         .html(html)
         .show();
@@ -142,6 +145,28 @@ $(document).ready(function () {
   })
 
   const getRole = async arg => {
+    const regionRes = await fetch(`${url}regions`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      },
+      method: 'get'
+    });
+
+    const regions = await regionRes.json();
+
+    const quesRes = await fetch(`${url}/questions`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+    });
+
+    const ques = await quesRes.json();
+
     try {
       if (sessionStorage.role == "supervisor") {
         newurl = `${url}profiles/role/operator`;
@@ -159,23 +184,24 @@ $(document).ready(function () {
       });
 
       const oper = await res.json();
+
       if (
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ oper, url });
+        var html = Template.templates.userOperator({ regions, ques, oper, url });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "admin") {
-        var html = Template.templates.userAdmin({ oper, url });
+        var html = Template.templates.userAdmin({ oper, url, regions, ques });
         $("#root").empty();
         $("#root")
           .html(html)
           .show();
       } else if (sessionStorage.role == "admin" && arg == "supervisor") {
-        var html = Template.templates.userSupervisor({ oper, url });
+        var html = Template.templates.userSupervisor({ oper, url, regions, ques });
         $("#root").empty();
         $("#root")
           .html(html)
@@ -208,21 +234,38 @@ $(document).ready(function () {
       .show();
   });
 
-  crossroads.addRoute("/survey", function () {
+  async function survey(){
     var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
-    console.log(survey);
+    var phone = JSON.parse(sessionStorage.getItem("phone"));
+    var profile = JSON.parse(sessionStorage.getItem("profile"));
+
+    const quesRes = await fetch(`${url}/question/set_id`, {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+    });
+
+    const ques = await quesRes.json();
+    var soalan = JSON.parse(ques.questions);
+    console.log(ques);
     var gender = survey[0].gender;
+
     if (gender === "Male") {
       gender = true;
     } else {
       gender = false;
     }
-    var html = Template.templates.survey({ survey, gender, url });
+    var html = Template.templates.survey({ survey, profile, gender, phone, url, ques, soalan });
     $("#root").empty();
     $("#root")
       .html(html)
       .show();
-  });
+  }
+
+  crossroads.addRoute("/survey", survey);
 
   async function question() {
     try {
