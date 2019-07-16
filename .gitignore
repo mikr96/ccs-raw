@@ -42,3 +42,5 @@ Thumbs.db
 debug.log
 
 DbManagement\.txt
+js/compiled.js
+js/handlebars.bundles.js
