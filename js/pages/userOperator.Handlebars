@@ -197,13 +197,13 @@
         <select name="region_id" id="region_id" class="form-control">
         <option value="">-- SELECT REGION --</option>
         {{#each regions}}
-            <option ${"{{id}}" == nameList[0].region_id ? 'selected' : ''} value="{{id}}">{{name}}</option>
+            <option value="{{id}}">{{name}}</option>
           {{/each}}
         </select> <br/>` + available_id + 
         `<select name="set_id" id="set_id" class="form-control">
           <option value="">-- SELECT SET --</option>
           {{#each ques}}
-            <option ${"{{set_id}}" == nameList[0].set_id ? 'selected' : ''} value="{{set_id}}">{{set_name}}</option>
+            <option value="{{set_id}}">{{set_name}}</option>
           {{/each}}
         </select><br/><input type="text" class="form-control" id="role" value="operator" readonly>`,
         focusConfirm: false,
@@ -234,9 +234,9 @@
             laptop_id: value[5],
             gender: value[6],
             password: value[7],
-            region: value[8]
+            region_id: value[8]
           });
-          const accountCreate = await fetch(`${{{url}}}registration`, {
+          const accountCreate = await fetch(`{{url}}registration`, {
             method: "post",
             headers: {
               Accept: "application/json",
