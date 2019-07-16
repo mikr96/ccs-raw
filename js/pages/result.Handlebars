@@ -1,7 +1,7 @@
 <div class="block-header">
   <div class="row">
     <div class="col-lg-5 col-md-8 col-sm-12">
-      <h2>Carta</h2>
+      <h2>Chart</h2>
     </div>
     <div class="col-lg-7 col-md-4 col-sm-12 text-right">
       <ul class="breadcrumb justify-content-end">
@@ -12,32 +12,35 @@
     </div>
   </div>
 </div>
-<div class="row clearfix">
-  {{!-- <div class="col-lg-6 col-md-12">
+<div class="row clearfix m-b-20">
+  <div class="col-lg-3 col-md-6">
+    <div class="btn-group" style="width: 100%;">
+      <select class="btn btn-secondary" style="width: 100%;text-align:centre;" onchange="regionSelection(event)">
+        <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" selected>Select Region</option>
+        {{#each regions}}
+        <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
     <div class="card">
-      <div class="header">
-        <h2>Simple Pie Chart</h2>
-      </div>
       <div class="body">
-        <div id="pie-chart" class="ct-chart"></div>
+        <div class="row">
+          <div class="col-md-6">
+            <div id="call-chart" class="status-call"></div> <!-- Status call percentage -->
+          </div>
+          <div class="col-md-6">
+            <div id="pie-chart" class="status-comment"></div> <!-- Status call percentage -->
+          </div>
+        </div>
       </div>
     </div>
-  </div> --}}
-  <!-- Example single danger button -->
-<div class="col-lg-3 col-md-6">
-<div class="btn-group" style="width: 100%;">
-  <select class="btn btn-secondary" style="width: 100%;text-align:centre;" onchange="regionSelection(event)">
-    <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" selected>Select Region</option>
-    {{#each regions}}
-    <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" value="{{id}}">{{name}}</option>
-    {{/each}}
-  </select>
+  </div>
 </div>
-</div>
-<div class="body">
-    <div id="pie-chart" class="status-call"></div> <!-- Status call percentage -->
-</div>
-</div>
+
 <script>
   async function regionSelection(e) {
     console.log(e.target.value);
@@ -61,33 +64,35 @@
   function callChart(callRecord) {
     var done = 0;
     var undone = 0;
-    {{!-- regionRecord[1].survey.map(e => {
-      if(e.status == 0) {
+    console.log(callRecord)
+    var call = callRecord.map(e => e.status)
+    call.forEach(e => {
+      if(e == 0){
         done=+1;
-      } else if(e.status == 2){
+      } else if( e == 2){
         undone=+1;
       }
-    }) --}}
-    console.log("dah call: " + done)
-    console.log("belum call: " + undone)
+    })
+
+    var data = {
+      series: [done, undone]
+    };
+
+    var sum = function(a, b) { return a + b };
+
+    new Chartist.Pie('.status-call', data, {
+      labelInterpolationFnc: function(value) {
+        return Math.round(value / data.series.reduce(sum) * 100) + '%';
+      }
+    });
+
+    $(".status-call").append('<label for="call-chart" class="col-form-label" style="display: block; text-align:center;">Call Status</label>')
   }
 
 
 
 
 
-
-    {{!-- var data = {
-      series: [5, 5]
-    };
-
-    var sum = function(a, b) { return a + b };
-
-    new Chartist.Pie('.ct-chart', data, {
-      labelInterpolationFnc: function(value) {
-        return Math.round(value / data.series.reduce(sum) * 100) + '%';
-      }
-    }); --}}
   {{!-- var line = {
     // A labels array that can contain any sort of values
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
