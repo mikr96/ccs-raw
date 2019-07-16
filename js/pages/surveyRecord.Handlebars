@@ -34,17 +34,29 @@
                 <th>Gender</th>
                 <th>Race</th>
                 <th>Address</th>
+								<th>Location</th>
                 <th>Phone No.</th>
+								<th>Phone Status.</th>
+								<th>Question Resp.</th>
+								<th>Comment</th>
+								<th>Call Duration</th>
               </tr>
             </thead>
             <tbody>
+							{{#each successSurveys}}
                 <tr class="gradeA" style="text-transform: capitalize;">
-                  <td></td>
-                  <td style="text-align: center;"></td>
-                  <td style="text-align: center;"></td>
-                  <td></td>
-                  <td style="text-align: center;"></td>
+                  <td>{{name}}</td>
+                  <td style="text-align: center;">{{gender}}</td>
+                  <td style="text-align: center;">{{race}}</td>
+                  <td>{{address}}</td>
+                  <td style="text-align: center;">{{location}}</td>
+									<td>{{phone}}</td>
+                  <td style="text-align: center;">{{status_phone}}</td>
+                  <td style="text-align: center;">{{question_survey}}</td>
+                  <td>{{comment}}</td>
+                  <td style="text-align: center;">{{call_duration}}</td>
                 </tr>
+							{{/each}}
             </tbody>
             <tfoot>
               <tr style="text-align: center;">
@@ -52,7 +64,12 @@
                 <th>Gender</th>
                 <th>Race</th>
                 <th>Address</th>
+								<th>Location</th>
                 <th>Phone No.</th>
+								<th>Phone Status.</th>
+								<th>Question Resp.</th>
+								<th>Comment</th>
+								<th>Call Duration</th>
               </tr>
             </tfoot>
           </table>
@@ -61,9 +78,20 @@
     </div>
   </div>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<div style="float:right;">
+			<button class="btn btn-primary" onclick="back()">Back to Statistics</button>
+		</div>
+	</div>
+</div>
 </div>
 <script>
   $(document).ready(() => {
     $("table.datatable").dataTable();
   })
+
+	function back(){
+		window.location.href = "index.html#result";
+	}
 </script>

@@ -319,16 +319,19 @@ $(document).ready(function () {
   }
 
   async function surveyRecord() {
-    // const res = await fetch(`${url}regions`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `bearer ${sessionStorage.getItem("token")}`
-    //   }
-    // });
-    // const regions = await res.json()
-    // console.log(regions)
-    var html = Template.templates.result({ url })
+    var region_id = sessionStorage.getItem("region_id")
+    const res = await fetch(`${url}surveys/statistics/${region_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+    });
+    const regionRecord = await res.json()
+    var status = 0
+    const successSurveys = regionRecord.filter(region => status === region.status);
+    console.log(successSurveys)
+    var html = Template.templates.surveyRecord({ successSurveys, url })
     $("#root").empty();
     $("#root")
       .html(html)

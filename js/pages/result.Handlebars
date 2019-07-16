@@ -53,7 +53,7 @@
             <div id="phone-chart" class="status-phone"></div> <!-- Status call percentage -->
           </div>
           <div class="col-md-6">
-            <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
+            <div id="race-chart" class="status-race"></div> <!-- Status call percentage -->
           </div>
         </div>
       </div>
@@ -74,24 +74,82 @@
   async function regionSelection(e) {
     $("#bottomCard").show()
     console.log(e.target.value);
+    sessionStorage.setItem("region_id",e.target.value)
     var region_id = e.target.value;
-    const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+    try {
+      const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
+        }
+      });
+      var regionRecord = await res.json()
+      
+      if(regionRecord) {
+        surveyChart(regionRecord);
+        commentChart(regionRecord);
+        phoneChart(regionRecord);
+        raceChart(regionRecord)
+
+      //Setting CSV file content
+      var obj = ["id","gender","phone","race","name","address","location","region_id","region_name","question_survey","comment","status","status_phone","status_survey","call_duration","operator_id"]
+
+      regionRecord.forEach(e => {
+        e.address = e.address.replace(/,/g, '');
+        if (e.status_phone){
+          if (e.status_phone.indexOf(',') != -1) { 
+            e.status_phone = e.status_phone.replace(/,/g, '') 
+          }
+        }
+        if (e.comment){
+          if (e.comment.indexOf(',') != -1) { 
+            e.comment = e.comment.replace(/,/g, '') 
+          }
+        }
+        if (e.phone.indexOf(',') != -1) { 
+          e.phone = e.phone.replace(/,/g, '') 
+        }
+        if(e.question_survey) {
+          if (e.question_survey.indexOf(',') != -1) {
+            e.question_survey = e.question_survey.replace(/,/g, '') 
+          }
+        }
+      })
+      regionRecord.unshift(obj);
+      const jsonObject = JSON.stringify(regionRecord)
+      const csvContent = ConvertToCSV(jsonObject)
+      //Appending CSV download link to the button
+      if(csvContent) {
+        var encodedUri = encodeURI(csvContent);
+        var link = document.getElementById("csv");
+        link.setAttribute("href", 'data:text/csv;charset=UTF-8,' + encodedUri);
+        link.setAttribute("download", "surveyDetails.csv");
       }
-    });
-    const regionRecord = await res.json()
-    console.log(regionRecord)
-    
-    if(regionRecord) {
-      surveyChart(regionRecord);
-      commentChart(regionRecord);
-      phoneChart(regionRecord);
+      }
+     } catch(err) {
+      Swal.fire('Ooupss..', 'Something went wrong, please try again..', 'error')
+      console.error(err)
+    }
+  } 
+
+  function ConvertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
     }
 
-  } 
+    return str;
+  }
 
   function surveyChart(surveyRecord) {
     $(".status-survey").empty()
@@ -141,9 +199,9 @@
 
   function commentChart(commentRecord) {
     $(".status-comment").empty()
-    var info = 3
-    var wr = 2
-    var dll = 5
+    var info = 0
+    var wr = 0
+    var dll = 0
     var comment = commentRecord.map(e => e.comment)
     comment.forEach(e => {
       if (e != null) {
@@ -248,7 +306,67 @@
     $(".status-phone").append('<label for="phone-chart" class="col-form-label" style="display: block; text-align:center;">Phone Record</label>')
   }
 
+  function raceChart(regionRecord) {
+    $(".status-race").empty()
+    const raceData = regionRecord.reduce((acc, survey) => {
+    const label = survey.race
+    const searchedSurveyIndex = acc.series.findIndex(accSurvey => accSurvey.name === label)
+      
+    if (searchedSurveyIndex === -1)
+      return {
+        ...acc,
+        labels: [
+          ...acc.labels, 
+          label
+        ],
+        series: [ 
+          ...acc.series,
+          {
+            name: label, 
+            value: 1
+          }
+        ]
+      }
+      
+    acc.series[searchedSurveyIndex].value += 1
+    return acc
+    }, {labels: [], series: []})
+
+    new Chartist.Pie(
+      '#race-chart', 
+      raceData, 
+      {
+        labelInterpolationFnc: function(value) {
+          const survey = raceData.series.find(accSurvey => accSurvey.name === value)
+          const amount = survey.value
+
+          const total = raceData.series.reduce((acc, a) => acc + a.value, 0)
+          return value + ' ' + Math.round(amount / total * 100) + '%'
+        }
+      },
+      [
+        ['screen and (min-width: 640px)', {
+          chartPadding: 30,
+          labelOffset: 100,
+          labelDirection: 'explode',
+          labelInterpolationFnc: function(value) {
+            const survey = raceData.series.find(accSurvey => accSurvey.name === value)
+            const amount = survey.value
+
+            const total = raceData.series.reduce((acc, a) => acc + a.value, 0)
+            return value + ' ' + Math.round(amount / total * 100) + '%'
+          }
+        }],
+        ['screen and (min-width: 1024px)', {
+          labelOffset: 60,
+          chartPadding: 20
+        }]
+      ]
+    )
+        $(".status-race").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Race Distribution</label>')
+  }
+  
   function viewDetails() {
-    window.location.href = "index.html#surveyRecord";
+    window.location.href = "index.html#survey-record";
   }
 </script>
