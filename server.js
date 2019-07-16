@@ -12,7 +12,7 @@ app.use(function(req, res, next) {
 		"Access-Control-Allow-Headers",
 		"Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
 	);
-	res.header("Content-Security-Policy", "script-src 'self' https://apis.google.com");
+	res.header("Content-Security-Policy", "default-src * 'self' 'unsafe-inline' 'unsafe-eval'; script-src * 'self' 'unsafe-inline' 'unsafe-eval' localhost:*/* https://apis.google.com");
 	next();
 });
 
