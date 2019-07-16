@@ -1,7 +1,8 @@
 // const url = "https://ccs.cyrix.my/CCS-API/";
 const url = "http://localhost/CCS-API/";
-async function login() {
-  event.preventDefault(); //prevent redirect/page refresh
+
+$('form#login').submit(async function (e) {
+  e.preventDefault()
   var formData = JSON.stringify({
     username: $("#username").val(),
     password: $("#password").val()
@@ -46,4 +47,4 @@ async function login() {
   } catch (err) {
     Swal.fire("Something went wrong", err.message, "error");
   }
-}
+})
