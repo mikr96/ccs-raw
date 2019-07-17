@@ -141,8 +141,8 @@ $(document).ready(function () {
 
             if (stateIndex === -1) {
               return [
-                ...acc, 
-                {state: state, value: 1}
+                ...acc,
+                { state: state, value: 1 }
               ]
             }
 
