@@ -17,22 +17,22 @@ $(document).ready(function () {
     const { oper, regions } = data.root
     const { index } = data
     const operator = oper[index]
-    if(operator.region_id){
-    const region = regions.find(region => region.id === operator.region_id)
-    return region ? region.name : 'NULL'
-    } else 
-    return 'NULL'
+    if (operator.region_id) {
+      const region = regions.find(region => region.id === operator.region_id)
+      return region ? region.name : 'NULL'
+    } else
+      return 'NULL'
   });
 
   Handlebars.registerHelper("printSet", function ({ data }) {
     const { oper, ques } = data.root
     const { index } = data
     const operator = oper[index]
-    if(operator.set_id > 0){
+    if (operator.set_id > 0) {
       const set = ques.find(set => set.set_id == operator.set_id)
       return set ? set.set_name : 'NULL'
-    } else 
-    return 'NULL'
+    } else
+      return 'NULL'
   });
 
   Handlebars.registerHelper("json", function (content) {
@@ -84,7 +84,6 @@ $(document).ready(function () {
         }
       });
       const surveys = await res.json();
-      console.log(surveys);
 
       var html = Template.templates.homeOperator({ surveys, url });
       $("#root")
@@ -112,24 +111,54 @@ $(document).ready(function () {
           { operator: 0, supervisor: 0 }
         );
 
-        var html = Template.templates.home({ totalProfiles, url });
+        const surveysRes = await fetch(`${url}surveys`, {
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `bearer ${sessionStorage.getItem('token')}`
+          }
+        })
+
+        const surveys = await surveysRes.json()
+
+        const surveyByState = surveys.map(
+          survey => {
+            const partialState = survey.address.split(',').slice(-1)[0].trim()
+            return partialState
+              .split(' ')
+              .reduce((acc, state) => {
+                if (state.match(/[A-Za-z]+/g))
+                  return acc += state + ' '
+                return acc
+              }, '')
+          }
+        )
+
+        const surveyCount = surveyByState
+          .reduce((acc, state) => {
+            let stateIndex = acc.findIndex(name => name.state === state)
+
+            if (stateIndex === -1) {
+              return [
+                ...acc, 
+                {state: state, value: 1}
+              ]
+            }
+
+            acc[stateIndex].value += 1
+
+            return [...acc]
+          }, [])
+
+        const top3 = surveyCount
+          .sort((a, b) => a.value > b.value)
+          .slice(0, 3)
+
+        var html = Template.templates.home({ totalProfiles, url, top3 });
         $("#root")
           .html(html)
           .show();
-
-        crossroads.addRoute("/home", function () {
-          if (role == "operator") {
-            var html = Template.templates.homeOperator({ url });
-            $("#root")
-              .html(html)
-              .show();
-          } else {
-            var html = Template.templates.home({ url });
-            $("#root")
-              .html(html)
-              .show();
-          }
-        });
       } catch (err) {
         console.log(err);
       }
@@ -234,7 +263,7 @@ $(document).ready(function () {
       .show();
   });
 
-  async function survey(){
+  async function survey() {
     var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
     var phone = JSON.parse(sessionStorage.getItem("phone"));
     var profile = JSON.parse(sessionStorage.getItem("profile"));
