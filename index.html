@@ -148,8 +148,8 @@
                           <img src="img/user-small.png" class="rounded" width="50" alt="">
                         </div>
                         <div class="drop-right">
-                          <h4>Diana Osman</h4>
-                          <p class="user-name">dianaosman@info.com</p>
+                          <h4 id="userFullName"></h4>
+                          <p class="user-name" id="userEmail"></p>
                         </div>
                       </div>
                       <div class="m-t-10 p-3 drop-list">
@@ -233,7 +233,37 @@
   <script src="node_modules/moment/min/moment.min.js"></script>
   <script src="node_modules/dropify/dist/js/dropify.min.js"></script>
   <script src="node_modules/easytimer/dist/easytimer.min.js"></script>
-  <script src="js/index.js"></script>'
+  <script src="js/jquery.sparkline.min.js"></script>
+  <script src="js/index.js"></script>
+  <script>
+    (async () => {
+      const url = 'http://localhost/ccs-api/'
+      if (sessionStorage.profile) {
+        try {
+          const username = JSON.parse(sessionStorage.getItem('profile')).username
+          
+          let userProfileRes =
+            await fetch(`${url}profile/${username}`, {
+              method: 'get',
+              headers: {
+                'Authorization': `bearer ${sessionStorage.getItem('token')}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              }
+            })
+    
+          const {data: [userProfile]} = await userProfileRes.json()
+
+          $('#userFullName').text(userProfile.fullname)
+          $('#userEmail').text(userProfile.username)
+        } catch (err) {
+          console.error(err)
+          Swal.fire('Ouuppss..', 'Something went wrong, please log in again')
+          .then(() => window.location = 'js/pages/page-login.html')
+        }
+      }
+    })()
+  </script>
 </body>
 
 </html>
