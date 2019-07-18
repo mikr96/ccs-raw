@@ -237,7 +237,8 @@
   <script src="js/index.js"></script>
   <script>
     (async () => {
-      const url = 'http://localhost/ccs-api/'
+      // const url = 'http://localhost/ccs-api/'
+      const url = "https://cyrixmy-api.herokuapp.com/";
       if (sessionStorage.profile) {
         try {
           const username = JSON.parse(sessionStorage.getItem('profile')).username

@@ -1,7 +1,7 @@
 //Registration form
 // const url = "http://ccs.cyrix.my/CCS-API/";
- const url = "http://localhost/CCS-API/";
-// const url = "https://cyrixmy-api.herokuapp.com/";
+ //const url = "http://localhost/CCS-API/";
+const url = "https://cyrixmy-api.herokuapp.com/";
 async function registration() {
   event.preventDefault(); //prevent redirect/page refresh
 
