@@ -54,7 +54,6 @@ $(document).ready(function () {
 
   // const url = "https://ccs.cyrix.my/CCS-API/";
   //const url = "http://localhost/CCS-API/";
-  
   const url = "https://cyrixmy-api.herokuapp.com/";
 
   var role = sessionStorage.getItem("role");
@@ -124,15 +123,46 @@ $(document).ready(function () {
         const surveys = await surveysRes.json()
 
         // format from 1000 => 1,000
-        const formatNumber = num => num
-          .toString()
-          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-
         const totalSurveys = surveys.length
-        const formattedTotalSurveys = formatNumber(totalSurveys)
-        const notExistSurveys = surveys.filter(({phone}) => !phone.length)
-        const formattedNotExistSurveys = formatNumber(notExistSurveys.length)
+        
+        const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
+        
+        const newSurveys = surveys.filter(survey => survey.status === 2)
+        
+        const formattedNewSurveysNumber = numeral(newSurveys.length).format('0 a')
 
+        const NoNumber = surveys.filter(({ phone }) => !phone.length)
+
+        const notExistNumber = surveys
+          .filter(({status_phone}) => status_phone ? 
+            status_phone.find(status => status === 'Tak Wujud') : null
+          )
+          .filter(s => s)
+        
+        const formattedNotExistNumber = numeral(notExistNumber.length).format('0 a')
+      
+        const formattedNoNumber = numeral(NoNumber.length).format('0 a')
+
+        const comments = surveys
+          .map(({ comment }) => comment ? comment[0] : null)
+          .filter(comment => comment)
+          .reduce((acc, comment) => {
+            const commentIndex = acc.findIndex(({category}) => category == comment)
+            
+            acc[commentIndex].value++
+            return acc
+          }, [
+            {category: 'lain-lain', value: 0},
+            {category: 'info', value: 0},
+            {category: 'wakil rakyat', value: 0},
+          ])
+          .map((comment, i, arr) => {
+            return {
+              ...comment,
+              percent: (comment.value/arr.length * 100).toFixed(2) + '%'
+            }
+          })
+        
         const surveyByState = surveys.map(
           survey => {
             const partialState = survey.address.split(',').slice(-1)[0].trim()
@@ -166,7 +196,7 @@ $(document).ready(function () {
           .sort((a, b) => a.value > b.value)
           .slice(0, 3)
 
-        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNotExistSurveys });
+        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNoNumber, comments, formattedNotExistNumber, formattedNewSurveysNumber });
         $("#root")
           .html(html)
           .show();

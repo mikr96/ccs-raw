@@ -361,7 +361,6 @@
 async function cancelSurvey(name){
     try {
       var survey = {{{ json survey }}}
-			console.log(survey)
 			var id = survey[0].id
       var formData = JSON.stringify({
         id: survey[0].id,
@@ -378,7 +377,6 @@ async function cancelSurvey(name){
         status_phone: null,
         status: 2
       });
-      console.log(formData)
       const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
         method: "post",
         headers: {
