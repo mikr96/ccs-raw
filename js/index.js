@@ -122,6 +122,16 @@ $(document).ready(function () {
 
         const surveys = await surveysRes.json()
 
+        // format from 1000 => 1,000
+        const formatNumber = num => num
+          .toString()
+          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+
+        const totalSurveys = surveys.length
+        const formattedTotalSurveys = formatNumber(totalSurveys)
+        const notExistSurveys = surveys.filter(({phone}) => !phone.length)
+        const formattedNotExistSurveys = formatNumber(notExistSurveys.length)
+
         const surveyByState = surveys.map(
           survey => {
             const partialState = survey.address.split(',').slice(-1)[0].trim()
@@ -155,7 +165,7 @@ $(document).ready(function () {
           .sort((a, b) => a.value > b.value)
           .slice(0, 3)
 
-        var html = Template.templates.home({ totalProfiles, url, top3 });
+        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNotExistSurveys });
         $("#root")
           .html(html)
           .show();

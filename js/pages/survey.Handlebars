@@ -47,6 +47,7 @@
 										<div class="m-t-15">
 												<button id="startButton" class="btn btn-primary js-sweetalert" onclick="startSurvey()">Mula Survey</button>
 												<button id="resetButton" class="btn btn-success" onclick="startSurvey()">Reset Caller</button>
+												<button id="cancelButton" class="btn btn-danger" onclick="cancelSurvey('{{{profile.username}}}')">Cancel Survey</button>
 										</div>
 								</div>
 						</div>
@@ -357,4 +358,50 @@
 			console.log(err) }
 		}	
 
+async function cancelSurvey(name){
+    try {
+      var survey = {{{ json survey }}}
+			console.log(survey)
+			var id = survey[0].id
+      var formData = JSON.stringify({
+        id: survey[0].id,
+        gender: survey[0].gender,
+        phone: survey[0].phone,
+        race: survey[0].race,
+        name:survey[0].name,
+        address: survey[0].address,
+        question_survey: null,
+        comment: null,
+        status_survey: null,
+        call_duration: null,
+        operator_id: name,
+        status_phone: null,
+        status: 2
+      });
+      console.log(formData)
+      const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
+        method: "post",
+        headers: {
+        credentials: 'include',
+        Accept: "application/json",
+        "Content-type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        },
+        body: formData
+      });
+
+      const cancel = await updateStatus.json();
+
+      if (cancel.status) {
+        window.location.href = "index.html#home";
+      } else {
+        Swal.fire({
+          title: "Fail",
+          text: "Unable to cancel survey",
+          type: "error"
+        });
+      }
+    } catch (err) { 
+      console.log(err) }
+}
 </script>
