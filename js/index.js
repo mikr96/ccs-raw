@@ -123,11 +123,25 @@ $(document).ready(function () {
         const surveys = await surveysRes.json()
 
         // format from 1000 => 1,000
-
         const totalSurveys = surveys.length
+        
         const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
-        const notExistSurveys = surveys.filter(({ phone }) => !phone.length)
-        const formattedNotExistSurveys = numeral(notExistSurveys.length).format('0 a')
+        
+        const newSurveys = surveys.filter(survey => survey.status === 2)
+        
+        const formattedNewSurveysNumber = numeral(newSurveys.length).format('0 a')
+
+        const NoNumber = surveys.filter(({ phone }) => !phone.length)
+
+        const notExistNumber = surveys
+          .filter(({status_phone}) => status_phone ? 
+            status_phone.find(status => status === 'Tak Wujud') : null
+          )
+          .filter(s => s)
+        
+        const formattedNotExistNumber = numeral(notExistNumber.length).format('0 a')
+      
+        const formattedNoNumber = numeral(NoNumber.length).format('0 a')
 
         const comments = surveys
           .map(({ comment }) => comment ? comment[0] : null)
@@ -182,7 +196,7 @@ $(document).ready(function () {
           .sort((a, b) => a.value > b.value)
           .slice(0, 3)
 
-        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNotExistSurveys, comments });
+        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNoNumber, comments, formattedNotExistNumber, formattedNewSurveysNumber });
         $("#root")
           .html(html)
           .show();
