@@ -204,8 +204,6 @@
     var comment = commentRecord.map(e => e.comment)
     comment.forEach(e => {
       if (e != null) {
-        console.log(e)
-        console.log(typeof e)
         if (e != 'null'){
           var temp = JSON.parse(e).shift();
           if (temp == "info"){
