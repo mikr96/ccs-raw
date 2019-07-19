@@ -19,7 +19,7 @@
 <script>
   $('.dropify').dropify()
 
-  let data = []
+  let csvData = []
 
   $("#file").change(function(e){
     if(e.target.files.length){
@@ -33,7 +33,7 @@
           .map(res => res.split(/,(?![ {1}])/gm))
           .filter(arr => arr.length > 1)
 
-        data = (await applyValues(csv, csvKeys))
+        csvData = (await applyValues(csv, csvKeys))
           .filter(d => d)
           .filter(d => d.hasOwnProperty('alamatterkinidaerah'))
         
