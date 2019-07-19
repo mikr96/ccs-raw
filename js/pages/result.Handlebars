@@ -73,7 +73,6 @@
   $("#bottomCard").hide()
   async function regionSelection(e) {
     $("#bottomCard").show()
-    console.log(e.target.value);
     sessionStorage.setItem("region_id",e.target.value)
     var region_id = e.target.value;
     try {
@@ -205,13 +204,17 @@
     var comment = commentRecord.map(e => e.comment)
     comment.forEach(e => {
       if (e != null) {
-        var temp = JSON.parse(e).shift();
-        if (temp == "info"){
-          info=+1
-        } else if (temp == "wakil rakyat") {
-          wr=+1
-        } else if (temp == "lain-lain") {
-          dll=+1
+        if (e != 'null'){
+          var temp = JSON.parse(e).shift();
+          if (temp == "info"){
+            info=+1
+          } else if (temp == "wakil rakyat") {
+            wr=+1
+          } else if (temp == "lain-lain") {
+            dll=+1
+          }
+        } else {
+          info = 1;
         }
       }
     })
@@ -237,7 +240,7 @@
         }
       }],
       ['screen and (min-width: 1024px)', {
-        labelOffset: 50,
+        labelOffset: 60,
         chartPadding: 20
       }]
     ]
@@ -259,18 +262,23 @@
 
     phone.forEach(e => {
       if (e != null) {
-        var len = JSON.parse(e).length
-        var temp = JSON.parse(e)
-        for(i=0;i<len;i++){
-          if (temp[i] == "Salah No"){
-            sn=+1
-          } else if (temp[i] == "Tak Wujud") {
-            tw=+1
-          } else if (temp[i] == "Hubungi Kemudian") {
-            hk=+1
-          } else if (temp[i] == "Tak Minat") {
-            tm=+1
+        if (e != 'null'){
+          var len = JSON.parse(e).length
+          var temp = JSON.parse(e)
+          for(i=0;i<len;i++){
+            if (temp[i] == "Salah No"){
+              sn=+1
+            } else if (temp[i] == "Tak Wujud") {
+              tw=+1
+            } else if (temp[i] == "Hubungi Kemudian") {
+              hk=+1
+            } else if (temp[i] == "Tak Minat") {
+              tm=+1
+            }
           }
+        } else {
+          sn = 1;
+
         }
       }
     })
