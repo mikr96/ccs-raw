@@ -419,7 +419,7 @@
     }
   }
 
-  const editForm = (nameList, available_id, role) => {
+  var editForm = (nameList, available_id, role) => {
     return (`
       <br/>
       <input type="text" placeholder="Full name" class="form-control" id="fullname" value="${nameList.fullname}" ${role === 'admin' ? '' : 'readonly'}>
