@@ -71,7 +71,7 @@
     <div class="card">
       <div class="row row-centered">
         <div class="col-md-3 col-centered offset-md-3" style="margin-right:20px;">
-          <h2>{{{len surveys}}}</h2>
+          <h2 id="NOS">{{{len surveys}}}</h2>
           <h6>Survey Available</h6>
         </div>
         <div class="col-md-3 col-centered">
@@ -81,7 +81,7 @@
       </div>
       <div class="row row-centered">
         <div class="col-md-6 div-center">
-          <button class="btn btn-survey btn-block" onclick="survey('{{{survey.name}}}')"><span>Start Survey</span></button>
+          <button id="SS" class="btn btn-survey btn-block" onclick="survey('{{{survey.name}}}')"><span>Start Survey</span></button>
         </div>
       </div>
     </div>
@@ -92,6 +92,39 @@
   $(document).ready(() => {
     $("table.datatable").dataTable();
   })
+
+  async function loop(options) {
+    return await new Promise(resolve => {
+      var result;
+      const interval = setInterval(() => {
+        try {
+          fetch(`{{url}}surveys/region`, options)
+          .then(response => response.json())
+          .then(data => {
+            result = data;
+          })
+          .catch(error => console.log(error));
+          var size = Object.keys(result).length;
+          console.log($("#NOS").text());
+          if (size != $("#NOS").text()) {
+            $("#NOS").replaceWith(`<h2 id="NOS">${size}</h2>`);
+            $("#SS").attr("onclick",`survey(${result[0].name})`);
+          }
+        } catch (err) {
+          resolve(err);
+        }
+      }, 3000);
+    });
+  }
+
+  var options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+  };
+  const bar = loop(options);
 
   async function survey(name) {
     try {
