@@ -31,6 +31,7 @@ $('form#login').submit(async function (e) {
         sessionStorage.setItem("role", success.role);
         sessionStorage.setItem("token", success.token);
         sessionStorage.setItem("laptop_id", success.laptop_id);
+        sessionStorage.setItem("region", success.region);
         if (result.value) {
           if (success.role == "admin" || success.role == "supervisor") {
             window.location.href = "../../index.html";

@@ -1,0 +1,44 @@
+      <div class="header">
+        <h2>List of Surveys</h2>
+      </div>
+      <div class="body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-striped datatable" id="addrowExample">
+            <thead>
+              <tr style="text-align: center;">
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Address</th>
+                <th>Phone No.</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each surveys}}
+                <tr class="gradeA" style="text-transform: capitalize;">
+                  <td>{{name}}</td>
+                  <td style="text-align: center;">{{gender}}</td>
+                  <td style="text-align: center;">{{race}}</td>
+                  <td>{{address}}</td>
+                  <td style="text-align: center;">{{phone}}</td>
+                  <td class="actions" style="text-align: center;">
+                    <button class="btn btn-sm btn-pure btn-success on-success m-r-5 button-continue"
+                      data-toggle="tooltip" onclick="survey('{{{name}}}')">Start Survey</button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+            <tfoot>
+              <tr style="text-align: center;">
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Race</th>
+                <th>Address</th>
+                <th>Phone No.</th>
+                <th>Action</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
