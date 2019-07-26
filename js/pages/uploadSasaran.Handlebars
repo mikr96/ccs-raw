@@ -19,7 +19,7 @@
 <script>
   $('.dropify').dropify()
 
-  let csvData = []
+  var csvData = []
 
   $("#file").change(function(e){
     if(e.target.files.length){
@@ -118,5 +118,5 @@
     }
   })
 
-  const _ = str => str ? `${str}, ` : '';
+  var _ = str => str ? `${str}, ` : '';
 </script>

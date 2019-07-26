@@ -9,51 +9,8 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html"
   });
 
-  Handlebars.registerHelper("date", function (timestamp) {
-    return moment(timestamp).format('DD MMMM YYYY')
-  });
-
-  Handlebars.registerHelper("printRegion", function ({ data }) {
-    const { oper, regions } = data.root
-    const { index } = data
-    const operator = oper[index]
-    if (operator.region_id) {
-      const region = regions.find(region => region.id === operator.region_id)
-      return region ? region.name : 'NULL'
-    } else
-      return 'NULL'
-  });
-
-  Handlebars.registerHelper("printSet", function ({ data }) {
-    const { oper, ques } = data.root
-    const { index } = data
-    const operator = oper[index]
-    if (operator.set_id > 0) {
-      const set = ques.find(set => set.set_id == operator.set_id)
-      return set ? set.set_name : 'NULL'
-    } else
-      return 'NULL'
-  });
-
-  Handlebars.registerHelper("json", function (content) {
-    return JSON.stringify(content);
-  });
-
-  Handlebars.registerHelper("len", function (json) {
-    return Object.keys(json).length;
-  });
-
-  Handlebars.registerHelper("length", function (arr) {
-    return arr.length;
-  });
-
-  Handlebars.registerHelper("index", function (index) {
-    return index + 1;
-  });
-
-
   // const url = "https://ccs.cyrix.my/CCS-API/";
-  //const url = "http://localhost/CCS-API/";
+  // const url = "http://localhost/CCS-API/";
   const url = "https://cyrixmy-api.herokuapp.com/";
 
   var role = sessionStorage.getItem("role");
@@ -75,6 +32,7 @@ $(document).ready(function () {
   }
 
   async function home() {
+    $('#root').fadeOut(100)
     if (role == "operator") {
       const res = await fetch(`${url}surveys/region`, {
         method: "GET",
@@ -124,45 +82,45 @@ $(document).ready(function () {
 
         // format from 1000 => 1,000
         const totalSurveys = surveys.length
-        
+
         const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
-        
+
         const newSurveys = surveys.filter(survey => survey.status === 2)
-        
+
         const formattedNewSurveysNumber = numeral(newSurveys.length).format('0 a')
 
         const NoNumber = surveys.filter(({ phone }) => !phone.length)
 
         const notExistNumber = surveys
-          .filter(({status_phone}) => status_phone ? 
+          .filter(({ status_phone }) => status_phone ?
             status_phone.find(status => status === 'Tak Wujud') : null
           )
           .filter(s => s)
-        
+
         const formattedNotExistNumber = numeral(notExistNumber.length).format('0 a')
-      
+
         const formattedNoNumber = numeral(NoNumber.length).format('0 a')
 
         const comments = surveys
           .map(({ comment }) => comment ? comment[0] : null)
           .filter(comment => comment)
           .reduce((acc, comment) => {
-            const commentIndex = acc.findIndex(({category}) => category == comment)
-            
-            acc[commentIndex].value++
+            const commentIndex = acc.findIndex(({ category }) => category == comment)
+            if (commentIndex > -1)
+              acc[commentIndex].value++
             return acc
           }, [
-            {category: 'lain-lain', value: 0},
-            {category: 'info', value: 0},
-            {category: 'wakil rakyat', value: 0},
-          ])
+              { category: 'lain-lain', value: 0 },
+              { category: 'info', value: 0 },
+              { category: 'wakil rakyat', value: 0 },
+            ])
           .map((comment, i, arr) => {
             return {
               ...comment,
-              percent: (comment.value/arr.length * 100).toFixed(2) + '%'
+              percent: (comment.value / arr.length * 100).toFixed(2) + '%'
             }
           })
-        
+
         const surveyByState = surveys.map(
           survey => {
             const partialState = survey.address.split(',').slice(-1)[0].trim()
@@ -199,7 +157,7 @@ $(document).ready(function () {
         var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNoNumber, comments, formattedNotExistNumber, formattedNewSurveysNumber });
         $("#root")
           .html(html)
-          .show();
+          .fadeIn(1000);
       } catch (err) {
         console.log(err);
       }
@@ -207,14 +165,15 @@ $(document).ready(function () {
   }
 
   crossroads.addRoute('/upload-sasaran', () => {
+    $('#root').fadeOut(100)
     var html = Template.templates.uploadSasaran({ url });
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   })
 
   const getRole = async arg => {
+    $('#root').fadeOut(100)
     const regionRes = await fetch(`${url}regions`, {
       headers: {
         'Content-Type': 'application/json',
@@ -260,22 +219,19 @@ $(document).ready(function () {
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
         var html = Template.templates.userOperator({ regions, ques, oper, url });
-        $("#root").empty();
         $("#root")
           .html(html)
-          .show();
+          .fadeIn(1000);
       } else if (sessionStorage.role == "admin" && arg == "admin") {
         var html = Template.templates.userAdmin({ oper, url, regions, ques });
-        $("#root").empty();
         $("#root")
           .html(html)
-          .show();
+          .fadeIn(1000);
       } else if (sessionStorage.role == "admin" && arg == "supervisor") {
         var html = Template.templates.userSupervisor({ oper, url, regions, ques });
-        $("#root").empty();
         $("#root")
           .html(html)
-          .show();
+          .fadeIn(1000);
       }
     } catch (err) {
       console.log(err);
@@ -289,22 +245,23 @@ $(document).ready(function () {
   crossroads.addRoute("/user-admin", () => getRole("admin"));
 
   crossroads.addRoute("/record-statistics", function () {
+    $('#root').fadeOut(100)
     var html = Template.templates.recordStatistics({ url });
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   });
 
   crossroads.addRoute("/record-region", function () {
+    $('#root').fadeOut(100)
     var html = Template.templates.recordRegion({ url });
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   });
 
   async function survey() {
+    $('#root').fadeOut(100)
     var survey = JSON.parse(sessionStorage.getItem("targetedSurvey"));
     var phone = JSON.parse(sessionStorage.getItem("phone"));
     var profile = JSON.parse(sessionStorage.getItem("profile"));
@@ -329,15 +286,15 @@ $(document).ready(function () {
       gender = false;
     }
     var html = Template.templates.survey({ survey, profile, gender, phone, url, ques, soalan });
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   }
 
   crossroads.addRoute("/survey", survey);
 
   async function question() {
+    $('#root').fadeOut(100)
     try {
       const res = await fetch(`${url}/questions`, {
         method: "get",
@@ -351,27 +308,27 @@ $(document).ready(function () {
       const ques = await res.json();
       sessionStorage.setItem("question", JSON.stringify(ques));
       var html = Template.templates.questionSet({ ques, url });
-      $("#root").empty();
       $("#root")
         .html(html)
-        .show();
+        .fadeIn(100);
     } catch (err) {
       console.log(err);
     }
   }
 
   function newQuestion() {
+    $('#root').fadeOut(100)
     var ques = JSON.parse(sessionStorage.getItem("question"));
     var id = Object.keys(ques).length;
     id = id + 1;
     var html = Template.templates.newQuestion({ id, url });
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   }
 
   async function result() {
+    $('#root').fadeOut(100)
     const res = await fetch(`${url}regions`, {
       method: "GET",
       headers: {
@@ -382,13 +339,13 @@ $(document).ready(function () {
     const regions = await res.json()
     console.log(regions)
     var html = Template.templates.result({ regions, url })
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   }
 
   async function surveyRecord() {
+    $('#root').fadeOut(100)
     var region_id = sessionStorage.getItem("region_id")
     const res = await fetch(`${url}surveys/statistics/${region_id}`, {
       method: "GET",
@@ -402,10 +359,9 @@ $(document).ready(function () {
     const successSurveys = regionRecord.filter(region => status === region.status);
     console.log(successSurveys)
     var html = Template.templates.surveyRecord({ successSurveys, url })
-    $("#root").empty();
     $("#root")
       .html(html)
-      .show();
+      .fadeIn(1000);
   }
 
   crossroads.addRoute("/question-set", question);
@@ -413,170 +369,6 @@ $(document).ready(function () {
   crossroads.addRoute("/result", result);
   crossroads.addRoute("/survey-record", surveyRecord);
 
-  $(".knob2").knob({
-    format: function (value) {
-      return value + "%";
-    }
-  });
-
-  // progress bars
-  $(".progress .progress-bar").progressbar({
-    display_text: "none"
-  });
-
-  // Visitors Statistics =============
-  var d = [
-    [1196463600000, 0],
-    [1196550000000, 0],
-    [1196636400000, 0],
-    [1196722800000, 77],
-    [1196809200000, 3636],
-    [1196895600000, 3575],
-    [1196982000000, 2736],
-    [1197068400000, 1086],
-    [1197154800000, 676],
-    [1197241200000, 1205],
-    [1197327600000, 906],
-    [1197414000000, 710],
-    [1197500400000, 639],
-    [1197586800000, 540],
-    [1197673200000, 435],
-    [1197759600000, 301],
-    [1197846000000, 575],
-    [1197932400000, 481],
-    [1198018800000, 591],
-    [1198105200000, 608],
-    [1198191600000, 459],
-    [1198278000000, 234],
-    [1198364400000, 1352],
-    [1198450800000, 686],
-    [1198537200000, 279],
-    [1198623600000, 449],
-    [1198710000000, 468],
-    [1198796400000, 392],
-    [1198882800000, 282],
-    [1198969200000, 208],
-    [1199055600000, 229],
-    [1199142000000, 177],
-    [1199228400000, 374],
-    [1199314800000, 436],
-    [1199401200000, 404],
-    [1199487600000, 253],
-    [1199574000000, 218],
-    [1199660400000, 476],
-    [1199746800000, 462],
-    [1199833200000, 448],
-    [1199919600000, 442],
-    [1200006000000, 403],
-    [1200092400000, 204],
-    [1200178800000, 194],
-    [1200265200000, 327],
-    [1200351600000, 374],
-    [1200438000000, 507],
-    [1200524400000, 546],
-    [1200610800000, 482],
-    [1200697200000, 283],
-    [1200783600000, 221],
-    [1200870000000, 483],
-    [1200956400000, 523],
-    [1201042800000, 528],
-    [1201129200000, 483],
-    [1201215600000, 452],
-    [1201302000000, 270],
-    [1201388400000, 222],
-    [1201474800000, 439],
-    [1201561200000, 559],
-    [1201647600000, 521],
-    [1201734000000, 477],
-    [1201820400000, 442],
-    [1201906800000, 252],
-    [1201993200000, 236],
-    [1202079600000, 525],
-    [1202166000000, 477],
-    [1202252400000, 386],
-    [1202338800000, 409],
-    [1202425200000, 408],
-    [1202511600000, 237],
-    [1202598000000, 193],
-    [1202684400000, 357],
-    [1202770800000, 4414],
-    [1202857200000, 3393],
-    [1202943600000, 2353],
-    [1203030000000, 1364],
-    [1203116400000, 215],
-    [1203202800000, 214],
-    [1203289200000, 356],
-    [1203375600000, 5599],
-    [1203462000000, 1334],
-    [1203548400000, 1348],
-    [1203634800000, 1243],
-    [1203721200000, 1126],
-    [1203807600000, 1157],
-    [1203894000000, 5288]
-  ];
-  // first correct the timestamps - they are recorded as the daily
-  // midnights in UTC+0100, but Flot always displays dates in UTC
-  // so we have to add one hour to hit the midnights in the plot
-  for (var i = 0; i < d.length; ++i) {
-    d[i][0] += 60 * 60 * 1000;
-  }
-  // helper for returning the weekends in a period
-  function weekendAreas(axes) {
-    var markings = [],
-      d = new Date(axes.xaxis.min);
-
-    // go to the first Saturday
-
-    d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7));
-    d.setUTCSeconds(0);
-    d.setUTCMinutes(0);
-    d.setUTCHours(0);
-
-    var i = d.getTime();
-
-    // when we don't set yaxis, the rectangle automatically
-    // extends to infinity upwards and downwards
-
-    do {
-      markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
-      i += 7 * 24 * 60 * 60 * 1000;
-    } while (i < axes.xaxis.max);
-
-    return markings;
-  }
-  var options = {
-    xaxis: {
-      mode: "time",
-      tickLength: 5
-    },
-    selection: {
-      mode: "x"
-    },
-    grid: {
-      markings: weekendAreas,
-      borderColor: "#eaeaea",
-      tickColor: "#eaeaea",
-      hoverable: true,
-      borderWidth: 1
-    }
-  };
-  var plot = $.plot("#Visitors_chart", [d], options);
-  // now connect the two
-  $("#Visitors_chart").bind("plotselected", function (event, ranges) {
-    // do the zooming
-    $.each(plot.getXAxes(), function (_, axis) {
-      var opts = axis.options;
-      opts.min = ranges.xaxis.from;
-      opts.max = ranges.xaxis.to;
-    });
-    plot.setupGrid();
-    plot.draw();
-    plot.clearSelection();
-
-    // don't fire event on the overview to prevent eternal loop
-
-    overview.setSelection(ranges, true);
-  });
   // Add the Flot version string to the footer
   $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
   // Visitors Statistics ============= end
