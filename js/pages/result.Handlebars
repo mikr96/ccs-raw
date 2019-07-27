@@ -57,6 +57,11 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-md-6">
+            <div id="questionDist-chart" class="status-questionDist-chart"></div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-12">
             <div id="question-chart" class="status-question"></div>
           </div>
@@ -95,6 +100,7 @@
         phoneChart(regionRecord);
         raceChart(regionRecord);
         questionChart(regionRecord);
+        questionDist(regionRecord);
 
       //Setting CSV file content
       var obj = ["id","gender","phone","race","name","address","location","region_id","region_name","question_survey","comment","status","status_phone","status_survey","call_duration","operator_id"]
@@ -473,6 +479,56 @@
 
       $(".status-question").append('<label for="survey-question" class="col-form-label" style="display: block; text-align:center;">Question Set</label>')
     }
+  }
+
+  async function questionDist(surveys) {
+    $('.status-questionDist-chart').empty()
+
+    const questionDistData = await questionDistributionData(surveys, '{{url}}')
+
+    const labels = Object.keys(questionDistData)
+    const graphQuestData = labels.reduce((acc, key) => {
+      return {
+        ...acc, 
+        series: [
+          ...acc.series, 
+          {
+            name: key, 
+            value: questionDistData[key]
+          }
+        ],
+        labels: [
+          ...acc.labels,
+          key
+        ]
+      }
+    }, {
+      series: [],
+      labels: []
+    })
+
+    const options = {
+      labelInterpolationFnc: value => interpolation(value),
+      chartPadding: 20,
+      labelOffset: 20,
+      labelDirection: 'explode',
+    }
+
+    new Chartist.Pie(
+      '#questionDist-chart', 
+      graphQuestData, 
+      options
+    )
+
+    function interpolation(value) {
+      const survey = graphQuestData.series.find(accSurvey => accSurvey.name === value)
+      const amount = survey.value
+      const total = graphQuestData.series.reduce((acc, a) => acc + a.value, 0)
+      if (total===0 && amount===0) return ''
+      return value + ' ' + Math.round(amount / total * 100) + '%'
+    }
+
+    $(".status-questionDist-chart").append('<label class="col-form-label" style="display: block; text-align:center;">Question Group Distribution</label>')
   }
 
 

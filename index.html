@@ -236,10 +236,11 @@
   <script src="js/jquery.sparkline.min.js"></script>
   <script src="node_modules/numeral/min/numeral.min.js"></script>
   <script src="js/handlebars.helpers.js"></script>
+  <script src="js/statistics.js"></script>
   <script src="js/index.js"></script>
   <script>
     (async () => {
-      //const url = 'http://localhost/ccs-api/'
+      // const url = 'http://localhost/ccs-api/'
       const url = "https://cyrixmy-api.herokuapp.com/";
       if (sessionStorage.profile) {
         try {
@@ -261,8 +262,8 @@
           $('#userEmail').text(userProfile.username)
         } catch (err) {
           console.error(err)
-          Swal.fire('Ouuppss..', 'Something went wrong, please log in again')
-          .then(() => window.location = 'js/pages/page-login.html')
+          await Swal.fire('Ouuppss..', 'Something went wrong, please log in again')
+          window.location = 'js/pages/page-login.html'
         }
       }
     })()

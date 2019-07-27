@@ -46,7 +46,7 @@ $(document).ready(function () {
       var html = Template.templates.homeOperator({ surveys, url });
       $("#root")
         .html(html)
-        .show();
+        .fadeIn(1000);
     } else {
       try {
         const res = await fetch(`${url}profiles`, {
