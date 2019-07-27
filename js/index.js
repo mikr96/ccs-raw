@@ -42,7 +42,7 @@ $(document).ready(function () {
         }
       });
       const surveys = await res.json();
-      const survey = surveys[0];
+      let survey = surveys[0];
 
       if (survey == null) {
         survey = [{

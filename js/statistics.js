@@ -94,7 +94,7 @@ async function questionDistributionData(surveys = [], url) {
     try {
       const setNumber = await getSetNumber(url, operator_id)
 
-      if (question_survey) {
+      if (question_survey && (setNumber === 1 || setNumber === 2) ) {
         const surveyQuestions = JSON.parse(question_survey)
         if (surveyQuestions && surveyQuestions.length) {
           const firstThree = surveyQuestions.slice(0, 3)
