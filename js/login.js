@@ -20,25 +20,26 @@ $(document).ready(function () {
         },
         body: formData
       });
-
-    if (success.status === 1) {
-      Swal.fire({
-        title: "Login Success",
-        text: "Welcome back",
-        type: "success"
-      }).then(result => {
-        sessionStorage.setItem("profile", JSON.stringify(success));
-        sessionStorage.setItem("role", success.role);
-        sessionStorage.setItem("token", success.token);
-        sessionStorage.setItem("laptop_id", success.laptop_id);
-        sessionStorage.setItem("region", success.region);
-        if (result.value) {
-          if (success.role == "admin" || success.role == "supervisor") {
-            window.location.href = "../../index.html";
-          } else {
-            window.location.href = "page-verify.html";
+      const success = await loginResponse.json()
+      if (success.status === 1) {
+        Swal.fire({
+          title: "Login Success",
+          text: "Welcome back",
+          type: "success"
+        }).then(result => {
+          sessionStorage.setItem("profile", JSON.stringify(success));
+          sessionStorage.setItem("role", success.role);
+          sessionStorage.setItem("token", success.token);
+          sessionStorage.setItem("laptop_id", success.laptop_id);
+          sessionStorage.setItem("region", success.region);
+          if (result.value) {
+            if (success.role == "admin" || success.role == "supervisor") {
+              window.location.href = "../../index.html";
+            } else {
+              window.location.href = "page-verify.html";
+            }
           }
-        });
+        })
       } else {
         Swal.fire({
           title: "Authentication Failed",
