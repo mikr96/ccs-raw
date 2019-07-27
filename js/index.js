@@ -69,6 +69,15 @@ $(document).ready(function () {
             Authorization: `bearer ${sessionStorage.getItem("token")}`
           }
         });
+
+        if (res.status === 401) {
+          await Swal.fire('Oouppss...', 'Please re-login', 'error')
+          return window.location.href = '/js/pages/page-login.html'
+        }
+
+        if (res.status !== 200)
+          window.location.reload()
+
         const profiles = await res.json();
 
         const totalProfiles = profiles.reduce(
@@ -116,9 +125,9 @@ $(document).ready(function () {
 
         const notExistNumber = surveys
           .filter(({
-              status_phone
-            }) => status_phone ?
-            status_phone.find(status => status === 'Tak Wujud') : null
+            status_phone
+          }) => status_phone ?
+              status_phone.find(status => status === 'Tak Wujud') : null
           )
           .filter(s => s)
 
@@ -139,18 +148,18 @@ $(document).ready(function () {
               acc[commentIndex].value++
             return acc
           }, [{
-              category: 'lain-lain',
-              value: 0
-            },
-            {
-              category: 'info',
-              value: 0
-            },
-            {
-              category: 'wakil rakyat',
-              value: 0
-            },
-          ])
+            category: 'lain-lain',
+            value: 0
+          },
+          {
+            category: 'info',
+            value: 0
+          },
+          {
+            category: 'wakil rakyat',
+            value: 0
+          },
+            ])
           .map((comment, i, arr) => {
             return {
               ...comment,

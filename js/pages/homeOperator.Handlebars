@@ -124,7 +124,7 @@
         Authorization: `bearer ${sessionStorage.getItem("token")}`
       }
   };
-  const bar = loop(options);
+  var bar = loop(options);
 
   async function survey(name) {
     try {
