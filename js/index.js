@@ -42,8 +42,21 @@ $(document).ready(function () {
         }
       });
       const surveys = await res.json();
+      const survey = surveys[0];
 
-      var html = Template.templates.homeOperator({ surveys, url });
+      if (survey == null) {
+        survey = [{
+          "available": 0,
+          "region": sessionStorage.getItem("region"),
+          "name": "hantu"
+        }]
+      }
+
+      var html = Template.templates.homeOperator({
+        survey,
+        surveys,
+        url
+      });
       $("#root")
         .html(html)
         .fadeIn(1000);
@@ -61,12 +74,20 @@ $(document).ready(function () {
         const totalProfiles = profiles.reduce(
           (acc, profile) => {
             if (profile.role === "operator")
-              return { ...acc, operator: (acc.operator += 1) };
+              return {
+                ...acc,
+                operator: (acc.operator += 1)
+              };
             if (profile.role === "supervisor")
-              return { ...acc, supervisor: (acc.supervisor += 1) };
+              return {
+                ...acc,
+                supervisor: (acc.supervisor += 1)
+              };
             return acc;
-          },
-          { operator: 0, supervisor: 0 }
+          }, {
+            operator: 0,
+            supervisor: 0
+          }
         );
 
         const surveysRes = await fetch(`${url}surveys`, {
@@ -89,10 +110,14 @@ $(document).ready(function () {
 
         const formattedNewSurveysNumber = numeral(newSurveys.length).format('0 a')
 
-        const NoNumber = surveys.filter(({ phone }) => !phone.length)
+        const NoNumber = surveys.filter(({
+          phone
+        }) => !phone.length)
 
         const notExistNumber = surveys
-          .filter(({ status_phone }) => status_phone ?
+          .filter(({
+              status_phone
+            }) => status_phone ?
             status_phone.find(status => status === 'Tak Wujud') : null
           )
           .filter(s => s)
@@ -102,18 +127,30 @@ $(document).ready(function () {
         const formattedNoNumber = numeral(NoNumber.length).format('0 a')
 
         const comments = surveys
-          .map(({ comment }) => comment ? comment[0] : null)
+          .map(({
+            comment
+          }) => comment ? comment[0] : null)
           .filter(comment => comment)
           .reduce((acc, comment) => {
-            const commentIndex = acc.findIndex(({ category }) => category == comment)
+            const commentIndex = acc.findIndex(({
+              category
+            }) => category == comment)
             if (commentIndex > -1)
               acc[commentIndex].value++
             return acc
-          }, [
-              { category: 'lain-lain', value: 0 },
-              { category: 'info', value: 0 },
-              { category: 'wakil rakyat', value: 0 },
-            ])
+          }, [{
+              category: 'lain-lain',
+              value: 0
+            },
+            {
+              category: 'info',
+              value: 0
+            },
+            {
+              category: 'wakil rakyat',
+              value: 0
+            },
+          ])
           .map((comment, i, arr) => {
             return {
               ...comment,
@@ -141,7 +178,10 @@ $(document).ready(function () {
             if (stateIndex === -1) {
               return [
                 ...acc,
-                { state: state, value: 1 }
+                {
+                  state: state,
+                  value: 1
+                }
               ]
             }
 
@@ -154,7 +194,16 @@ $(document).ready(function () {
           .sort((a, b) => a.value > b.value)
           .slice(0, 3)
 
-        var html = Template.templates.home({ totalProfiles, url, top3, formattedTotalSurveys, formattedNoNumber, comments, formattedNotExistNumber, formattedNewSurveysNumber });
+        var html = Template.templates.home({
+          totalProfiles,
+          url,
+          top3,
+          formattedTotalSurveys,
+          formattedNoNumber,
+          comments,
+          formattedNotExistNumber,
+          formattedNewSurveysNumber
+        });
         $("#root")
           .html(html)
           .fadeIn(1000);
@@ -166,7 +215,9 @@ $(document).ready(function () {
 
   crossroads.addRoute('/upload-sasaran', () => {
     $('#root').fadeOut(100)
-    var html = Template.templates.uploadSasaran({ url });
+    var html = Template.templates.uploadSasaran({
+      url
+    });
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -218,17 +269,32 @@ $(document).ready(function () {
         sessionStorage.role == "supervisor" ||
         (sessionStorage.role == "admin" && arg == "operator")
       ) {
-        var html = Template.templates.userOperator({ regions, ques, oper, url });
+        var html = Template.templates.userOperator({
+          regions,
+          ques,
+          oper,
+          url
+        });
         $("#root")
           .html(html)
           .fadeIn(1000);
       } else if (sessionStorage.role == "admin" && arg == "admin") {
-        var html = Template.templates.userAdmin({ oper, url, regions, ques });
+        var html = Template.templates.userAdmin({
+          oper,
+          url,
+          regions,
+          ques
+        });
         $("#root")
           .html(html)
           .fadeIn(1000);
       } else if (sessionStorage.role == "admin" && arg == "supervisor") {
-        var html = Template.templates.userSupervisor({ oper, url, regions, ques });
+        var html = Template.templates.userSupervisor({
+          oper,
+          url,
+          regions,
+          ques
+        });
         $("#root")
           .html(html)
           .fadeIn(1000);
@@ -246,7 +312,9 @@ $(document).ready(function () {
 
   crossroads.addRoute("/record-statistics", function () {
     $('#root').fadeOut(100)
-    var html = Template.templates.recordStatistics({ url });
+    var html = Template.templates.recordStatistics({
+      url
+    });
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -254,7 +322,9 @@ $(document).ready(function () {
 
   crossroads.addRoute("/record-region", function () {
     $('#root').fadeOut(100)
-    var html = Template.templates.recordRegion({ url });
+    var html = Template.templates.recordRegion({
+      url
+    });
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -285,7 +355,15 @@ $(document).ready(function () {
     } else {
       gender = false;
     }
-    var html = Template.templates.survey({ survey, profile, gender, phone, url, ques, soalan });
+    var html = Template.templates.survey({
+      survey,
+      profile,
+      gender,
+      phone,
+      url,
+      ques,
+      soalan
+    });
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -307,7 +385,10 @@ $(document).ready(function () {
 
       const ques = await res.json();
       sessionStorage.setItem("question", JSON.stringify(ques));
-      var html = Template.templates.questionSet({ ques, url });
+      var html = Template.templates.questionSet({
+        ques,
+        url
+      });
       $("#root")
         .html(html)
         .fadeIn(100);
@@ -321,7 +402,10 @@ $(document).ready(function () {
     var ques = JSON.parse(sessionStorage.getItem("question"));
     var id = Object.keys(ques).length;
     id = id + 1;
-    var html = Template.templates.newQuestion({ id, url });
+    var html = Template.templates.newQuestion({
+      id,
+      url
+    });
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -338,7 +422,10 @@ $(document).ready(function () {
     });
     const regions = await res.json()
     console.log(regions)
-    var html = Template.templates.result({ regions, url })
+    var html = Template.templates.result({
+      regions,
+      url
+    })
     $("#root")
       .html(html)
       .fadeIn(1000);
@@ -358,7 +445,10 @@ $(document).ready(function () {
     var status = 0
     const successSurveys = regionRecord.filter(region => status === region.status);
     console.log(successSurveys)
-    var html = Template.templates.surveyRecord({ successSurveys, url })
+    var html = Template.templates.surveyRecord({
+      successSurveys,
+      url
+    })
     $("#root")
       .html(html)
       .fadeIn(1000);
