@@ -1,8 +1,6 @@
 $(document).ready(function () {
 
-  // const url = "https://ccs.cyrix.my/CCS-API/";
-  // const url = "http://localhost/CCS-API/";
-  const url = "https://cyrixmy-api.herokuapp.com/";
+  const url = "http://ccs.cyrix.my/CCS-API/";
 
   $('form#login').submit(async function (e) {
     e.preventDefault()

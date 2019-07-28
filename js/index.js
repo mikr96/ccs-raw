@@ -9,9 +9,7 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html"
   });
 
-  // const url = "https://ccs.cyrix.my/CCS-API/";
-  // const url = "http://localhost/CCS-API/";
-  const url = "https://cyrixmy-api.herokuapp.com/";
+  const url = "http://ccs.cyrix.my/CCS-API/";
 
   var role = sessionStorage.getItem("role");
 
@@ -38,11 +36,14 @@ $(document).ready(function () {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          mode: "no-cors"
         }
       });
       const surveys = await res.json();
-      let survey = surveys[0];
+      var size = Object.keys(surveys).length;
+      var random = Math.floor((Math.random() * Number(size)) + 1);
+      let survey = surveys[random];
 
       if (survey == null) {
         survey = [{
@@ -66,7 +67,8 @@ $(document).ready(function () {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `bearer ${sessionStorage.getItem("token")}`
+            Authorization: `bearer ${sessionStorage.getItem("token")}`,
+            mode: "no-cors"
           }
         });
 
@@ -104,7 +106,8 @@ $(document).ready(function () {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            'Authorization': `bearer ${sessionStorage.getItem('token')}`,
+            mode: "no-cors"
           }
         })
 
@@ -125,9 +128,9 @@ $(document).ready(function () {
 
         const notExistNumber = surveys
           .filter(({
-            status_phone
-          }) => status_phone ?
-              status_phone.find(status => status === 'Tak Wujud') : null
+              status_phone
+            }) => status_phone ?
+            status_phone.find(status => status === 'Tak Wujud') : null
           )
           .filter(s => s)
 
@@ -148,18 +151,18 @@ $(document).ready(function () {
               acc[commentIndex].value++
             return acc
           }, [{
-            category: 'lain-lain',
-            value: 0
-          },
-          {
-            category: 'info',
-            value: 0
-          },
-          {
-            category: 'wakil rakyat',
-            value: 0
-          },
-            ])
+              category: 'lain-lain',
+              value: 0
+            },
+            {
+              category: 'info',
+              value: 0
+            },
+            {
+              category: 'wakil rakyat',
+              value: 0
+            },
+          ])
           .map((comment, i, arr) => {
             return {
               ...comment,
@@ -240,7 +243,8 @@ $(document).ready(function () {
         'Accept': 'application/json',
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       },
-      method: 'get'
+      method: 'get',
+      mode: "no-cors"
     });
 
     const regions = await regionRes.json();
@@ -250,7 +254,8 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        mode: "no-cors"
       }
     });
 
@@ -268,7 +273,8 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          mode: "no-cors"
         }
       });
 
@@ -350,7 +356,8 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        mode: "no-cors"
       }
     });
 
@@ -388,7 +395,8 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          mode: "no-cors"
         }
       });
 
@@ -426,7 +434,8 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        mode: "no-cors"
       }
     });
     const regions = await res.json()
@@ -447,7 +456,8 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        mode: "no-cors"
       }
     });
     const regionRecord = await res.json()

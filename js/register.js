@@ -1,7 +1,5 @@
 //Registration form
-// const url = "http://ccs.cyrix.my/CCS-API/";
-// const url = "http://localhost/CCS-API/";
-const url = "https://cyrixmy-api.herokuapp.com/";
+const url = "http://ccs.cyrix.my/CCS-API/";
 async function registration() {
   event.preventDefault(); //prevent redirect/page refresh
 
@@ -24,7 +22,8 @@ async function registration() {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: formData
+      body: formData,
+      mode: "no-cors"
     });
 
     const created = await accountCreate.json();

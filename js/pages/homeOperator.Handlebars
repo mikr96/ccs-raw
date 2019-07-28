@@ -105,10 +105,11 @@
           })
           .catch(error => console.log(error));
           var size = Object.keys(result).length;
-          console.log($("#NOS").text());
+          var random = Math.floor((Math.random() * Number(size)) + 1);
+          console.log(random);
           if (size != $("#NOS").text()) {
             $("#NOS").replaceWith(`<h2 id="NOS">${size}</h2>`);
-            $("#SS").attr("onclick",`survey(${result[0].name})`);
+            $("#SS").attr("onclick",`survey(${result[random].name})`);
           }
         } catch (err) {
           resolve(err);
