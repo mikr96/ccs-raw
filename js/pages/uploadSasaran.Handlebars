@@ -62,8 +62,8 @@
 
   $('#csvForm').submit(async e => {
     e.preventDefault()
-    if (data.length) {
-      const submitData = data.map(res => {
+    if (csvData.length) {
+      const submitData = csvData.map(res => {
         const {nama, nric, gender, age, bangsa, dun, lokaliti, alamatterkinilokaliti, alamatterkinilokaliti2, alamatterkinirumah, alamatterkiniposkod, alamatterkininegeri} = res
         const phone = []
         for (let i = 1; i <= 42; i++) {
