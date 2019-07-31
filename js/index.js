@@ -36,21 +36,20 @@ $(document).ready(function () {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`,
-          mode: "no-cors"
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
       });
       const surveys = await res.json();
       var size = Object.keys(surveys).length;
-      var random = Math.floor((Math.random() * Number(size)) + 1);
-      let survey = surveys[random];
+      var random = Math.floor((Math.random() * Number(size) - 1) + 1)
+      var survey = surveys[random];
 
-      if (survey == null) {
-        survey = [{
+      if (!survey) {
+        survey = {
           "available": 0,
-          "region": sessionStorage.getItem("region"),
+          "region_name": sessionStorage.getItem("region"),
           "name": "hantu"
-        }]
+        }
       }
 
       var html = Template.templates.homeOperator({
@@ -67,8 +66,7 @@ $(document).ready(function () {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `bearer ${sessionStorage.getItem("token")}`,
-            mode: "no-cors"
+            Authorization: `bearer ${sessionStorage.getItem("token")}`
           }
         });
 
@@ -106,8 +104,7 @@ $(document).ready(function () {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `bearer ${sessionStorage.getItem('token')}`,
-            mode: "no-cors"
+            'Authorization': `bearer ${sessionStorage.getItem('token')}`
           }
         })
 
@@ -243,8 +240,7 @@ $(document).ready(function () {
         'Accept': 'application/json',
         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
       },
-      method: 'get',
-      mode: "no-cors"
+      method: 'get'
     });
 
     const regions = await regionRes.json();
@@ -254,8 +250,7 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`,
-        mode: "no-cors"
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
       }
     });
 
@@ -273,8 +268,7 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`,
-          mode: "no-cors"
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
       });
 
@@ -356,8 +350,7 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`,
-        mode: "no-cors"
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
       }
     });
 
@@ -395,8 +388,7 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`,
-          mode: "no-cors"
+          Authorization: `bearer ${sessionStorage.getItem("token")}`
         }
       });
 
@@ -434,8 +426,7 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`,
-        mode: "no-cors"
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
       }
     });
     const regions = await res.json()
@@ -456,8 +447,7 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`,
-        mode: "no-cors"
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
       }
     });
     const regionRecord = await res.json()

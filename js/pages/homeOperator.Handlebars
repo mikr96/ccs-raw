@@ -93,6 +93,11 @@
     $("table.datatable").dataTable();
   })
 
+  const len = {{{ len surveys }}}
+  if(!len) {
+    $("#SS").prop("disabled", true);
+  }
+
   async function loop(options) {
     return await new Promise(resolve => {
       var result;
@@ -105,8 +110,8 @@
           })
           .catch(error => console.log(error));
           var size = Object.keys(result).length;
-          var random = Math.floor((Math.random() * Number(size)) + 1);
-          console.log(random);
+          var random = Math.floor((Math.random() * Number(size-1)) + 1);
+          console.log(size);
           if (size != $("#NOS").text()) {
             $("#NOS").replaceWith(`<h2 id="NOS">${size}</h2>`);
             $("#SS").attr("onclick",`survey(${result[random].name})`);

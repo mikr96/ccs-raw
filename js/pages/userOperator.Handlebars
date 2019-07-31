@@ -374,7 +374,8 @@
             type: "success"
           }).then(result => {
             if (result.value) {
-              window.location.reload();
+              localStorage.clear();
+              window.location.reload(true);
             }
           });
         } else {
@@ -416,7 +417,8 @@
           swal.fire("Successfully deleted", "success")
           .then(result => {
             if (result.value) {
-              window.location.reload();
+              localStorage.clear();
+              window.location.reload(true);
             }
           }); 
         }

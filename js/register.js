@@ -22,8 +22,7 @@ async function registration() {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: formData,
-      mode: "no-cors"
+      body: formData
     });
 
     const created = await accountCreate.json();
