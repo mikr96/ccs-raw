@@ -82,7 +82,6 @@
 <script>
   $("#bottomCard").hide()
   async function regionSelection(e) {
-    $('#graphContainer').fadeOut(1000)
     sessionStorage.setItem("region_id",e.target.value)
     var region_id = e.target.value;
       const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
@@ -139,6 +138,7 @@
       }
       }
     $('#graphContainer').fadeIn(1000)
+    $("#bottomCard").show()
   } 
 
   function ConvertToCSV(objArray) {
