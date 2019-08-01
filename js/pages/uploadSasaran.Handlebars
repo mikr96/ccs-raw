@@ -30,7 +30,7 @@
           .split(',')
 
         const csv = csvResult
-          .map(res => res.split(/,(?![ {1}])/gm))
+          .map(res => res.split(/,(?![ +])/gm))
           .filter(arr => arr.length > 1)
 
         csvData = (await applyValues(csv, csvKeys))
