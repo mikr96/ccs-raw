@@ -14,7 +14,8 @@ $(document).ready(function () {
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-type": "application/json"
+          "Content-type": "application/json",
+          'Cache-Control': 'no-cache'
         },
         body: formData
       });

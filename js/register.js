@@ -20,7 +20,8 @@ async function registration() {
       method: "post",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        'Cache-Control': 'no-cache'
       },
       body: formData
     });

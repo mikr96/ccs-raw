@@ -36,7 +36,8 @@ $(document).ready(function () {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         }
       });
       const surveys = await res.json();
@@ -66,7 +67,8 @@ $(document).ready(function () {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `bearer ${sessionStorage.getItem("token")}`
+            Authorization: `bearer ${sessionStorage.getItem("token")}`,
+            'Cache-Control': 'no-cache'
           }
         });
 
@@ -104,7 +106,8 @@ $(document).ready(function () {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `bearer ${sessionStorage.getItem('token')}`
+            'Authorization': `bearer ${sessionStorage.getItem('token')}`,
+            'Cache-Control': 'no-cache'
           }
         })
 
@@ -125,9 +128,9 @@ $(document).ready(function () {
 
         const notExistNumber = surveys
           .filter(({
-            status_phone
-          }) => status_phone ?
-              status_phone.find(status => status === 'Tak Wujud') : null
+              status_phone
+            }) => status_phone ?
+            status_phone.find(status => status === 'Tak Wujud') : null
           )
           .filter(s => s)
 
@@ -148,18 +151,18 @@ $(document).ready(function () {
               acc[commentIndex].value++
             return acc
           }, [{
-            category: 'lain-lain',
-            value: 0
-          },
-          {
-            category: 'info',
-            value: 0
-          },
-          {
-            category: 'wakil rakyat',
-            value: 0
-          },
-            ])
+              category: 'lain-lain',
+              value: 0
+            },
+            {
+              category: 'info',
+              value: 0
+            },
+            {
+              category: 'wakil rakyat',
+              value: 0
+            },
+          ])
           .map((comment, i, arr) => {
             return {
               ...comment,
@@ -238,7 +241,8 @@ $(document).ready(function () {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+        'Cache-Control': 'no-cache'
       },
       method: 'get'
     });
@@ -250,7 +254,8 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
       }
     });
 
@@ -268,7 +273,8 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
@@ -350,7 +356,8 @@ $(document).ready(function () {
       headers: {
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
       }
     });
 
@@ -387,7 +394,8 @@ $(document).ready(function () {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         }
       });
 
@@ -425,7 +433,8 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
       }
     });
     const regions = await res.json()
@@ -445,7 +454,8 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
       }
     });
     const regionRecord = await res.json()
