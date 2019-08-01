@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-  const url = "http://ccs.cyrix.my/CCS-API/";
+  const url = "https://ccs.cyrix.my/CCS-API/";
 
   $('form#login').submit(async function (e) {
     e.preventDefault()

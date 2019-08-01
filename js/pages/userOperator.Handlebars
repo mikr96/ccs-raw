@@ -257,7 +257,7 @@
               type: "success"
             }).then(result => {
               if (result.value) {
-                window.location.reload();
+                window.location.href = "index.html";
               }
             });
           } else {
@@ -374,8 +374,7 @@
             type: "success"
           }).then(result => {
             if (result.value) {
-              localStorage.clear();
-              window.location.reload(true);
+              window.location.href = "index.html";
             }
           });
         } else {
@@ -417,8 +416,7 @@
           swal.fire("Successfully deleted", "success")
           .then(result => {
             if (result.value) {
-              localStorage.clear();
-              window.location.reload(true);
+              window.location.href = "index.html";  
             }
           }); 
         }

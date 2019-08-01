@@ -9,7 +9,7 @@ $(document).ready(function () {
     window.location.href = "js/pages/page-login.html"
   });
 
-  const url = "http://ccs.cyrix.my/CCS-API/";
+  const url = "https://ccs.cyrix.my/CCS-API/";
 
   var role = sessionStorage.getItem("role");
 
@@ -356,7 +356,6 @@ $(document).ready(function () {
 
     const ques = await quesRes.json();
     var soalan = JSON.parse(ques.questions);
-    console.log(ques);
     var gender = survey[0].gender;
 
     if (gender === "Male") {
@@ -430,7 +429,6 @@ $(document).ready(function () {
       }
     });
     const regions = await res.json()
-    console.log(regions)
     var html = Template.templates.result({
       regions,
       url
@@ -453,7 +451,6 @@ $(document).ready(function () {
     const regionRecord = await res.json()
     var status = 0
     const successSurveys = regionRecord.filter(region => status === region.status);
-    console.log(successSurveys)
     var html = Template.templates.surveyRecord({
       successSurveys,
       url

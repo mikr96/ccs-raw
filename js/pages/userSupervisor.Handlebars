@@ -191,7 +191,7 @@
             region_id: null
           });
 
-          console.log(formData);
+  ;
 
           const accountCreate = await fetch(`{{url}}registration`, {
             method: "post",
@@ -265,7 +265,6 @@
         region_id: 0,
         set_id: 0
       });
-      console.log(formData)
       const accountCreate = await fetch(`{{url}}profile/${username}/edit`, {
         method: "post",
         headers: {
@@ -276,7 +275,6 @@
         body: formData
       });
       const created = await accountCreate.json();
-      console.log(created);
       if (created.status) {
         Swal.fire({
           title: "Congratulation",
