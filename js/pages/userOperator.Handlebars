@@ -259,7 +259,7 @@
               type: "success"
             }).then(result => {
               if (result.value) {
-                window.location.href = "index.html";
+                window.location.reload(true);
               }
             });
           } else {
@@ -377,7 +377,7 @@
             type: "success"
           }).then(result => {
             if (result.value) {
-              window.location.href = "index.html";
+              window.location.reload(true);
             }
           });
         } else {
@@ -420,7 +420,7 @@
           swal.fire("Successfully deleted", "success")
           .then(result => {
             if (result.value) {
-              window.location.href = "index.html";  
+              window.location.reload(true);  
             }
           }); 
         }

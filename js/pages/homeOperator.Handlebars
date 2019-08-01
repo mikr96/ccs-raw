@@ -163,7 +163,8 @@
         credentials: 'include',
         Accept: "application/json",
         "Content-type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
         },
         body: formData
       });

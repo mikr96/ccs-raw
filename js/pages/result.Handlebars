@@ -89,7 +89,8 @@
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         }
       });
       var regionRecord = await res.json()
