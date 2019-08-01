@@ -45,8 +45,8 @@
 												</div>
 										</div>
 										<div class="m-t-15">
-												<button id="startButton" class="btn btn-primary js-sweetalert" onclick="startSurvey()">Mula Survey</button>
-												<button id="resetButton" class="btn btn-success" onclick="startSurvey()">Reset Caller</button>
+												<button id="startButton" class="btn btn-primary js-sweetalert">Mula Survey</button>
+												<button id="resetButton" class="btn btn-success">Reset Caller</button>
 												<button id="cancelButton" class="btn btn-danger" onclick="cancelSurvey('{{{profile.username}}}')">Cancel Survey</button>
 										</div>
 								</div>
@@ -292,8 +292,8 @@
 
 	var question_response;
 
-	async function submitSurvey(){
-		try{
+	async function submitSurvey() {
+		try {
 			var time_taken = timer.getTimeValues().toString()
 			var arr = []	//question survey
 			var arr2 = [] //phonestatus
@@ -330,6 +330,15 @@
 				status: 0,
 			});
 
+			Swal.fire({
+				title: "Survey",
+				text: "Please refill the form",
+				type: "error"
+			}).then(result => {
+						if (result.value) {
+							window.location.reload();
+						}
+			});
 			var id = survey[0].id
 			const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
 				method: "post",
@@ -350,9 +359,9 @@
 					type: "success"
 				}).then(result => {
 							if (result.value) {
-								window.location.href = "index.html#home";
+								window.location.href = "index.html";
 							}
-						});
+				});
 			}
 		} catch(err) { 
 			console.log(err) }
@@ -391,7 +400,7 @@ async function cancelSurvey(name){
       const cancel = await updateStatus.json();
 
       if (cancel.status) {
-        window.location.href = "index.html#home";
+        window.location.href = "index.html";
       } else {
         Swal.fire({
           title: "Fail",
@@ -400,6 +409,7 @@ async function cancelSurvey(name){
         });
       }
     } catch (err) { 
-      console.log(err) }
-}
+      console.log(err) 
+			}
+}	
 </script>

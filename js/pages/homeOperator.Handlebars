@@ -1,6 +1,53 @@
 <style>
-  td { text-transform: lowercase; }
-  td:first-letter { text-transform: uppercase; }
+  td, h2 { text-transform: lowercase; }
+  td:first-letter, h2:first-letter { text-transform: uppercase; }
+  .card {
+    padding: 70px 10px;
+  }
+  .row-centered { text-align:center; }
+  .col-centered {
+    float:none;
+    text-align: center;
+    color: white;
+    background-color: #5A5A5A;
+    padding: 20px;
+    border: 1px solid #5A5A5A;
+    border-radius:20px;
+    margin-top: 20px;
+  }
+  .div-center {
+    margin: 20px auto;
+  }
+  .btn-survey {
+    transition: all 0.5s;
+    color: #5A5A5A;
+    background-color: white;
+    border-color: #5A5A5A;
+  }
+  .btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+  }
+
+  .btn span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+
+  .btn:hover span {
+    padding-right: 25px;
+  }
+
+  .btn:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
 </style>
 
 <!-- Listing survey by region -->
@@ -22,48 +69,19 @@
 <div class="row clearfix">
   <div class="col-lg-12">
     <div class="card">
-      <div class="header">
-        <h2>List of Surveys</h2>
+      <div class="row row-centered">
+        <div class="col-md-3 col-centered offset-md-3" style="margin-right:20px;">
+          <h2 id="NOS">{{{len surveys}}}</h2>
+          <h6>Survey Available</h6>
+        </div>
+        <div class="col-md-3 col-centered">
+          <h2>{{{survey.region_name}}}</h2>
+          <h6>Assigned Region</h6>
+        </div>
       </div>
-      <div class="body">
-        <div class="table-responsive">
-          <table class="table table-bordered table-hover table-striped datatable" id="addrowExample">
-            <thead>
-              <tr style="text-align: center;">
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Race</th>
-                <th>Address</th>
-                <th>Phone No.</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each surveys}}
-                <tr class="gradeA" style="text-transform: capitalize;">
-                  <td>{{name}}</td>
-                  <td style="text-align: center;">{{gender}}</td>
-                  <td style="text-align: center;">{{race}}</td>
-                  <td>{{address}}</td>
-                  <td style="text-align: center;">{{phone}}</td>
-                  <td class="actions" style="text-align: center;">
-                    <button class="btn btn-sm btn-pure btn-success on-success m-r-5 button-continue"
-                      data-toggle="tooltip" onclick="survey('{{{name}}}')">Start Survey</button>
-                  </td>
-                </tr>
-              {{/each}}
-            </tbody>
-            <tfoot>
-              <tr style="text-align: center;">
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Race</th>
-                <th>Address</th>
-                <th>Phone No.</th>
-                <th>Action</th>
-              </tr>
-            </tfoot>
-          </table>
+      <div class="row row-centered">
+        <div class="col-md-6 div-center">
+          <button id="SS" class="btn btn-survey btn-block" onclick="survey('{{{survey.name}}}')"><span>Start Survey</span></button>
         </div>
       </div>
     </div>
@@ -74,6 +92,44 @@
   $(document).ready(() => {
     $("table.datatable").dataTable();
   })
+
+  const len = {{{ len surveys }}}
+  if(!len) {
+    $("#SS").prop("disabled", true);
+  }
+
+  async function loop(options) {
+    return await new Promise(resolve => {
+      var result;
+      const interval = setInterval(() => {
+        try {
+          fetch(`{{url}}surveys/region`, options)
+          .then(response => response.json())
+          .then(data => {
+            result = data;
+          })
+          .catch(error => console.log(error));
+          var size = Object.keys(result).length;
+          var random = Math.floor((Math.random() * Number(size-1)) + 1);
+          if (size != $("#NOS").text()) {
+            $("#NOS").replaceWith(`<h2 id="NOS">${size}</h2>`);
+            $("#SS").attr("onclick",`survey(${result[random].name})`);
+          }
+        } catch (err) {
+          resolve(err);
+        }
+      }, 3000);
+    });
+  }
+
+  var options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`
+      }
+  };
+  var bar = loop(options);
 
   async function survey(name) {
     try {
@@ -101,7 +157,6 @@
         status_phone: null,
         status: 1
       });
-      console.log(formData)
       const updateStatus = await fetch(`{{url}}survey/${id}/edit`, {
         method: "post",
         headers: {

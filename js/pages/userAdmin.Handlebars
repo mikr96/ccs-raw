@@ -112,7 +112,6 @@
             region_id: 0
           });
 
-          console.log(formData)
           const accountCreate = await fetch(`{{url}}registration`, {
             method: "post",
             headers: {
@@ -123,7 +122,6 @@
           });
 
           const created = await accountCreate.json();
-          console.log(created)
           if (created.insertstatus) {
             Swal.fire({
               title: "Congratulation",
@@ -186,7 +184,6 @@
         region_id: 0,
         set_id: 0
       });
-      console.log(formData)
       const accountCreate = await fetch(`{{url}}profile/${username}/edit`, {
         method: "post",
         headers: {
@@ -198,7 +195,6 @@
       });
       
       const created = await accountCreate.json();
-      console.log(created)
         if (created.status) {
           Swal.fire({
             title: "Congratulation",
