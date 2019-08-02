@@ -137,7 +137,8 @@
         headers: {
           'Authorization': `bearer ${sessionStorage.getItem('token')}`,
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache'
         },
         body: JSON.stringify({
           password1,
@@ -197,7 +198,8 @@
             method: "post",
             headers: {
               Accept: "application/json",
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              'Cache-Control': 'no-cache'
             },
             body: formData
           });
@@ -270,7 +272,8 @@
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         },
         body: formData
       });
@@ -318,7 +321,8 @@
           headers: {
             Accept: "application/json",
             "Content-type": "application/json",
-            Authorization: `bearer ${sessionStorage.getItem("token")}`
+            Authorization: `bearer ${sessionStorage.getItem("token")}`,
+            'Cache-Control': 'no-cache'
           }
 
         });

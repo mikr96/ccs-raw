@@ -82,14 +82,14 @@
 <script>
   $("#bottomCard").hide()
   async function regionSelection(e) {
-    $('#graphContainer').fadeOut(1000)
     sessionStorage.setItem("region_id",e.target.value)
     var region_id = e.target.value;
       const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `bearer ${sessionStorage.getItem("token")}`
+          Authorization: `bearer ${sessionStorage.getItem("token")}`,
+          'Cache-Control': 'no-cache'
         }
       });
       var regionRecord = await res.json()
@@ -138,6 +138,7 @@
       }
       }
     $('#graphContainer').fadeIn(1000)
+    $("#bottomCard").show()
   } 
 
   function ConvertToCSV(objArray) {
