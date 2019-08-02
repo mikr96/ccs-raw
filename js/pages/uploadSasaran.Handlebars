@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/css/spinner.css">
 <div class="row clearfix">
   <div class="col-lg-12 col-md-12">
     <div class="card">
@@ -8,114 +9,132 @@
         <div class="body">
           <input type="file" class="dropify" id="file" data-allowed-file-extensions="xls xlsx csv">
           <div class="d-flex justify-content-end my-2">
-            <input type="submit" value="Submit" class="btn btn-info">
+            <button type="submit" class="btn btn-info">
+              Submit
+            </button>
           </div>
         </div>
       </form>
     </div>
   </div>
 </div>
+<div class="warning-message">
+  <div class="message-content">
+    Please wait while data is processing...
+  </div>
+</div>
 
 <script>
   $('.dropify').dropify()
 
-  var csvData = []
+var csvData = []
 
-  $("#file").change(function(e){
-    if(e.target.files.length){
-      var reader = new FileReader();
-      reader.onload = async function(e){
-        csvResult = e.target.result.split(/\r|\n|\r\n/);
-        const csvKeys = csvResult[0]
-          .split(',')
+$("#file").change(function (e) {
+  if (e.target.files.length) {
+    $('button.btn.btn-info').attr('disabled', '').toggleClass('spinner')
+    $('.warning-message').css('visibility', 'visible')
+    var reader = new FileReader();
+    reader.onload = async function (e) {
+      csvResult = e.target.result.split(/\r|\n|\r\n/);
+      const csvKeys = csvResult[0]
+        .split(',')
 
-        const csv = csvResult
-          .map(res => res.split(/,(?![ +])/gm))
-          .filter(arr => arr.length > 1)
+      const csv = csvResult
+        .map(res => res.split(/,(?![ +])/gm))
+        .filter(arr => arr.length > 1)
 
-        csvData = (await applyValues(csv, csvKeys))
-          .filter(d => d)
-          .filter(d => d.hasOwnProperty('alamatterkinidaerah'))
-        
-      }
-      reader.readAsText(e.target.files.item(0));
-  	}
+      csvData = (await applyValues(csv, csvKeys))
+        .filter(d => d)
+        .filter(d => d.hasOwnProperty('alamatterkinidaerah'))
 
-    const applyValues = async (arr, objects) => {
-      return new Promise(async (resolve, reject) => {
-        const values = arr.map((outer, i) => {
-          if (i > 0) {
-            let obj = {}
-            outer.forEach((inner, index, arr) => {
-              if (arr.length > 1){
-                obj[objects[index]] = inner
-              }
-            })
-            return obj
-          }
-        })
+      $('.warning-message').css('visibility', 'hidden')
+      $('button.btn.btn-info').removeAttr('disabled').toggleClass('spinner')
 
-        return resolve(values)
-      })
     }
-  });
+    reader.readAsText(e.target.files.item(0));
+  }
 
-  $('#csvForm').submit(async e => {
-    e.preventDefault()
-    if (csvData.length) {
-      const submitData = csvData.map(res => {
-        const {nama, nric, gender, age, bangsa, dun, lokaliti, alamatterkinilokaliti, alamatterkinilokaliti2, alamatterkinirumah, alamatterkiniposkod, alamatterkininegeri} = res
-        const phone = []
-        for (let i = 1; i <= 42; i++) {
-          const currPhone = res[`tel${i}`]
-          if (currPhone)
-            phone.push(currPhone)
-        }
-        return {
-          ic: nric,
-          name: nama,
-          gender: gender,
-          age: age,
-          race: bangsa,
-          region: dun,
-          location: lokaliti,
-          phone: phone,
-          address: `${_(alamatterkinirumah)}${_(alamatterkinilokaliti)}${alamatterkiniposkod} ${_(alamatterkinilokaliti2)}${alamatterkininegeri}`,
+  const applyValues = async (arr, objects) => {
+    return new Promise(async (resolve, reject) => {
+      const values = arr.map((outer, i) => {
+        if (i > 0) {
+          let obj = {}
+          outer.forEach((inner, index, arr) => {
+            if (arr.length > 1) {
+              obj[objects[index]] = inner
+            }
+          })
+          return obj
         }
       })
 
-      try {
-        const submitSurveys = await fetch('{{url}}survey/create', {
-          headers: {
-            'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          method: 'post',
-          body: JSON.stringify(submitData)
-        })
-        if (submitSurveys.status === 401){
-          Swal.fire('Ouupps', 'You are not authorized for this, pls re-login', 'error')
-          setTimeout(() => window.location = '/js/pages/page-login.html', 1000) 
-        }
-        const submitSurveysRes = await submitSurveys.json()
+      return resolve(values)
+    })
+  }
+});
 
-        if (submitSurveysRes.status) {
-          Swal.fire('Successful', 'Data inserted', 'success').then(result => {
-            if (result.value) {
-              window.location.reload()
-            }
+$('#csvForm').submit(async e => {
+  e.preventDefault()
+  if (csvData.length) {
+    $('button.btn.btn-info').attr('disabled', '').toggleClass('spinner')
+    $('.warning-message').css('visibility', 'visible')
+    const submitData = csvData.map(res => {
+      const { nama, nric, gender, age, bangsa, dun, lokaliti, alamatterkinilokaliti, alamatterkinilokaliti2, alamatterkinirumah, alamatterkiniposkod, alamatterkininegeri } = res
+      const phone = []
+      for (let i = 1; i <= 42; i++) {
+        const currPhone = res[`tel${i}`]
+        if (currPhone)
+          phone.push(currPhone)
+      }
+      return {
+        ic: nric,
+        name: nama,
+        gender: gender,
+        age: age,
+        race: bangsa,
+        region: dun,
+        location: lokaliti,
+        phone: phone,
+        address: `${_(alamatterkinirumah)}${_(alamatterkinilokaliti)}${alamatterkiniposkod} ${_(alamatterkinilokaliti2)}${alamatterkininegeri}`,
+      }
+    })
+
+    try {
+      const submitSurveys = await fetch('{{url}}survey/create', {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify(submitData)
+      })
+      if (submitSurveys.status === 401) {
+        Swal.fire('Ouupps', 'You are not authorized for this, pls re-login', 'error')
+        setTimeout(() => window.location = '/js/pages/page-login.html', 1000)
+      }
+      const submitSurveysRes = await submitSurveys.json()
+
+      if (submitSurveysRes.status) {
+        Swal.fire('Successful', 'Data inserted', 'success').then(result => {
+          if (result.value) {
+            window.location.reload()
+          }
         });
       }
-        else {
-          Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
-        }
-      } catch(err) {
-        console.log(err)
+      else {
         Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
       }
+      $('.warning-message').css('visibility', 'hidden')
+      $('button.btn.btn-info').removeAttr('disabled').toggleClass('spinner')
+    } catch (err) {
+      console.log(err)
+      Swal.fire('Ouupps', 'Something went wrong please try again', 'error')
+      $('.warning-message').css('visibility', 'hidden')
+      $('button.btn.btn-info').removeAttr('disabled').toggleClass('spinner')
     }
-  })
+  }
+})
 
-  var _ = str => str ? `${str}, ` : '';
+var _ = str => str ? `${str}, ` : '';
 </script>

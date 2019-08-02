@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:700&display=swap');
+
+:root {
+  --size:20px;
+}
+
+.spinner {
+  position: relative;
+  color: #ff000000 !important;
+}
+
+.spinner::after {
+  content: '';
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: 2px solid inherit;
+  border-top-color: #fff;
+  border-right-color: #fff;
+  left:0;
+  right:0;
+  margin: 0 auto;
+  animation: spinner .6s linear infinite;
+}
+
+.spinner::after {
+  border: none;
+  border-top: 2px solid #fff;
+}
+
+.btn.btn-info:active {
+	transform: scale(1.1) translate(0px, 2px);
+  box-shadow: inset 4px 4px 5px 0px rgba(0, 0, 0, 0.20);
+}
+
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
+.warning-message {
+  visibility: hidden;
+  position: absolute;
+  z-index: 10;
+  margin: 50% auto;
+  height: 20%;
+  top: 40%;
+  margin: 0 auto;
+  width: 97%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.20);
+  animation: blink 1s linear 1s infinite alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.warning-message .message-content {
+  position: relative;
+  color: rgb(71, 25, 25);
+  font-size: 1.3rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
