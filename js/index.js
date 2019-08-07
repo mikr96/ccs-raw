@@ -101,7 +101,7 @@ $(document).ready(function () {
           }
         );
 
-        const surveysRes = await fetch(`${url}surveys`, {
+        const analyticsRes = await fetch(`${url}surveys/analytics`, {
           method: 'get',
           headers: {
             'Content-Type': 'application/json',
@@ -111,100 +111,41 @@ $(document).ready(function () {
           }
         })
 
-        const surveys = await surveysRes.json()
+        const analytics = await analyticsRes.json()
 
         // format from 1000 => 1,000
-        const totalSurveys = surveys.length
+        const totalSurveys = analytics.total
 
         const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
 
-        const newSurveys = surveys.filter(survey => survey.status === 2)
+        const newSurveys = analytics.newSurveys
 
-        const formattedNewSurveysNumber = numeral(newSurveys.length).format('0 a')
+        const formattedNewSurveysNumber = numeral(newSurveys).format('0 a')
 
-        const NoNumber = surveys.filter(({
-          phone
-        }) => !phone.length)
+        const noNumber = analytics.noNumberSurveys
 
-        const notExistNumber = surveys
-          .filter(({
-              status_phone
-            }) => status_phone ?
-            status_phone.find(status => status === 'Tak Wujud') : null
-          )
-          .filter(s => s)
+        const notExistNumber = analytics.notExistSurveys
 
-        const formattedNotExistNumber = numeral(notExistNumber.length).format('0 a')
+        const formattedNotExistNumber = numeral(notExistNumber).format('0 a')
 
-        const formattedNoNumber = numeral(NoNumber.length).format('0 a')
+        const formattedNoNumber = numeral(noNumber).format('0 a')
 
-        const comments = surveys
-          .map(({
-            comment
-          }) => comment ? comment[0] : null)
-          .filter(comment => comment)
-          .reduce((acc, comment) => {
-            const commentIndex = acc.findIndex(({
-              category
-            }) => category == comment)
-            if (commentIndex > -1)
-              acc[commentIndex].value++
-            return acc
-          }, [{
-              category: 'lain-lain',
-              value: 0
-            },
-            {
-              category: 'info',
-              value: 0
-            },
-            {
-              category: 'wakil rakyat',
-              value: 0
-            },
-          ])
-          .map((comment, i, arr) => {
+        const analyticsComments = analytics.comments
+        const comments = Object.keys(analyticsComments)
+          .map(keySurvey => {
             return {
-              ...comment,
-              percent: (comment.value / arr.length * 100).toFixed(2) + '%'
+              category: keySurvey,
+              value: analyticsComments[keySurvey],
+              percent: ((analyticsComments[keySurvey] / totalSurveys) * 100).toFixed(2) + '%'
             }
           })
 
-        const surveyByState = surveys.map(
-          survey => {
-            const partialState = survey.address.split(',').slice(-1)[0].trim()
-            return partialState
-              .split(' ')
-              .reduce((acc, state) => {
-                if (state.match(/[A-Za-z]+/g))
-                  return acc += state + ' '
-                return acc
-              }, '')
-          }
-        )
-
-        const surveyCount = surveyByState
-          .reduce((acc, state) => {
-            let stateIndex = acc.findIndex(name => name.state === state)
-
-            if (stateIndex === -1) {
-              return [
-                ...acc,
-                {
-                  state: state,
-                  value: 1
-                }
-              ]
-            }
-
-            acc[stateIndex].value += 1
-
-            return [...acc]
-          }, [])
-
-        const top3 = surveyCount
-          .sort((a, b) => a.value > b.value)
-          .slice(0, 3)
+        const analyticsTop3 = analytics.top3
+        const top3 = Object.keys(analyticsTop3)
+          .map(keyState => ({
+            state: keyState,
+            value: analyticsTop3[keyState],
+          }))
 
         var html = Template.templates.home({
           totalProfiles,
