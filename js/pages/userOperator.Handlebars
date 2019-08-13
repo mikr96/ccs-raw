@@ -2,6 +2,7 @@
   td, select#race { text-transform: lowercase; }
   td:first-letter { text-transform: uppercase; }
   select#race:first-letter { text-transform: uppercase; }
+  #addrowExample_filter, #editRegions { float: right; }
 
 </style>
 <div class="block-header">
@@ -25,13 +26,21 @@
         <h2>List of Operators</h2>
       </div>
       <div class="body">
-        <button id="add" onclick="add()" class="btn btn-primary m-b-15" type="button">
-          <i class="icon wb-plus" aria-hidden="true"></i> New Operator
-        </button>
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <button id="add" onclick="add()" class="btn btn-primary m-b-15" type="button">
+              <i class="icon wb-plus" aria-hidden="true"></i> New Operator
+            </button>    
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <button id="editRegions" class="btn m-b-15" onclick="editRegions()" type="button" disabled>Edit Region</button>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table table-bordered table-hover table-striped datatable" id="addrowExample">
             <thead>
               <tr>
+                <th></th>
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Age</th>
@@ -40,12 +49,13 @@
                 <th>Laptop ID</th>
                 <th>Region</th>
                 <th>Set Name</th>
-                <th>Actions</th>
+                <th style="text-align: center;">Actions</th>
               </tr>
             </thead>
             <tbody>
               {{#each oper}}
                 <tr class="gradeA">
+                  <td><input type="checkbox" name="{{username}}"></td>
                   <td>{{fullname}}</td>
                   <td>{{username}}</td>
                   <td>{{age}}</td>
@@ -72,6 +82,7 @@
             </tbody>
             <tfoot>
               <tr>
+                <th></th>
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Age</th>
@@ -80,7 +91,7 @@
                 <th>Laptop ID</th>
                 <th>Region</th>
                 <th>Set Name</th>
-                <th>Actions</th>
+                <th style="text-align: center;">Actions</th>
               </tr>
             </tfoot>
           </table>
@@ -124,6 +135,18 @@
 <script>
 
   $(document).ready(function() {
+    $('#addrowExample').click(function(){
+        var val = [];
+        $(':checkbox:checked').each(function(i){
+          val[i] = $(this).val();
+        });
+        if(val.length < 1) {
+          $("#editRegions").attr("disabled", true);
+          console.log("tak lepas")
+        } else {
+          $("#editRegions").attr("disabled", false);
+        }
+      }); 
     const passwordForm = $('form#changePasswordForm')
     const passwordButton = $('button.passwordModalButton')
 
@@ -178,6 +201,74 @@
     $("table.datatable").dataTable();
   })
 
+
+  async function editRegions() {
+    try {
+      var val = [];
+      $(':checkbox:checked').each(function(i){
+        val[i] = $(this).attr('name');
+      });
+      const { value } = await Swal.fire({
+          title: 'Add new operator',
+          html: '<br/>' + `
+          <select name="region_id" id="region_id" class="form-control">
+          <option value="">-- SELECT REGION --</option>
+          {{#each regions}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select><br/>`,
+          focusConfirm: false,
+          preConfirm: () => {
+            return [
+              document.getElementById('region_id').value
+            ]
+          }
+        });
+
+      if (value) {
+        try {
+          const region_id = value[0]; 
+          var formData = JSON.stringify({
+            users: val
+          });
+          const assigning = await fetch(`{{url}}profiles/assign_region/${region_id}`, {
+            method: "post",
+            headers: {
+              Authorization: `bearer ${sessionStorage.getItem("token")}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              'Cache-Control': 'no-cache'
+            },
+            body: formData
+          });
+
+          const assigned = await assigning.json();
+
+          if (assigned.status) {
+            Swal.fire({
+              title: "Congratulation",
+              text: "Successfully Assigned",
+              type: "success"
+            }).then(result => {
+              if (result.value) {
+                window.location.reload(true);
+              }
+            });
+          } else {
+            Swal.fire({
+              title: "Fail",
+              text: "Please re-assigned the regions",
+              type: "error"
+            });
+          }
+        } catch (err) {
+          Swal.fire("Something went wrong", err.message, "error");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function add() {
 
