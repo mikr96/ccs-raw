@@ -32,7 +32,7 @@
 
       var token = sessionStorage.getItem("token");
       if (token == null) {
-        window.location.href = "js/pages/page-login.html";
+        window.location.href = "page-login.html";
       }
 
       console.log(token);

@@ -185,7 +185,7 @@
 
       if (changeRes.status === 401)
         return Swal.fire('Ouupss..', 'Not Authorized', 'error')
-          .then(() => window.location.href = 'js/pages/page-login.html')
+          .then(() => window.location.href = 'page-login.html')
         
 
       const res = await changeRes.json()

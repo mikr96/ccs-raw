@@ -74,7 +74,7 @@ $(document).ready(function () {
 
         if (res.status === 401) {
           await Swal.fire('Oouppss...', 'Please re-login', 'error')
-          return window.location.href = '/js/pages/page-login.html'
+          return window.location.href = '/page-login.html'
         }
 
         if (res.status !== 200)

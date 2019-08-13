@@ -111,7 +111,7 @@ $('#csvForm').submit(async e => {
       })
       if (submitSurveys.status === 401) {
         Swal.fire('Ouupps', 'You are not authorized for this, pls re-login', 'error')
-        setTimeout(() => window.location = '/js/pages/page-login.html', 1000)
+        setTimeout(() => window.location = '/page-login.html', 1000)
       }
       const submitSurveysRes = await submitSurveys.json()
 

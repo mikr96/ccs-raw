@@ -153,7 +153,7 @@ async function questionDistributionData(surveys = [], url) {
 
 //       if (operatorRes.status === 401) {
 //         await Swal.fire('Ouppss..', 'Please Re-Login', 'error')
-//         return window.location.href = '/js/pages/page-login.html'
+//         return window.location.href = '/page-login.html'
 //       }
 
 //       const {
