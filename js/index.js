@@ -1,12 +1,12 @@
 $(document).ready(function () {
   var token = sessionStorage.getItem("token");
   if (token == null) {
-    window.location.href = "js/pages/page-login.html";
+    window.location.href = "page-login.html";
   }
 
   $('#logout').click(() => {
     sessionStorage.clear()
-    window.location.href = "js/pages/page-login.html"
+    window.location.href = "page-login.html"
   });
 
   const url = "https://ccs.cyrix.my/CCS-API/";
