@@ -91,11 +91,12 @@ const questionGroups = {
 async function questionDistributionData(surveys = [], url) {
   const result = surveys.map(async ({
     question_survey,
-    operator_id
+    operator_id,
+    set_id
   }) => {
     if (!operator_id) return null
     try {
-      const setNumber = await getSetNumber(url, operator_id)
+      const setNumber = set_id
 
       if (question_survey && (setNumber === 1 || setNumber === 2)) {
         const surveyQuestions = JSON.parse(question_survey)
@@ -130,39 +131,39 @@ async function questionDistributionData(surveys = [], url) {
       acc[r] += 1
     return acc
   }, {
-    W: 0,
-    GW: 0,
-    G: 0,
-    GB: 0,
-    B: 0
-  })
+      W: 0,
+      GW: 0,
+      G: 0,
+      GB: 0,
+      B: 0
+    })
 
   return totalOutcomes
 }
 
-async function getSetNumber(url, operator_id) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const operatorRes = await fetch(`${url}profile/${operator_id}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          'Cache-Control': 'no-cache'
-        }
-      })
+// async function getSetNumber(url, operator_id) {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       const operatorRes = await fetch(`${url}profile/${operator_id}`, {
+//         headers: {
+//           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+//           'Cache-Control': 'no-cache'
+//         }
+//       })
 
-      if (operatorRes.status === 401) {
-        await Swal.fire('Ouppss..', 'Please Re-Login', 'error')
-        return window.location.href = '/js/pages/page-login.html'
-      }
+//       if (operatorRes.status === 401) {
+//         await Swal.fire('Ouppss..', 'Please Re-Login', 'error')
+//         return window.location.href = '/js/pages/page-login.html'
+//       }
 
-      const {
-        data: [operator1]
-      } = await operatorRes.json()
+//       const {
+//         data: [operator1]
+//       } = await operatorRes.json()
 
-      return resolve(operator1.set_id)
-    } catch (err) {
-      console.error(err)
-      return reject(err)
-    }
-  })
-}
+//       return resolve(operator1.set_id)
+//     } catch (err) {
+//       console.error(err)
+//       return reject(err)
+//     }
+//   })
+// }

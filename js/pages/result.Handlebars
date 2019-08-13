@@ -9,6 +9,16 @@
     background-color: #3e4c77;
     border-color: #1a2d3d; /*set the color you want here*/
 }
+.ct-label {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 <div class="block-header">
   <div class="row">
@@ -37,7 +47,7 @@
   </div>
 </div>
 <div class="row m-b-20" id="graphContainer">
-  <div class="col-lg-12">
+  <div class="col-md-12">
     <div class="card">
       <div class="body">
         <div id="cardSurvey" class="row" style="display: hide;">
@@ -51,29 +61,44 @@
         </div>
         <br/>
         <div class="row m-b-20">
-          <div class="col-md-6">
-            <div id="survey-chart" class="status-survey"></div> <!-- Status call percentage -->
-          </div>
-          <div class="col-md-6">
-            <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div id="phone-chart" class="status-phone"></div> <!-- Status call percentage -->
-          </div>
-          <div class="col-md-6">
-            <div id="race-chart" class="status-race"></div> <!-- Status call percentage -->
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div id="questionDist-chart" class="status-questionDist-chart"></div>
+          <div class="col-md-12">
+            <div class="flex-center">
+              <div id="survey-chart" class="status-survey"></div> <!-- Status call percentage -->
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div id="question-chart" class="status-question"></div>
+            <div class="flex-center">
+              <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="flex-center">
+              <div id="phone-chart" class="status-phone"></div> <!-- Status call percentage -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="flex-center">
+              <div id="race-chart" class="status-race"></div> <!-- Status call percentage -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="flex-center">
+              <div id="questionDist-chart" class="status-questionDist-chart"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="flex-center">
+              <div id="question-chart" class="status-question"></div>
           </div>
         </div>
       </div>
@@ -187,33 +212,21 @@
 
     var data = {
       labels: ['Passed Surveys', 'Pending Surveys'],
-      series: [done, undone]
+      series: [{name: 'Passed Surveys', value: done}, {name: 'Pending Surveys', value: undone}]
     };
 
-    var options = {
-      labelInterpolationFnc: function(value) {
-        return value[0]
-      }
-    };
-
-    var responsiveOptions = [
-      ['screen and (min-width: 640px)', {
-        chartPadding: 30,
-        labelOffset: 100,
-        labelDirection: 'explode',
-        labelInterpolationFnc: function(value) {
-          return value;
-        }
-      }],
-      ['screen and (min-width: 1024px)', {
-        labelOffset: 60,
-        chartPadding: 20
-      }]
-    ];
+    const options = {
+      labelInterpolationFnc: value => interpolation(value, data.series),
+      chartPadding: 20,
+      labelOffset: 20,
+      labelDirection: 'explode',
+      width: '350px',
+      height: '250px'
+    }
 
     var sum = function(a, b) { return a + b };
 
-    new Chartist.Pie('.status-survey', data, options, responsiveOptions);
+    new Chartist.Pie('.status-survey', data, options);
 
     $(".status-survey").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Survey Status</label>')
   }
@@ -242,32 +255,20 @@
     })
 
     var data = {
-      labels: ['Info', 'Wakil Rakyat', 'Lain-Lain'],
-      series: [info, wr, dll]
+      labels: ['Info', 'Wakil Rakyat', 'dll'],
+      series: [{name: 'Info', value: info}, {name: 'Wakil Rakyat', value: wr}, {name: 'dll', value: dll}]
     }
 
-    var options = {
-      labelInterpolationFnc: function(value) {
-        return value[0]
-      }
+    const options = {
+      labelInterpolationFnc: value => interpolation(value, data.series),
+      chartPadding: 20,
+      labelOffset: 20,
+      labelDirection: 'explode',
+      width: '350px',
+      height: '250px'
     }
 
-    var responsiveOptions = [
-      ['screen and (min-width: 640px)', {
-        chartPadding: 30,
-        labelOffset: 100,
-        labelDirection: 'explode',
-        labelInterpolationFnc: function(value) {
-          return value;
-        }
-      }],
-      ['screen and (min-width: 1024px)', {
-        labelOffset: 60,
-        chartPadding: 20
-      }]
-    ]
-
-    new Chartist.Pie('.status-comment', data, options, responsiveOptions)
+    new Chartist.Pie('.status-comment', data, options)
 
     $(".status-comment").append('<label for="comment-chart" class="col-form-label" style="display: block; text-align:center;">Comment Record</label>')
   }
@@ -307,31 +308,19 @@
 
     var data = {
       labels: ['Salah Nombor', 'Tidak Wujud', 'Hubungi Kemudian', "Tak Berminat"],
-      series: [sn, tw, hk, tm]
+      series: [{name: 'Salah Nombor', value: sn}, {name: 'Tidak Wujud', value: tw}, {name:'Hubungi Kemudian', value: hk}, {name: 'Tak Berminat', value: tm}]
     }
 
-    var options = {
-      labelInterpolationFnc: function(value) {
-        return value[0]
-      }
+    const options = {
+      labelInterpolationFnc: value => interpolation(value, data.series),
+      chartPadding: 20,
+      labelOffset: 20,
+      labelDirection: 'explode',
+      width: '350px',
+      height: '250px'
     }
 
-    var responsiveOptions = [
-      ['screen and (min-width: 640px)', {
-        chartPadding: 30,
-        labelOffset: 100,
-        labelDirection: 'explode',
-        labelInterpolationFnc: function(value) {
-          return value;
-        }
-      }],
-      ['screen and (min-width: 1024px)', {
-        labelOffset: 60,
-        chartPadding: 20
-      }]
-    ]
-
-    new Chartist.Pie('.status-phone', data, options, responsiveOptions)
+    new Chartist.Pie('.status-phone', data, options)
 
     $(".status-phone").append('<label for="phone-chart" class="col-form-label" style="display: block; text-align:center;">Phone Record</label>')
   }
@@ -362,36 +351,19 @@
     return acc
     }, {labels: [], series: []})
 
+    const options = {
+      labelInterpolationFnc: value => interpolation(value, raceData.series),
+      chartPadding: 20,
+      labelOffset: 20,
+      labelDirection: 'explode',
+      width: '350px',
+      height: '250px'
+    }
+
     new Chartist.Pie(
       '#race-chart', 
       raceData, 
-      {
-        labelInterpolationFnc: function(value) {
-          const survey = raceData.series.find(accSurvey => accSurvey.name === value)
-          const amount = survey.value
-
-          const total = raceData.series.reduce((acc, a) => acc + a.value, 0)
-          return value + ' ' + Math.round(amount / total * 100) + '%'
-        }
-      },
-      [
-        ['screen and (min-width: 640px)', {
-          chartPadding: 30,
-          labelOffset: 100,
-          labelDirection: 'explode',
-          labelInterpolationFnc: function(value) {
-            const survey = raceData.series.find(accSurvey => accSurvey.name === value)
-            const amount = survey.value
-
-            const total = raceData.series.reduce((acc, a) => acc + a.value, 0)
-            return value + ' ' + Math.round(amount / total * 100) + '%'
-          }
-        }],
-        ['screen and (min-width: 1024px)', {
-          labelOffset: 60,
-          chartPadding: 20
-        }]
-      ]
+      options
     )
         $(".status-race").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Race Distribution</label>')
   }
@@ -530,10 +502,12 @@
     })
 
     const options = {
-      labelInterpolationFnc: value => interpolation(value),
+      labelInterpolationFnc: value => interpolation(value, graphQuestData.series),
       chartPadding: 20,
       labelOffset: 20,
       labelDirection: 'explode',
+      width: '350px',
+      height: '250px'
     }
 
     new Chartist.Pie(
@@ -542,15 +516,19 @@
       options
     )
 
-    function interpolation(value) {
-      const survey = graphQuestData.series.find(accSurvey => accSurvey.name === value)
-      const amount = survey.value
-      const total = graphQuestData.series.reduce((acc, a) => acc + a.value, 0)
-      if (total===0 && amount===0) return ''
-      return value + ' ' + Math.round(amount / total * 100) + '%'
-    }
 
     $(".status-questionDist-chart").append('<label class="col-form-label" style="display: block; text-align:center;">Question Group Distribution</label>')
+  }
+
+  function interpolation(value, data) {
+    const survey = data.find(accSurvey => {
+      return accSurvey.name === value
+    })
+
+    const amount = survey.value
+    const total = data.reduce((acc, a) => acc + a.value, 0)
+    if (total===0 || amount===0) return ''
+    return value + ' ' + Math.round(amount / total * 100) + '%, ' + amount
   }
 
 
