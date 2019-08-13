@@ -113,6 +113,31 @@ $(document).ready(function () {
 
         const analytics = await analyticsRes.json()
 
+        const RegionsRes = await fetch(`${url}regions`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `bearer ${sessionStorage.getItem("token")}`,
+            'Cache-Control': 'no-cache'
+          }
+        });
+        const regions = await RegionsRes.json()
+        const regionName = regions.map(res => {
+          return res.name
+        })
+
+        var size = [];
+        regions.forEach(function (item, i) {
+          get(item).then(result => {
+            size.push({
+              id: i,
+              surveys: result,
+              regionName: regionName[i]
+            })
+          });
+        });
+        console.log(size)
+
         // format from 1000 => 1,000
         const totalSurveys = analytics.total
 
@@ -147,23 +172,41 @@ $(document).ready(function () {
             value: analyticsTop3[keyState],
           }))
 
-        var html = Template.templates.home({
-          totalProfiles,
-          url,
-          top3,
-          formattedTotalSurveys,
-          formattedNoNumber,
-          comments,
-          formattedNotExistNumber,
-          formattedNewSurveysNumber
-        });
-        $("#root")
-          .html(html)
-          .fadeIn(1000);
+        setTimeout(() => {
+          $('#main-content').toggleClass('lds-dual-ring')
+          var html = Template.templates.home({
+            totalProfiles,
+            url,
+            top3,
+            formattedTotalSurveys,
+            formattedNoNumber,
+            comments,
+            formattedNotExistNumber,
+            formattedNewSurveysNumber,
+            size
+          });
+          $("#root")
+            .html(html)
+            .fadeIn(1000);
+        }, 8000)
+        $('#main-content').toggleClass('lds-dual-ring')
       } catch (err) {
         console.log(err);
       }
     }
+  }
+
+  async function get(item) {
+    var RegionRes = await fetch(`https://ccs.cyrix.my/CCS-API/surveys/statistics/${item.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
+      }
+    });
+    var regionRecord = await RegionRes.json();
+    return regionRecord;
   }
 
   crossroads.addRoute('/upload-sasaran', () => {

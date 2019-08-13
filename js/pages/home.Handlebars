@@ -112,6 +112,37 @@
         </div>
       </div>
     </div>
+        <div class="card Sales_Overview">
+      <div class="header">
+        <h2>Jumlah Sasaran Mengikut Daerah</h2>
+        <ul class="header-dropdown">
+          <li> <a onclick="location.reload()" style="cursor: pointer;" data-toggle="cardloading" data-loading-effect="pulse"><i
+                class="icon-refresh"></i></a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+              aria-haspopup="true" aria-expanded="false"></a>
+            <ul class="dropdown-menu dropdown-menu-right animated bounceIn">
+              <li><a href="javascript:void(0);">Action</a></li>
+              <li><a href="javascript:void(0);">Another Action</a></li>
+              <li><a href="javascript:void(0);">Something else</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="body">
+        <div id="Sales_Overview" class="ct-chart"></div>
+        <div class="row">
+        {{#each size}}
+          <div class="col-lg-4 col-md-4" style="margin-bottom:10px;">
+            <div class="body xl-slategray text-center">
+              <h2 class="font700">{{len surveys}}</h2>
+              <span>{{regionName}}</span>
+            </div>
+          </div>
+        {{/each}}
+        </div>
+      </div>
+    </div>
   </div>
   <div class="col-lg-4 col-md-12">
     <div class="card">

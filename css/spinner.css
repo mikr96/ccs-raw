@@ -72,3 +72,31 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+.lds-dual-ring {
+  display: inline-block;
+  width: 94px;
+  height: 94px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 49px;
+  height: 49px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: 150px;
+  border-radius: 50%;
+  border: 5px solid #262626;
+  border-color: #262626 transparent #262626 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

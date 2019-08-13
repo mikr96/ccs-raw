@@ -2,9 +2,16 @@ Handlebars.registerHelper("date", function (timestamp) {
   return moment(timestamp).format('DD MMMM YYYY')
 });
 
-Handlebars.registerHelper("printRegion", function ({ data }) {
-  const { oper, regions } = data.root
-  const { index } = data
+Handlebars.registerHelper("printRegion", function ({
+  data
+}) {
+  const {
+    oper,
+    regions
+  } = data.root
+  const {
+    index
+  } = data
   const operator = oper[index]
   if (operator.region_id) {
     const region = regions.find(region => region.id === operator.region_id)
@@ -13,9 +20,16 @@ Handlebars.registerHelper("printRegion", function ({ data }) {
     return 'NULL'
 });
 
-Handlebars.registerHelper("printSet", function ({ data }) {
-  const { oper, ques } = data.root
-  const { index } = data
+Handlebars.registerHelper("printSet", function ({
+  data
+}) {
+  const {
+    oper,
+    ques
+  } = data.root
+  const {
+    index
+  } = data
   const operator = oper[index]
   if (operator.set_id > 0) {
     const set = ques.find(set => set.set_id == operator.set_id)
