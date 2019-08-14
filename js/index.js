@@ -9,7 +9,8 @@ $(document).ready(function () {
     window.location.href = "page-login.html"
   });
 
-  const url = "https://ccs.cyrix.my/CCS-API/";
+  // const url = "https://ccs.cyrix.my/CCS-API/";
+  const url = "http://CCS-API.ts/";
 
   var role = sessionStorage.getItem("role");
 
@@ -63,7 +64,45 @@ $(document).ready(function () {
         .fadeIn(1000);
     } else {
       try {
-        const res = await fetch(`${url}profiles`, {
+
+        const { totalProfiles,
+          top3,
+          formattedTotalSurveys,
+          formattedNoNumber,
+          comments,
+          formattedNotExistNumber,
+          formattedNewSurveysNumber,
+          size } = await getHomeData(url)
+
+        setTimeout(() => {
+          $('#main-content').toggleClass('lds-dual-ring')
+          var html = Template.templates.home({
+            totalProfiles,
+            url,
+            top3,
+            formattedTotalSurveys,
+            formattedNoNumber,
+            comments,
+            formattedNotExistNumber,
+            formattedNewSurveysNumber,
+            size,
+            pageTitle: 'Dashboard'
+          });
+          $("#root")
+            .html(html)
+            .fadeIn(1000);
+        }, 8000)
+        $('#main-content').toggleClass('lds-dual-ring')
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  async function getHomeData(_url) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await fetch(`${_url}profiles`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -101,112 +140,71 @@ $(document).ready(function () {
           }
         );
 
-        const analyticsRes = await fetch(`${url}surveys/analytics`, {
-          method: 'get',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `bearer ${sessionStorage.getItem('token')}`,
-            'Cache-Control': 'no-cache'
-          }
+        const { top3, formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, size } = await getAnalyticsData(url)
+
+        return resolve({
+          top3, formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, size, totalProfiles
         })
-
-        const analytics = await analyticsRes.json()
-
-        const RegionsRes = await fetch(`${url}regions`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `bearer ${sessionStorage.getItem("token")}`,
-            'Cache-Control': 'no-cache'
-          }
-        });
-        const regions = await RegionsRes.json()
-        const regionName = regions.map(res => {
-          return res.name
-        })
-
-        var size = [];
-        regions.forEach(function (item, i) {
-          get(item).then(result => {
-            size.push({
-              id: i,
-              surveys: result,
-              regionName: regionName[i]
-            })
-          });
-        });
-        console.log(size)
-
-        // format from 1000 => 1,000
-        const totalSurveys = analytics.total
-
-        const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
-
-        const newSurveys = analytics.newSurveys
-
-        const formattedNewSurveysNumber = numeral(newSurveys).format('0 a')
-
-        const noNumber = analytics.noNumberSurveys
-
-        const notExistNumber = analytics.notExistSurveys
-
-        const formattedNotExistNumber = numeral(notExistNumber).format('0 a')
-
-        const formattedNoNumber = numeral(noNumber).format('0 a')
-
-        const analyticsComments = analytics.comments
-        const comments = Object.keys(analyticsComments)
-          .map(keySurvey => {
-            return {
-              category: keySurvey,
-              value: analyticsComments[keySurvey],
-              percent: ((analyticsComments[keySurvey] / totalSurveys) * 100).toFixed(2) + '%'
-            }
-          })
-
-        const analyticsTop3 = analytics.top3
-        const top3 = Object.keys(analyticsTop3)
-          .map(keyState => ({
-            state: keyState,
-            value: analyticsTop3[keyState],
-          }))
-
-        setTimeout(() => {
-          $('#main-content').toggleClass('lds-dual-ring')
-          var html = Template.templates.home({
-            totalProfiles,
-            url,
-            top3,
-            formattedTotalSurveys,
-            formattedNoNumber,
-            comments,
-            formattedNotExistNumber,
-            formattedNewSurveysNumber,
-            size
-          });
-          $("#root")
-            .html(html)
-            .fadeIn(1000);
-        }, 8000)
-        $('#main-content').toggleClass('lds-dual-ring')
       } catch (err) {
-        console.log(err);
+        return reject(err)
       }
-    }
+    })
   }
 
-  async function get(item) {
-    var RegionRes = await fetch(`https://ccs.cyrix.my/CCS-API/surveys/statistics/${item.id}`, {
-      method: "GET",
+  async function getAnalyticsData(_url) {
+    const analyticsRes = await fetch(`${_url}surveys/analytics`, {
+      method: 'get',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `bearer ${sessionStorage.getItem('token')}`,
         'Cache-Control': 'no-cache'
       }
-    });
-    var regionRecord = await RegionRes.json();
-    return regionRecord;
+    })
+
+    const analytics = await analyticsRes.json()
+
+    // format from 1000 => 1,000
+    const totalSurveys = analytics.total
+
+    const formattedTotalSurveys = numeral(totalSurveys).format('0 a')
+
+    const newSurveys = analytics.newSurveys
+
+    const formattedNewSurveysNumber = numeral(newSurveys).format('0 a')
+
+    const noNumber = analytics.noNumberSurveys
+
+    const notExistNumber = analytics.notExistSurveys
+
+    const formattedNotExistNumber = numeral(notExistNumber).format('0 a')
+
+    const formattedNoNumber = numeral(noNumber).format('0 a')
+
+    const analyticsComments = analytics.comments
+    const comments = Object.keys(analyticsComments)
+      .map(keySurvey => {
+        return {
+          category: keySurvey,
+          value: analyticsComments[keySurvey],
+          percent: ((analyticsComments[keySurvey] / totalSurveys) * 100).toFixed(2) + '%'
+        }
+      })
+
+    const analyticsTop3 = analytics.top3
+    const top3 = Object.keys(analyticsTop3)
+      .map(keyState => ({
+        state: keyState,
+        value: analyticsTop3[keyState],
+      }))
+
+    const size = Object.keys(analytics.sizes)
+      .map(key => ({ value: analytics.sizes[key], regionName: key }))
+      .sort((a, b) => b.value - a.value)
+
+    return {
+      formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, top3, size
+    }
   }
 
   crossroads.addRoute('/upload-sasaran', () => {
@@ -422,7 +420,27 @@ $(document).ready(function () {
       }
     });
     const regions = await res.json()
-    var html = Template.templates.result({
+    const { totalProfiles,
+      top3,
+      formattedTotalSurveys,
+      formattedNoNumber,
+      comments,
+      formattedNotExistNumber,
+      formattedNewSurveysNumber,
+      size } = await getHomeData(url)
+
+    var html = Template.templates.home({
+      totalProfiles,
+      top3,
+      formattedTotalSurveys,
+      formattedNoNumber,
+      comments,
+      formattedNotExistNumber,
+      formattedNewSurveysNumber,
+      size,
+      pageTitle: 'Statistics'
+    })
+    html += Template.templates.result({
       regions,
       url
     })
