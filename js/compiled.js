@@ -20,7 +20,7 @@ this["Template"]["templates"]["home"] = Handlebars.template({"1":function(contai
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "          <div class=\"form-group\">\r\n            <label class=\"d-block\">"
+  return "          <div class=\"form-group text-capitalize\">\r\n            <label class=\"d-block\">"
     + alias4(((helper = (helper = helpers.category || (depth0 != null ? depth0.category : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"category","hash":{},"data":data}) : helper)))
     + "<span class=\"float-right\">"
     + alias4(((helper = (helper = helpers.percent || (depth0 != null ? depth0.percent : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"percent","hash":{},"data":data}) : helper)))
