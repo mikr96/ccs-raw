@@ -473,29 +473,8 @@ $(document).ready(function () {
       }
     });
     const regions = await res.json()
-    // const {
-    //   totalProfiles,
-    //   top3,
-    //   formattedTotalSurveys,
-    //   formattedNoNumber,
-    //   comments,
-    //   formattedNotExistNumber,
-    //   formattedNewSurveysNumber,
-    //   size
-    // } = await getHomeData(url)
 
-    // var html = Template.templates.home({
-    //   totalProfiles,
-    //   top3,
-    //   formattedTotalSurveys,
-    //   formattedNoNumber,
-    //   comments,
-    //   formattedNotExistNumber,
-    //   formattedNewSurveysNumber,
-    //   size,
-    //   pageTitle: 'Statistics'
-    // })
-    html = Template.templates.result({
+    var html = Template.templates.result({
       regions,
       url
     })
