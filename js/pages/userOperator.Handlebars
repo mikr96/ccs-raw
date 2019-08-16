@@ -2,7 +2,7 @@
   td, select#race { text-transform: lowercase; }
   td:first-letter { text-transform: uppercase; }
   select#race:first-letter { text-transform: uppercase; }
-  #addrowExample_filter, #editRegions { float: right; }
+  #addrowExample_filter { float: right; }
 
 </style>
 <div class="block-header">
@@ -31,9 +31,7 @@
             <button id="add" onclick="add()" class="btn btn-primary m-b-15" type="button">
               <i class="icon wb-plus" aria-hidden="true"></i> New Operator
             </button>    
-          </div>
-          <div class="col-sm-12 col-md-6">
-            <button id="editRegions" class="btn m-b-15" onclick="editRegions()" type="button" disabled>Edit Region</button>
+            <button id="editRegions" class="btn m-b-15" onclick="editRegions()" type="button" disabled>Edit Multiple Region</button>
           </div>
         </div>
         <div class="table-responsive">

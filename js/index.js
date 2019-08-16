@@ -9,8 +9,8 @@ $(document).ready(function () {
     window.location.href = "page-login.html"
   });
 
-  // const url = "https://ccs.cyrix.my/CCS-API/";
-  const url = "http://CCS-API.ts/";
+  const url = "https://ccs.cyrix.my/CCS-API/";
+  // const url = "http://CCS-API.ts/";
 
   var role = sessionStorage.getItem("role");
 
@@ -32,6 +32,7 @@ $(document).ready(function () {
 
   async function home() {
     $('#root').fadeOut(100)
+    $('#main-content').toggleClass('lds-dual-ring')
     if (role == "operator") {
       const res = await fetch(`${url}surveys/region`, {
         method: "GET",
@@ -62,36 +63,37 @@ $(document).ready(function () {
       $("#root")
         .html(html)
         .fadeIn(1000);
+      $('#main-content').toggleClass('lds-dual-ring')
     } else {
       try {
 
-        const { totalProfiles,
+        const {
+          totalProfiles,
           top3,
           formattedTotalSurveys,
           formattedNoNumber,
           comments,
           formattedNotExistNumber,
           formattedNewSurveysNumber,
-          size } = await getHomeData(url)
-
-        setTimeout(() => {
-          $('#main-content').toggleClass('lds-dual-ring')
-          var html = Template.templates.home({
-            totalProfiles,
-            url,
-            top3,
-            formattedTotalSurveys,
-            formattedNoNumber,
-            comments,
-            formattedNotExistNumber,
-            formattedNewSurveysNumber,
-            size,
-            pageTitle: 'Dashboard'
-          });
-          $("#root")
-            .html(html)
-            .fadeIn(1000);
-        }, 8000)
+          size,
+          regions
+        } = await getHomeData(url)
+        var html = Template.templates.home({
+          totalProfiles,
+          url,
+          top3,
+          formattedTotalSurveys,
+          formattedNoNumber,
+          comments,
+          formattedNotExistNumber,
+          formattedNewSurveysNumber,
+          size,
+          regions,
+          pageTitle: 'Dashboard'
+        });
+        $("#root")
+          .html(html)
+          .fadeIn(1000);
         $('#main-content').toggleClass('lds-dual-ring')
       } catch (err) {
         console.log(err);
@@ -140,10 +142,27 @@ $(document).ready(function () {
           }
         );
 
-        const { top3, formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, size } = await getAnalyticsData(url)
+        const {
+          top3,
+          formattedNewSurveysNumber,
+          formattedNoNumber,
+          formattedNotExistNumber,
+          formattedTotalSurveys,
+          comments,
+          size,
+          regions
+        } = await getAnalyticsData(url)
 
         return resolve({
-          top3, formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, size, totalProfiles
+          top3,
+          formattedNewSurveysNumber,
+          formattedNoNumber,
+          formattedNotExistNumber,
+          formattedTotalSurveys,
+          comments,
+          size,
+          regions,
+          totalProfiles
         })
       } catch (err) {
         return reject(err)
@@ -198,12 +217,32 @@ $(document).ready(function () {
         value: analyticsTop3[keyState],
       }))
 
+    const resRegion = await fetch(`${url}regions`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
+      }
+    });
+    const regions = await resRegion.json()
+
     const size = Object.keys(analytics.sizes)
-      .map(key => ({ value: analytics.sizes[key], regionName: key }))
+      .map(key => ({
+        value: analytics.sizes[key],
+        regionName: key
+      }))
       .sort((a, b) => b.value - a.value)
 
     return {
-      formattedNewSurveysNumber, formattedNoNumber, formattedNotExistNumber, formattedTotalSurveys, comments, top3, size
+      formattedNewSurveysNumber,
+      formattedNoNumber,
+      formattedNotExistNumber,
+      formattedTotalSurveys,
+      comments,
+      top3,
+      size,
+      regions
     }
   }
 
