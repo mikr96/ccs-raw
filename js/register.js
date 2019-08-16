@@ -1,5 +1,23 @@
 //Registration form
 const url = "https://ccs.cyrix.my/CCS-API/";
+
+async function onInit() {
+  const res = await fetch(url + "getRaceSurveys", {
+    method: "get",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      'Cache-Control': 'no-cache'
+    }
+  });
+
+  const race = await res.json();
+  race.forEach((data) => {
+    $('#race').append("<option value=" + data.race + ">" + data.race + "</option>")
+  })
+
+}
+
 async function registration() {
   event.preventDefault(); //prevent redirect/page refresh
 

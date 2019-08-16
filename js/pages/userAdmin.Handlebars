@@ -86,9 +86,15 @@
   
   async function add() {
     try {
+      var races = {{{json race}}}
+      var html = '<select class="form-control" id="race"><option selected value="" disabled>Select race</option>'
+      races.forEach((data) => {
+        html = html + '<option value="' + data.race + '">' + data.race + '</option>'
+      })
+      html = html + '</select><br/>'
       const { value } = await Swal.fire({
         title: 'Add new admin',
-        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="role" value="admin" readonly>',
+        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + html + '<input type="text" class="form-control" id="role" value="admin" readonly>',
         focusConfirm: false,
         preConfirm: () => {
           return [
@@ -159,10 +165,16 @@
   async function edit(username) {
     var oper = {{{ json oper }}};
   const nameList = oper.filter(profiles => username === profiles.username);
+      var races = {{{json race}}}
+    var html = `<select class="form-control" id="race"> <option selected value="${nameList[0].race}" disabled>${nameList[0].race}</option>`
+      races.forEach((data) => {
+        html = html + '<option value="' + data.race + '">' + data.race + '</option>'
+    })
+    html = html + '</select><br/>'
 
   const { value: formValues } = await Swal.fire({
     title: 'Edit admin',
-    html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"readonly><br/>' + '<input type="password" class="form-control" id="password" value="' + nameList[0].password + '" readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="' + nameList[0].gender + '" disabled>' + nameList[0].gender + '</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="' + nameList[0].race + '" disabled>' + nameList[0].race + '</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="admin" readonly>',
+    html: '<br/><input type="text" class="form-control" id="fullname" value="' + nameList[0].fullname + '"><br/>' + '<input type="text" class="form-control" id="username" value="' + nameList[0].username + '"readonly><br/>' + '<input type="password" class="form-control" id="password" value="' + nameList[0].password + '" readonly><br/>' + '<input type="age" class="form-control" id="age" value="' + nameList[0].age + '"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="' + nameList[0].gender + '" disabled>' + nameList[0].gender + '</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + html + '<input type="text" class="form-control" id="laptopId" value="' + nameList[0].laptop_id + '"><br/>' + '<input type="text" class="form-control" id="role" value="admin" readonly>',
     focusConfirm: false,
     preConfirm: () => {
       return [

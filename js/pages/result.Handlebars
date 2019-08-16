@@ -61,7 +61,7 @@
         </div>
         <br/>
         <div class="row m-b-20">
-          <div class="col-md-12">
+          <div id="survey-chart-title" class="col-md-12">
             <div class="flex-center">
               <div id="survey-chart" class="status-survey"></div> <!-- Status call percentage -->
             </div>
@@ -228,7 +228,8 @@
 
     new Chartist.Pie('.status-survey', data, options);
 
-    $(".status-survey").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Survey Status</label>')
+    //$(".status-survey").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Survey Status</label>')
+    $("#survey-chart-title").append('<h3>Survey Status:</h3>')
   }
 
   function commentChart(commentRecord) {

@@ -282,6 +282,17 @@ $(document).ready(function () {
 
     const ques = await quesRes.json();
 
+    const resRace = await fetch(url + "getRaceSurveys", {
+      method: "get",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        'Cache-Control': 'no-cache'
+      }
+    });
+
+    const race = await resRace.json();
+
     try {
       if (sessionStorage.role == "supervisor") {
         newurl = `${url}profiles/role/operator`;
@@ -309,7 +320,8 @@ $(document).ready(function () {
           regions,
           ques,
           oper,
-          url
+          url,
+          race
         });
         $("#root")
           .html(html)
@@ -319,7 +331,8 @@ $(document).ready(function () {
           oper,
           url,
           regions,
-          ques
+          ques,
+          race
         });
         $("#root")
           .html(html)
@@ -329,7 +342,8 @@ $(document).ready(function () {
           oper,
           url,
           regions,
-          ques
+          ques,
+          race
         });
         $("#root")
           .html(html)

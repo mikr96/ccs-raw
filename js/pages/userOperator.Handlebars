@@ -272,6 +272,12 @@
 
     try {
       var operator = {{{json oper}}}
+      var races = {{{json race}}}
+      var html = '<select class="form-control" id="race"><option selected value="" disabled>Select race</option>'
+      races.forEach((data) => {
+        html = html + '<option value="' + data.race + '">' + data.race + '</option>'
+      })
+      html = html + '</select><br/>'
       var used_id = operator.map(res => res.laptop_id);
       var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
       const id = laptopId.filter(function(e) {
@@ -286,7 +292,7 @@
       available_id = available_id + '</select><br/>';
       const { value } = await Swal.fire({
         title: 'Add new operator',
-        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + '<select class="form-control" id="race">' + '<option selected value="" disabled>Select race</option>' + '<option value="Melayu">Melayu</option>' + '<option value="Cina">Cina</option>' + '<option value="Penan">Penan</option>' + '<option value="Iban">Iban/Sea Dayak</option>' + '<option value="Bumiputra">Bumiputra Sarawak</option></select><br/>' + `
+        html: '<br/><input type="text" class="form-control" id="fullname" placeholder="Enter full name"><br/>' + '<input type="text" class="form-control" id="username" placeholder="Enter username"><br/>' + '<input type="password" class="form-control" id="password" placeholder="Enter password"><br/>' + '<input type="age" class="form-control" id="age" placeholder="Enter age"><br/>' + '<select class="form-control" id="gender">' + '<option selected value="" disabled>Select gender</option>' + '<option value="Male">Male</option>' + '<option value="Female">Female</option></select><br/>' + html + `
         <select name="region_id" id="region_id" class="form-control">
         <option value="">-- SELECT REGION --</option>
         {{#each regions}}
@@ -372,7 +378,7 @@
   async function edit(username) {
     try {
       var operator = {{{json oper}}}
-
+      var races = {{{json race}}}
       const nameList = operator.filter(profiles => username === profiles.username);
       var used_id = operator.map(res => res.laptop_id);
       var laptopId = ["L001","L002","L003","L004","L005","L006","L007","L008","L009","L010","L011","L012","L013","L014","L015","L016","L017","L018","L019","L020"];
@@ -391,11 +397,16 @@
 
       var token = sessionStorage.getItem("role");
       let value = null
+      var html = `<select class="form-control" id="race" ${token === 'admin' ? '': 'readonly'}> <option selected value="${nameList[0].race}" disabled>${nameList[0].race}</option>`
+      races.forEach((data) => {
+        html = html + '<option value="' + data.race + '">' + data.race + '</option>'
+      })
+      html = html + '</select><br/>'
 
       if(token === "admin") {
       value = await Swal.fire({
           title: 'Edit operator',
-          html: editForm(nameList[0], available_id, token),
+          html: editForm(nameList[0], available_id, token, html),
           focusConfirm: false,
           preConfirm: () => {
             return [
@@ -414,7 +425,7 @@
       } else {
         value = await Swal.fire({
           title: 'Edit operator',
-          html: editForm(nameList[0], available_id, token),
+          html: editForm(nameList[0], available_id, token, html),
           focusConfirm: false,
           preConfirm: () => {
             return [
@@ -518,7 +529,7 @@
     }
   }
 
-  var editForm = (nameList, available_id, role) => {
+  var editForm = (nameList, available_id, role, html) => {
     return (`
       <br/>
       <input type="text" placeholder="Full name" class="form-control" id="fullname" value="${nameList.fullname}" ${role === 'admin' ? '' : 'readonly'}>
@@ -538,7 +549,7 @@
       `}
       
       <br>
-      <input type="text" class="form-control" placeholder="Race" id="race" value="${nameList.race}" ${role === 'admin' ? '': 'readonly'}>
+      ${html}
       <br/>
       <select name="region_id" id="region_id" class="form-control">
         <option value="">-- SELECT REGION --</option>
