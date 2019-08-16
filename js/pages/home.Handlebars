@@ -1,3 +1,21 @@
+<style>
+  .region-select {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    border: 1px solid #AAA;
+    border-radius: 2px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: #444;
+    white-space: nowrap;
+    background: #eceeef ;
+    text-transform: uppercase;
+    width: 100%;
+    text-align-last: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+
 <div class="block-header">
   <div class="row">
     <div class="col-lg-5 col-md-8 col-sm-12">
@@ -43,7 +61,7 @@
   <div class="col-lg-8 col-md-6 col-sm-6">
     <div class="card" style="min-height: 211px;">
       <div class="header">
-        <h2>Analysis</h2>
+        <h2>Analysis Sasaran</h2>
         <ul class="header-dropdown">
           <li> <a onclick="location.reload()" style="cursor: pointer;" data-toggle="cardloading" data-loading-effect="pulse"><i
                 class="icon-refresh"></i></a></li>
@@ -62,9 +80,6 @@
           </div>
           {{/each}}
         </div>
-        <div class="sparkline" data-type="bar" data-offset="90" data-width="97%" data-height="50px" data-bar-Width="10"
-          data-bar-Spacing="10" data-bar-Color="#7cb5ec">
-          4,8,0,3,1,8,5,4,0,5,4,3,2,1,5,6,7,8,4,5,8,0,3</div>
       </div>
     </div>
   </div>
@@ -73,46 +88,6 @@
 <div class="row clearfix">
   <div class="col-lg-8 col-md-12">
     <div class="card Sales_Overview">
-      <div class="header">
-        <h2>Kajiselidik keseluruhan</h2>
-        <ul class="header-dropdown">
-          <li> <a onclick="location.reload()" style="cursor: pointer;" data-toggle="cardloading" data-loading-effect="pulse"><i
-                class="icon-refresh"></i></a></li>
-          <li class="dropdown">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
-              aria-haspopup="true" aria-expanded="false"></a>
-            <ul class="dropdown-menu dropdown-menu-right animated bounceIn">
-              <li><a href="javascript:void(0);">Action</a></li>
-              <li><a href="javascript:void(0);">Another Action</a></li>
-              <li><a href="javascript:void(0);">Something else</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="body">
-        <div id="Sales_Overview" class="ct-chart"></div>
-        <div class="body xl-slategray text-center">
-          <div class="row clearfix">
-            <div class="col-lg-4 col-md-4">
-              <h2 class="font700">150K</h2>
-              <small>17% <i class="fa fa-level-up text-success"></i>
-                Sasaran</small>
-            </div>
-            <div class="col-lg-4 col-md-4">
-              <h2 class="font700">80K</h2>
-              <small>18% <i class="fa fa-level-down text-danger"></i>
-                Survey Berjaya</small>
-            </div>
-            <div class="col-lg-4 col-md-4">
-              <h2 class="font700">9K</h2>
-              <small>18% <i class="fa fa-level-up text-success"></i>
-                Fixed Sample</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-        <div class="card Sales_Overview">
       <div class="header">
         <h2>Jumlah Sasaran Mengikut Daerah</h2>
         <ul class="header-dropdown">
@@ -131,15 +106,22 @@
       </div>
       <div class="body">
         <div id="Sales_Overview" class="ct-chart"></div>
-        <div class="row">
-        {{#each size}}
-          <div class="col-lg-4 col-md-4" style="margin-bottom:10px;">
-            <div class="body xl-slategray text-center">
-              <h2 class="font700">{{value}}</h2>
-              <span>{{regionName}}</span>
+        <div class="row" style="padding:10px;">
+          <select class="region-select" onchange="regionSelection(event)">
+            <option class="dropdown-menu dropdown-item" style="text-align:centre;" selected>Select Region</option>
+          {{#each regions}}
+            <option class="dropdown-menu dropdown-item" style="text-align:centre;" value="{{id}},{{name}}">{{name}}</option>
+          {{/each}}
+          </select>
+        </div>
+        <div id="cardSurvey" class="row" style="display: hide;">
+          <div style="margin-bottom:10px;">
+            <div class="body text-center">
+              <h2 id="title" class="font700"></h2>
+              <h2 id="jumlahSurvey"></h2>
+              <span id="namaRegion"></span>
             </div>
           </div>
-        {{/each}}
         </div>
       </div>
     </div>
@@ -207,4 +189,32 @@
       width: '30rem'
     })
   })
+
+  async function regionSelection(event) {
+    var arr = event.target.value.split(',');
+    const regionName = arr[1];
+    sessionStorage.setItem("region_id", arr[0])
+    const region_id = arr[0];
+    const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${sessionStorage.getItem("token")}`,
+        'Cache-Control': 'no-cache'
+        }
+      });
+    var regionRecord = await res.json()
+      
+    if(regionRecord) {
+      displaySasaran(regionRecord, regionName);
+    }
+  }
+
+  function displaySasaran(sets, name) {
+    var size = Object.keys(sets).length;
+    document.getElementById("jumlahSurvey").innerHTML = size;
+    document.getElementById("cardSurvey").style.display = "block";
+    document.getElementById("namaRegion").innerHTML = name;
+    document.getElementById("title").innerHTML = "<b><u>Jumlah Sasaran</u></b>"
+  }
 </script>
