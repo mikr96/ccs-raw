@@ -61,7 +61,7 @@
   <div class="col-lg-8 col-md-6 col-sm-6">
     <div class="card" style="min-height: 211px;">
       <div class="header">
-        <h2>Analysis Sasaran</h2>
+        <h2>Analisis Sasaran</h2>
         <ul class="header-dropdown">
           <li> <a onclick="location.reload()" style="cursor: pointer;" data-toggle="cardloading" data-loading-effect="pulse"><i
                 class="icon-refresh"></i></a></li>
@@ -79,6 +79,15 @@
             <h4>{{value}} <span class="font-13 d-block mt-2">{{state}}</span></h4>
           </div>
           {{/each}}
+          <div class="col-4">
+            <h4>{{totalSurveys}} <span class="font-13 d-block mt-2">Jumlah Sasaran</span></h4>
+          </div>
+          <div class="col-4">
+            <h4>{{jumlahSasaranWithTel}} <span class="font-13 d-block mt-2">Boleh Dihubungi</span></h4>
+          </div>
+          <div class="col-4">
+            <h4>{{unavailable}} <span class="font-13 d-block mt-2">Tidak Boleh Dihubungi</span></h4>
+          </div>
         </div>
       </div>
     </div>

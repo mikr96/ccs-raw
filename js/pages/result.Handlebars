@@ -1,5 +1,5 @@
 <style>
-  .btn-result {
+.btn-result {
     color: #fff; 
     background-color: #4d62a7; 
     border-color: #4d62a7;
@@ -14,11 +14,26 @@
   font-weight: bold;
 }
 
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.div-center {
+  margin-left: auto;
+  margin-right: auto;
 }
+
+.ct-legend.ct-legend-inside {
+    position: relative;
+    text-align: center;
+}
+
+.ct-chart-pie {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
 </style>
 <div class="block-header">
   <div class="row">
@@ -60,46 +75,52 @@
           </div>
         </div>
         <br/>
-        <div class="row m-b-20">
+        <div id="survey-chart" class="row m-b-20">
+          <div class="div-center">
+            <h3 align="center">Survey Status</h3>
+          </div>
           <div id="survey-chart-title" class="col-md-12">
-            <div class="flex-center">
-              <div id="survey-chart" class="status-survey"></div> <!-- Status call percentage -->
-            </div>
+            <div class="status-survey"></div> <!-- Status call percentage -->
           </div>
         </div>
-        <div class="row">
+        <div id="comment-chart" class="row">
+          <div class="div-center">
+            <h3 align="center">Comment Status</h3>
+          </div>
           <div class="col-md-12">
-            <div class="flex-center">
-              <div id="comment-chart" class="status-comment"></div> <!-- Status call percentage -->
-            </div>
+            <div class="status-comment"></div> <!-- Status call percentage -->
           </div>
         </div>
-        <div class="row">
+        <div id="phone-chart" class="row">
+          <div class="div-center">
+            <h3 align="center">Phone Status</h3>
+          </div>
           <div class="col-md-12">
-            <div class="flex-center">
-              <div id="phone-chart" class="status-phone"></div> <!-- Status call percentage -->
-            </div>
+            <div class="status-phone"></div> <!-- Status call percentage -->
           </div>
         </div>
-        <div class="row">
+        <div id="race-chart" class="row">
+          <div class="div-center">
+            <h3 align="center">Race Distribution</h3>
+          </div>
           <div class="col-md-12">
-            <div class="flex-center">
-              <div id="race-chart" class="status-race"></div> <!-- Status call percentage -->
-            </div>
+            <div class="status-race"></div> <!-- Status call percentage -->
           </div>
         </div>
-        <div class="row">
+        <div id="questionDist-chart" class="row">
+          <div class="div-center">
+            <h3 align="center">Question Distribution</h3>
+          </div>
           <div class="col-md-12">
-            <div class="flex-center">
-              <div id="questionDist-chart" class="status-questionDist-chart"></div>
-            </div>
+            <div class="QD-chart"></div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="flex-center">
-              <div id="question-chart" class="status-question"></div>
+        <div id="question-chart" class="row">
+          <div class="div-center">
+            <h3 align="center">Question Status</h3>
           </div>
+          <div class="col-md-12">
+            <div class="status-question"></div>
         </div>
       </div>
     </div>
@@ -115,7 +136,7 @@
 </div>
 
 <script>
-  $("#bottomCard").hide()
+  $("#bottomCard,#question-chart,#questionDist-chart,#race-chart,#phone-chart,#comment-chart,#survey-chart").hide()
   async function regionSelection(e) {
     var arr = e.target.value.split(',');
     const regionName = arr[1];
@@ -198,7 +219,7 @@
   }
 
   function surveyChart(surveyRecord) {
-    $(".status-survey").empty()
+    
     var done = 0;
     var undone = 0;
     var survey = surveyRecord.map(e => e.status)
@@ -217,23 +238,27 @@
 
     const options = {
       labelInterpolationFnc: value => interpolation(value, data.series),
-      chartPadding: 20,
-      labelOffset: 20,
+      chartPadding: 70,
+      labelOffset: 30,
       labelDirection: 'explode',
-      width: '350px',
-      height: '250px'
+      width: '600px',
+      height: '600px',
+      plugins: [
+        Chartist.plugins.legend({
+          legendNames:data.labels,
+          clickable: false
+        })
+      ] 
     }
 
     var sum = function(a, b) { return a + b };
 
     new Chartist.Pie('.status-survey', data, options);
 
-    //$(".status-survey").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Survey Status</label>')
-    $("#survey-chart-title").append('<h3>Survey Status:</h3>')
+    $("#survey-chart").show();
   }
 
   function commentChart(commentRecord) {
-    $(".status-comment").empty()
     var info = 0
     var wr = 0
     var dll = 0
@@ -262,20 +287,26 @@
 
     const options = {
       labelInterpolationFnc: value => interpolation(value, data.series),
-      chartPadding: 20,
-      labelOffset: 20,
+      chartPadding: 70,
+      labelOffset: 30,
       labelDirection: 'explode',
-      width: '350px',
-      height: '250px'
+      width: '600px',
+      height: '600px',
+      plugins: [
+        Chartist.plugins.legend({
+          legendNames:data.labels,
+          clickable: false
+        })
+      ]
     }
 
     new Chartist.Pie('.status-comment', data, options)
 
-    $(".status-comment").append('<label for="comment-chart" class="col-form-label" style="display: block; text-align:center;">Comment Record</label>')
+    $("#comment-chart").show();
   }
 
   function phoneChart(phoneRecord) {
-    $(".status-phone").empty()
+  
 
     var sn = 0    //salah nombor
     var tw = 0    //tidak wujud
@@ -314,20 +345,26 @@
 
     const options = {
       labelInterpolationFnc: value => interpolation(value, data.series),
-      chartPadding: 20,
-      labelOffset: 20,
+      chartPadding: 70,
+      labelOffset: 30,
       labelDirection: 'explode',
-      width: '350px',
-      height: '250px'
+      width: '600px',
+      height: '600px',
+      plugins: [
+        Chartist.plugins.legend({
+          legendNames:data.labels,
+          clickable: false
+        })
+      ]
     }
 
     new Chartist.Pie('.status-phone', data, options)
 
-    $(".status-phone").append('<label for="phone-chart" class="col-form-label" style="display: block; text-align:center;">Phone Record</label>')
+    $("#phone-chart").show();
   }
 
   function raceChart(regionRecord) {
-    $(".status-race").empty()
+
     const raceData = regionRecord.reduce((acc, survey) => {
     const label = survey.race
     const searchedSurveyIndex = acc.series.findIndex(accSurvey => accSurvey.name === label)
@@ -354,23 +391,28 @@
 
     const options = {
       labelInterpolationFnc: value => interpolation(value, raceData.series),
-      chartPadding: 20,
-      labelOffset: 20,
+      chartPadding: 70,
+      labelOffset: 30,
       labelDirection: 'explode',
-      width: '350px',
-      height: '250px'
+      width: '600px',
+      height: '600px',
+      plugins: [
+        Chartist.plugins.legend({
+          legendNames:raceData.labels,
+          clickable: false
+        })
+      ]
     }
 
     new Chartist.Pie(
-      '#race-chart', 
+      '.status-race', 
       raceData, 
       options
     )
-        $(".status-race").append('<label for="survey-chart" class="col-form-label" style="display: block; text-align:center;">Race Distribution</label>')
+    $("#race-chart").show();
   }
 
   function questionChart(questionRecord) {
-    $(".status-question").empty()
     var status_survey = 0
     var res1 = questionRecord.filter(e => status_survey == e.status)
     if(res1.length){
@@ -464,7 +506,7 @@
         }]
       ]);
 
-      $(".status-question").append('<label for="survey-question" class="col-form-label" style="display: block; text-align:center;">Question Set</label>')
+      $("#question-chart").show();
     }
   }
 
@@ -477,7 +519,6 @@
   }
 
   async function questionDist(surveys) {
-    $('.status-questionDist-chart').empty()
 
     const questionDistData = await questionDistributionData(surveys, '{{url}}')
 
@@ -504,21 +545,26 @@
 
     const options = {
       labelInterpolationFnc: value => interpolation(value, graphQuestData.series),
-      chartPadding: 20,
-      labelOffset: 20,
+      chartPadding: 70,
+      labelOffset: 30,
       labelDirection: 'explode',
-      width: '350px',
-      height: '250px'
+      width: '600px',
+      height: '600px',
+      plugins: [
+        Chartist.plugins.legend({
+          legendNames:graphQuestData.labels,
+          clickable: false
+        })
+      ]
     }
 
     new Chartist.Pie(
-      '#questionDist-chart', 
+      '.QD-chart', 
       graphQuestData, 
       options
     )
 
-
-    $(".status-questionDist-chart").append('<label class="col-form-label" style="display: block; text-align:center;">Question Group Distribution</label>')
+    $("#questionDist-chart").show();
   }
 
   function interpolation(value, data) {
@@ -529,7 +575,7 @@
     const amount = survey.value
     const total = data.reduce((acc, a) => acc + a.value, 0)
     if (total===0 || amount===0) return ''
-    return value + ' ' + Math.round(amount / total * 100) + '%, ' + amount
+    return Math.round(amount / total * 100) + '%, ' + amount
   }
 
 

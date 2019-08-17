@@ -76,7 +76,10 @@ $(document).ready(function () {
           formattedNotExistNumber,
           formattedNewSurveysNumber,
           size,
-          regions
+          regions,
+          totalSurveys,
+          jumlahSasaranWithTel,
+          unavailable,
         } = await getHomeData(url)
         var html = Template.templates.home({
           totalProfiles,
@@ -89,6 +92,9 @@ $(document).ready(function () {
           formattedNewSurveysNumber,
           size,
           regions,
+          totalSurveys,
+          jumlahSasaranWithTel,
+          unavailable,
           pageTitle: 'Dashboard'
         });
         $("#root")
@@ -122,7 +128,7 @@ $(document).ready(function () {
           window.location.reload()
 
         const profiles = await res.json();
-
+        console.log(profiles)
         const totalProfiles = profiles.reduce(
           (acc, profile) => {
             if (profile.role === "operator")
@@ -150,7 +156,10 @@ $(document).ready(function () {
           formattedTotalSurveys,
           comments,
           size,
-          regions
+          regions,
+          totalSurveys,
+          jumlahSasaranWithTel,
+          unavailable,
         } = await getAnalyticsData(url)
 
         return resolve({
@@ -162,7 +171,10 @@ $(document).ready(function () {
           comments,
           size,
           regions,
-          totalProfiles
+          totalProfiles,
+          totalSurveys,
+          jumlahSasaranWithTel,
+          unavailable,
         })
       } catch (err) {
         return reject(err)
@@ -216,6 +228,10 @@ $(document).ready(function () {
         state: keyState,
         value: analyticsTop3[keyState],
       }))
+    var jumlahSasaranWithTel = 0
+    top3.forEach(data => {
+      jumlahSasaranWithTel = jumlahSasaranWithTel + data.value
+    })
 
     const resRegion = await fetch(`${url}regions`, {
       method: "GET",
@@ -234,13 +250,17 @@ $(document).ready(function () {
       }))
       .sort((a, b) => b.value - a.value)
 
+    var unavailable = Number(totalSurveys) - Number(jumlahSasaranWithTel);
+
     return {
       formattedNewSurveysNumber,
       formattedNoNumber,
       formattedNotExistNumber,
       formattedTotalSurveys,
       comments,
-      top3,
+      totalSurveys,
+      jumlahSasaranWithTel,
+      unavailable,
       size,
       regions
     }
