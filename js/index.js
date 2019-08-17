@@ -496,8 +496,10 @@ $(document).ready(function () {
 
     const surveyByRace = await fetch(`${url}getRaceSurveys`, {
       method: 'get',
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-cache'
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
     })
     const surveyByRaceRes = await surveyByRace.json()
     const surveys = surveyByRaceRes.map(survey => ({ ...survey, race: survey.race.trim() }))
