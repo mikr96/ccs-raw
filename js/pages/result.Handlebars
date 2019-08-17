@@ -30,6 +30,11 @@
   margin-right: auto;
 }
 
+#bottomCard {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 h3 {
   margin-bottom: 20px;
 }
@@ -138,6 +143,7 @@ h3 {
 <script>
   $("#bottomCard,#question-chart,#questionDist-chart,#race-chart,#phone-chart,#comment-chart,#survey-chart").hide()
   async function regionSelection(e) {
+    $('#main-content').toggleClass('lds-dual-ring')
     var arr = e.target.value.split(',');
     const regionName = arr[1];
     sessionStorage.setItem("region_id", arr[0])
@@ -195,8 +201,9 @@ h3 {
         link.setAttribute("href", 'data:text/csv;charset=UTF-8,' + encodedUri);
         link.setAttribute("download", "surveyDetails.csv");
       }
+      $('#main-content').toggleClass('lds-dual-ring')
       }
-    $('#graphContainer').fadeIn(1000)
+    $('#graphContainer').fadeIn(2000)
     $("#bottomCard").show()
   } 
 
@@ -245,7 +252,7 @@ h3 {
       height: '600px',
       plugins: [
         Chartist.plugins.legend({
-          legendNames:data.labels,
+          legendNames:labelling(data.labels, data.series),
           clickable: false
         })
       ] 
@@ -294,7 +301,7 @@ h3 {
       height: '600px',
       plugins: [
         Chartist.plugins.legend({
-          legendNames:data.labels,
+          legendNames:labelling(data.labels, data.series),
           clickable: false
         })
       ]
@@ -352,7 +359,7 @@ h3 {
       height: '600px',
       plugins: [
         Chartist.plugins.legend({
-          legendNames:data.labels,
+          legendNames:labelling(data.labels, data.series),
           clickable: false
         })
       ]
@@ -398,7 +405,7 @@ h3 {
       height: '600px',
       plugins: [
         Chartist.plugins.legend({
-          legendNames:raceData.labels,
+          legendNames:labelling(raceData.labels, raceData.series),
           clickable: false
         })
       ]
@@ -552,7 +559,7 @@ h3 {
       height: '600px',
       plugins: [
         Chartist.plugins.legend({
-          legendNames:graphQuestData.labels,
+          legendNames:labelling(graphQuestData.labels,graphQuestData.series),
           clickable: false
         })
       ]
@@ -578,6 +585,17 @@ h3 {
     return Math.round(amount / total * 100) + '%, ' + amount
   }
 
+  function labelling(label, data) {
+    var newLabel = []
+    for(i=0;i<Object.keys(data).length;i++) {
+      label.forEach(title => {
+        if(data[i].name == title) {
+          newLabel.push(data[i].name + ", " + data[i].value)
+        }
+      })
+    }
+    return newLabel
+  }
 
   function viewDetails() {
     window.location.href = "index.html#survey-record";
