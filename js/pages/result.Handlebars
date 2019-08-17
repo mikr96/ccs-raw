@@ -128,9 +128,38 @@ h3 {
             <div class="status-question"></div>
         </div>
       </div>
+      <div class="row clearfix mb-20">
+        <div class="table-responsive">
+          <h5 class="text-capitalize pl-4">race distribution table</h5>
+          <table class="table table-hover table-striped w-75 table-bordered" style="margin: 0 auto;">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Race</th>
+                <th>Finished</th>
+                <th>Unfinished</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each surveys}}
+              <tr>
+                <td>{{@key}}</td>
+                {{#if race}}
+                <td>{{race}}</td>
+                {{else}}
+                  <td class="text-uppercase">Unknown</td>
+                {{/if}}
+                <td>{{finished}}</td>
+                <td>{{unfinished}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+  </div>
 <div id="bottomCard" class="row">
   <div class="col-sm-12">
     <div class="card" style="padding:15px; text-align:center;">
