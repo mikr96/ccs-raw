@@ -60,7 +60,13 @@ h3 {
       <select class="btn btn-secondary" style="width: 100%;text-align:centre;" onchange="regionSelection(event)">
         <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" selected>Select Region</option>
         {{#each regions}}
-        <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" value="{{id}},{{name}}">{{name}}</option>
+        <option class="dropdown-menu dropdown-item" style="background-color:white; text-align:centre;" value="{{id}},{{name}}">
+          {{#if name}}
+            {{name}}
+          {{else}}
+            N/A
+          {{/if}}
+        </option>
         {{/each}}
       </select>
     </div>
@@ -76,6 +82,7 @@ h3 {
               <h2 id="title" class="font700"></h2>
               <h2 id="jumlahSurvey"></h2>
               <span id="namaRegion"></span>
+              <div id="tableRegionSurvey" class="d-flex flex-row justify-content-center"></div>
             </div>
           </div>
         </div>
@@ -128,35 +135,6 @@ h3 {
             <div class="status-question"></div>
         </div>
       </div>
-      <div class="row clearfix mb-20">
-        <div class="table-responsive">
-          <h5 class="text-capitalize pl-4">region distribution table</h5>
-          <table class="table table-hover table-striped w-75 table-bordered" style="margin: 0 auto;">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Region</th>
-                <th>Finished</th>
-                <th>Unfinished</th>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each surveys}}
-              <tr>
-                <td>{{@key}}</td>
-                {{#if region}}
-                <td>{{region}}</td>
-                {{else}}
-                  <td class="text-uppercase">Unknown</td>
-                {{/if}}
-                <td>{{finished}}</td>
-                <td>{{unfinished}}</td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </div>
   </div>
@@ -175,8 +153,18 @@ h3 {
     $('#main-content').toggleClass('lds-dual-ring')
     var arr = e.target.value.split(',');
     const regionName = arr[1];
+    if (!regionName) {
+      $('#main-content').toggleClass('lds-dual-ring')
+      return;     
+    }
     sessionStorage.setItem("region_id", arr[0])
+    const regionSurveys = {{{json surveys}}}
+    const regionSurvey = regionSurveys.find(s => s.region === regionName)
     const region_id = arr[0];
+    if (region_id === 'Select Region') {
+      $('#main-content').toggleClass('lds-dual-ring')
+      return;      
+    }
       const res = await fetch(`{{url}}surveys/statistics/${region_id}`, {
         method: "GET",
         headers: {
@@ -234,6 +222,29 @@ h3 {
       }
     $('#graphContainer').fadeIn(2000)
     $("#bottomCard").show()
+    $('#tableRegionSurvey').empty()
+    if (regionSurvey) {
+      const mappedRegion = regionSurvey.race.map(race => (`<tr><td>${race.name}</td><td>${race.unfinished}</td><td>${race.finished}</td></tr>`))
+
+      const table = `<table class="table w-75 mt-3 table-striped table-bordered table-hover">
+        <tr>
+          <thead>
+            <th>Race</th>
+            <th>Unfinished</th>
+            <th>Finished</th>
+          </thead>
+          <tbody>
+            ${mappedRegion}
+          </tbody>
+        </tr>
+      </table>`
+      $('#tableRegionSurvey').html($(table))
+      const tableRegionSurvey = document.querySelector('#tableRegionSurvey')
+      const childNodes = tableRegionSurvey.childNodes
+      if (childNodes.length > 1) {
+        tableRegionSurvey.removeChild(childNodes[0])
+      }
+    }
   } 
 
   function ConvertToCSV(objArray) {
