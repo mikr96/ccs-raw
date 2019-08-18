@@ -494,15 +494,14 @@ $(document).ready(function () {
     });
     const regions = await res.json()
 
-    const surveyByRace = await fetch(`${url}getRaceSurveys`, {
+    const surveyByRace = await fetch(`${url}getRegionSurveys`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'
       }
     })
-    const surveyByRaceRes = await surveyByRace.json()
-    const surveys = surveyByRaceRes.map(survey => ({ ...survey, race: survey.race.trim() }))
+    const surveys = await surveyByRace.json()
 
     var html = Template.templates.result({
       regions,
